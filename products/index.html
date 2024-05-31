@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<script src=/include/common.js></script>
+<title>陀螺商品⬧Merchandise</title>
+<link rel=stylesheet href=products.css>
+
+<nav>
+    <script>nav(['/', '/parts/'])</script>
+    <span class=free-search>部件檢索</span>
+    <div class=prod-search>
+        <label for=free>&#xe00a;</label>
+        <input id=free placeholder=騎士/HN/low>
+    </div>
+    <data class=prod-result>結果</data>
+    <button class=prod-reset>&#xe029; 重設</button>
+</nav>
+<input type=radio name=system id=DB data-part='[[Core,blade7c],[Blade,blade7b],[Armor,blade7a]]' checked>
+<input type=radio name=system id=SP data-part='[[Chip,blade6c],[Ring,blade6r],[Chassis,blade6s]]'>
+<input type=radio name=system id=GT data-part='[[Chip,blade5c],[Base,blade5b],[Weight,blade5w]]'>
+<!--db-status callback="Table()"></db-status-->
+<main>
+    <form>
+        <div>
+            <a href="https://kyoganken.web.fc2.com/beyx/index.htm#parts1" target=_blank>競</a>
+            <a href="http://obakeblader.com/?s=入手法" target=_blank>お</a>
+        </div>
+        <details>
+        </details>
+        <div>
+            <a href=equipment.html#launchers></a>
+            <a href=equipment.html#others></a>
+        </div>
+    </form>
+
+    <details id=filter>
+        <summary>&#xe027; 分類<i></i></summary>
+        <div>
+            <label class=S title=附發射器的單陀螺>Starter</label>
+            <label class=B title=單陀螺>Booster</label>
+            <label class=St title=至少包含兩陀螺>Set</label>
+            <label class=SS title=含對戰盤及陀螺>Stadium Set</label>
+            <label class=RB title=單陀螺抽包>Random Booster</label>
+        </div>
+        <span>&#xe02a; 異色版／再推出版</span>
+        <div>
+            <label class='S H'>Starter</label>
+            <label class='B H'>Booster</label>
+            <label class='St H'>Set</label>
+            <label class='SS H'>Stadium Set</label>
+            <label class='RB H'>Random Booster</label>
+        </div>
+        <span hidden>&#xe02b; 系統<button>全部</button></span>
+        <div class=system hidden>
+            <label class=blade1><img src=/img/system-blade1.png alt=single></label>
+            <label class=MFB><img src=/img/system-MFB.png alt=MFB></label>
+            <label class=BSB><img src=/img/system-BSB.png alt=BSB></label>
+        </div>
+    </details>
+
+    <table id=regular class=new>
+        <caption class=loading>
+            <!--span>&#xe028; 2021.04～</span-->
+            <button hidden>顯示全部</button>
+            <label>A<input type=checkbox id=eng></label>
+            <label>ア<input type=checkbox id=jap></label>
+        </caption>
+        <thead>
+            <tr class=comp>
+                <th>No</th>
+                <th colspan=3 id=blade class=blade>Blade</th>
+                <th colspan=1 id=ratchet class=ratchet>Ratchet</th>
+                <th colspan=2 id=bit class=bit>Bit</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot></tfoot>
+    </table>
+</main>
+<label id=popup>
+    <input type=checkbox>
+</label>
+
+<script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js></script>
+<script src=/parts/catalog.js></script>
+<script src=table.js></script>
+<script src=maps.js></script>
+<script src=row.js></script>
+<script>Table(), Filter(), Finder()</script>
+
+<link rel=stylesheet href=/parts/catalog.css>
+<link rel=stylesheet href=/parts/typography.css>
