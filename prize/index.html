@@ -5,7 +5,7 @@
 <script src=/include/common.js></script>
 
 <nav><script>nav(['/', '/products/'])</script></nav>
-<db-status></db-status>
+<db-status callback="prize()"></db-status>
 <main>
     <a href="https://beyblade.takaratomy.co.jp/beyblade-x/news/news_stickerlist.html">
         <img src="https://beyblade.takaratomy.co.jp/beyblade-x/news/_image/news_stickerlist_12.png">
@@ -58,6 +58,7 @@ class Keihin {
     static type = {t: '比賽', d: '抽獎', g: '贈品', m: '限定商品'}
 }
 let names;
+const prize = () =>
 DB.get.names(['blade']).then(result => names = result)
 .then(() => Fetch('/db/prod-keihin.json')).then(resp => resp.json())
 .then(keihins => Q('.diamonds').append(...keihins.map(k => new Keihin(k).li)))
