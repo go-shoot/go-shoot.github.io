@@ -29,7 +29,7 @@ App.load = {
             ratchet: (p, q) => parseInt(p.abbr.split('-')[1]) - parseInt(q.abbr.split('-')[1]),
             bit: (p, q) => bits.indexOf(p.attr[0]) - bits.indexOf(q.attr[0])
         };
-        return DB.get._names('blade')
+        return DB.get.names('blade')
         .then(names => (NAMES = names) && DB.get.parts())
         .then(async PARTS => ({...PARTS, bit: await Promise.all(PARTS.bit.map((p, _, ar) => new Part(p).revise(ar)))}))
         .then(PARTS => Object.entries(PARTS).forEach(([comp, parts]) => 
