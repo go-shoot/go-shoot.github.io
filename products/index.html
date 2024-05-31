@@ -16,7 +16,7 @@
 <input type=radio name=system id=DB data-part='[[Core,blade7c],[Blade,blade7b],[Armor,blade7a]]' checked>
 <input type=radio name=system id=SP data-part='[[Chip,blade6c],[Ring,blade6r],[Chassis,blade6s]]'>
 <input type=radio name=system id=GT data-part='[[Chip,blade5c],[Base,blade5b],[Weight,blade5w]]'>
-<!--db-status callback="Table()"></db-status-->
+<db-status callback="Table(); Filter(); Finder()"></db-status>
 <main>
     <form>
         <div>
@@ -85,7 +85,6 @@
 <script src=table.js></script>
 <script src=maps.js></script>
 <script src=row.js></script>
-<script>Table(), Filter(), Finder()</script>
 
 <link rel=stylesheet href=/parts/catalog.css>
 <link rel=stylesheet href=/parts/typography.css>

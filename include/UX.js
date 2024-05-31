@@ -148,7 +148,7 @@ class Dragging {
 class Knob extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({mode: 'open'}).append(E('meter', [E('slot', {name: 'knob'})]), E('span'), E('style', this.css));
+        this.attachShadow({mode: 'open'}).append(E('meter', [E('slot')]), E('span'), E('style', this.css));
     }
     get value() {return this.input.value;}
     set value(value) {this[this.type].adjustValue(value);}
@@ -184,16 +184,14 @@ class Knob extends HTMLElement {
     afterChildren() {
         this.type = this.Q('option') ? 'discrete' : 'continuous';
         this.input = this.Q('input,select');
-        if (this.type == 'continuous') {
-            this.input || this.append(this.input = E('input', {type: 'range', min: 0, max: 100, step: 'any'}));
-            this.max = parseFloat(this.input.max), this.min = parseFloat(this.input.min);
-        } else {
-            this.setAttribute('discrete', this.discrete.total = this.Q('option').length);
-            this.shadowRoot.Q('style').textContent += `:host([discrete]) meter {background:conic-gradient(${this.discrete.ticks()})}`;
-        }
+        this[this.type].setup();
         this.input.onchange = ev => this.event(ev);
     }
     discrete = {
+        setup: () => {
+            this.setAttribute('discrete', this.discrete.total = this.Q('option').length);
+            this.shadowRoot.Q('style').textContent += `:host([discrete]) meter {background:conic-gradient(${this.discrete.ticks()})}`;
+        },
         ticks () {
             let css = `transparent ${this.θ(0) - 1.5}deg,`;
             for (let i = 0; i < this.total; i++)
@@ -215,6 +213,10 @@ class Knob extends HTMLElement {
         θ: (x = this.discrete.index) => (this.maxθ-this.minθ) / (this.discrete.total-1) * x + this.minθ
     }
     continuous = {
+        setup: () => {
+            this.input || this.append(this.input = E('input', {type: 'range', min: 0, max: 100, step: 'any'}));
+            this.max = parseFloat(this.input.max), this.min = parseFloat(this.input.min);
+        },
         getΔY: (drag) => {
             this.continuous.θ = drag.moveθ = Math.max(this.minθ, Math.min(drag.pressθ - (drag.moveY - drag.pressY), this.maxθ));
             (drag.moveθ == this.minθ || drag.moveθ == this.maxθ) && ([drag.pressY, drag.pressθ] = [drag.moveY, drag.moveθ]);
@@ -244,7 +246,7 @@ class Knob extends HTMLElement {
     :host(.hover),:host([discrete]) meter::after {
         transition:--angle .5s;
     }
-    meter,meter::before,slot[name=knob] {
+    meter,meter::before,slot {
         width:100%; height:100%;
     }
     meter {
@@ -294,7 +296,7 @@ class Knob extends HTMLElement {
     :host([discrete]) meter::after {
         outline-width:.1em;
     }
-    slot[name=knob] {
+    slot {
         z-index:1;
         position:absolute; 
         user-select:none; -webkit-user-select:none; pointer-events:none;
@@ -304,6 +306,9 @@ class Knob extends HTMLElement {
     ::slotted(a) {
         width:100% !important; height:100% !important;
         pointer-events:auto !important;
+    }
+    ::slotted(:is(input,select)) {
+        display:none !important;
     }
     span {
         position:absolute; right:-.3em; bottom:.4em;

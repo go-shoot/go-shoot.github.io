@@ -25,7 +25,7 @@
     <h2>非官方資訊站</h2>
 </header>
 
-<!--db-status></db-status-->
+<db-status callback="Q('header,section,time,.scroller', content => observer.observe(content));"></db-status>
 <section id=contents>
     <h3>本站内容</h3>
     <a href=products/ >商品</a>
@@ -35,12 +35,12 @@
 
 <section id=links>
     <h3>外部連結</h3>
-    <spin-knob title=商品陣容><a slot=knob href="//beyblade.takaratomy.co.jp/beyblade-x/lineup/"><i>🛍️</i></a></spin-knob>
-    <spin-knob title=YouTube><a slot=knob href="//m.youtube.com/@BEYBLADEOfficialYouTube/videos"><i>🎞️</i></a></spin-knob>
-    <spin-knob title=漫畫閲覽 alt="//drive.google.com/drive/folders/1vSOCv8UNyiJ76KCDhUbexuS7E7Hs-Isr"><a slot=knob href="//www.corocoro.jp/episode/4856001361379685850"><i>🖍️</i></a></spin-knob>
-    <spin-knob title=動畫資訊><a slot=knob href="//beyblade.takaratomy.co.jp/anime/character/"><i>📺</i></a></spin-knob>
-    <spin-knob title=App 下載><a slot=knob href=_><i>📥</i></a></spin-knob>
-    <spin-knob title=𝕏><a slot=knob href="//twitter.com/tbh_pr"><i>🛠️</i></a></spin-knob>
+    <spin-knob title=商品陣容><a href="//beyblade.takaratomy.co.jp/beyblade-x/lineup/"><i>🛍️</i></a></spin-knob>
+    <spin-knob title=YouTube><a href="//m.youtube.com/@BEYBLADEOfficialYouTube/videos"><i>🎞️</i></a></spin-knob>
+    <spin-knob title=漫畫閲覽 alt="//drive.google.com/drive/folders/1vSOCv8UNyiJ76KCDhUbexuS7E7Hs-Isr"><a href="//www.corocoro.jp/episode/4856001361379685850"><i>🖍️</i></a></spin-knob>
+    <spin-knob title=動畫資訊><a href="//beyblade.takaratomy.co.jp/anime/character/"><i>📺</i></a></spin-knob>
+    <spin-knob title=App 下載><a href=_><i>📥</i></a></spin-knob>
+    <spin-knob title=𝕏><a href="//twitter.com/tbh_pr"><i>🛠️</i></a></spin-knob>
 </section>
 
 <section id=products>
@@ -103,8 +103,6 @@
     Q('#links a[href=_]').href = navigator.appVersion.includes('Mac') ? 'https://apps.apple.com/tw/app/id1670801696':'https://play.google.com/store/apps/details?id=jp.co.takaratomy.beyblade&pli=1';
 
     const observer = new IntersectionObserver(entries => entries.forEach(entry => entry.target.classList.toggle('seeing', entry.isIntersecting)));
-    fetch('/db/-update.json').then(resp => resp.json()).then(({news}) => announce(news))
-    .then(() => Q('header,section,time,.scroller', content => observer.observe(content))).catch(console.error);
         
     const announce = news => Object.entries(news).forEach(([date, beys]) => {
         let base = `https://beyblade.takaratomy.co.jp/beyblade-x/lineup/_image/`;

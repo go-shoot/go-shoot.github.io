@@ -15,9 +15,8 @@ let Parts = {
         //});
     },
     async cataloging () {
-        Parts.all = Object.entries(await (await Fetch(`/db/part-${Parts.comp}.json`)).json()).map(([abbr, part]) => ({...part, key: `${abbr}.${Parts.comp}`}));
-        //await Promise.all(Parts.meta.groups.map(g => DB.get.parts(g)));
-        Parts.all = await Promise.all(Parts.all.flat().map((p, _, ar) => new Part(p, ar)).map(p => p.prepare().catalog()));
+        Parts.all = DB.get.parts(Parts.comp).then(parts => parts.map((p, _, ar) => new Part(p, ar).prepare().catalog()));
+        Parts.all = await Promise.all(await Parts.all);
     },
     async listing () {
         Parts.all = await Promise.all(location.hash.substring(1).split(',').map(p => DB.get('parts', decodeURI(p))));
@@ -60,7 +59,7 @@ const Magnifier = () => {
 };
 Object.assign(Magnifier, {
     create: () => E('div', {classList: 'part-mag'}, [
-        E('spin-knob', [E('input', {type: 'range', min: .75, max: 2, step: 'any'}), E('i', {slot: 'knob'}, '🔍')]),
+        E('spin-knob', [E('input', {type: 'range', min: .75, max: 2, step: 'any'}), E('i', '🔍')]),
         ...[1,2,3].map(n => E('label', [E('input', {id: `mag${n}`, type: 'radio', name: 'mag'})]))
     ]),
     events () {

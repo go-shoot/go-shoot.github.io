@@ -1,12 +1,9 @@
 {
-  "/db/prod-launchers.json":"2024/05/27 13:50:00",
-  "/db/prod-others.json":   "2024/04/26 17:15:00",
   "/db/prod-beys.json":     "2024/05/27 13:45:00",
   "/db/part-ratchet.json":  "2024/05/27 14:55:00",
   "/db/part-bit.json":      "2024/05/18 21:55:00",
   "/db/part-blade.json":    "2024/05/22 00:55:00",
   "/db/part-meta.json":     "2024/05/22 00:55:00",
-  "/db/keihin.json":        "2024/05/15 22:50:00",
   "news": {
     "2024-06-01":[
       {"code":"BXG-07","name":"カスタムグリップ クリアブラックVer.<br>Custom Grip (Clear Black ver.)"}

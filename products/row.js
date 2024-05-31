@@ -151,12 +151,7 @@ class Cell {
     _preview = {
         part: async () => {
             Cell.popup.classList = 'catalog';
-            for (let p of this.dissect()) {
-                //new Part(await DB.get('parts', p)).catalog(true);
-                let [sym, comp] = p.split('.');
-                Fetch(`/db/part-${comp}.json`).then(resp => resp.json())
-                .then(parts => new Part({...parts[sym], key: p}, Object.entries(parts).map(([sym, part]) => ({...part, sym}))).catalog(true));
-            }
+            this.dissect().reduce((prom, part) => prom.then(() => DB.get(part)).then(p => new Part(p).catalog(true)), Promise.resolve())
         },
         image () {
             Cell.popup.classList = 'images';

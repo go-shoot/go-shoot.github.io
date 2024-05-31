@@ -53,9 +53,9 @@ customElements.define('db-status', class extends HTMLElement {
             this.style.setProperty('--p', 40 - 225 * this.progress / this.total + '%');
         this.setAttribute('progress', this.progress);
     }
-    error(ev) {
+    error(er) {
         this.setAttribute('status', 'error');
-        this.title = ev.target.errorCode;
+        this.title = `${er}`;
     }
     static observedAttributes = ['status'];
 });
@@ -73,32 +73,32 @@ const DB = {
     open: () => DB.db ? true : 
         new Promise(res => Object.assign(indexedDB.open(DB.current, 1), {onsuccess: res, onupgradeneeded: res}))
         .then(ev => ev.type == 'success' ? DB.check(ev.target) : DB.setup(ev.target))
-        .then(DB.cache).then(() => DB.indicator.update(true)).catch(er => DB.indicator.error(er) ?? console.error(er)),
+        .then(DB.cache).catch(er => DB.indicator.error(er) ?? console.error(er)),
 
-    setup: ({result, transaction}) => new Promise(res => {console.log('setup');
-        DB.db = result, DB.fresh = true;
-        DB.components.forEach(s => DB.db.createObjectStore(`.${s}`, {keyPath: 'abbr'}).createIndex('group', 'group'));
-        ['meta','html','user'].forEach(s => DB.db.createObjectStore(s));
-        transaction.oncomplete = () => res();
-    }),
-    check ({result}) {
+    setup ({result}) {console.log('f setup');
         DB.db = result;
-        if (location.pathname != '/' && DB.fresh) return Promise.resolve(false);
+        ['product','meta','user'].map(s => DB.db.createObjectStore(s));
+        DB.components.map(s => DB.db.createObjectStore(`.${s}`, {keyPath: 'abbr'}).createIndex('group', 'group'));
+        return DB.updates({index: location.pathname == '/', fresh: true});
+    },
+    check ({result}) {console.log('f check');
+        DB.db = result;        
+        return DB.updates({index: location.pathname == '/', fresh: false});
+    },
+    updates ({index, fresh}) {
+        if (!index && fresh) return null;
         let compare = files => Object.entries(files).filter(([file, time]) => new Date(time) / 1000 > (localStorage.getItem(file) || 0)).map(([file]) => file);
-        console.log('check');
         return fetch(`/db/-update.json?${Math.random()}`).catch(() => DB.indicator.setAttribute('status', 'offline'))
         .then(resp => resp.json()).then(({news, ...files}) => {
-            location.pathname == '/' && announce(news);
-            return !DB.fresh && compare(files);
+            index && announce(news);
+            return fresh ? null : compare(files);
         });
     },
-    cache (outdated) {
-        if (outdated === false) return console.log('first time, no check');
-        console.log(outdated);
-        Q('a', a => a.classList.add('disabled'));
-        DB.indicator.init(outdated);
+    cache (outdated) {console.log('f cache');
+        if (outdated && !outdated.length) return DB.indicator.remove() ?? console.log('no updates');
+        DB.indicator.init(outdated); console.log(outdated);
         return Promise.all(Object.keys(DB.action).map(f => (outdated?.some(p => p.includes(f)) ?? true) && DB.fetch(f)))
-        .then(() => Q('a.disabled', a => a.classList.remove('disabled')));
+        .then(() => DB.indicator.update(true));
         //update(['beys'].map(f => `prod-${f}`), (json, file) => DB.put('html', [file, json])),
         //update(['layer7', 'layer6', 'layer5'],       json => Promise.all(Object.entries(json).map(([comp, parts]) => DB.put.parts(parts, comp)))),
         //update(['part-meta'], json => Promise.all(Object.entries(json).map(info => DB.put('meta', info))))
@@ -108,16 +108,17 @@ const DB = {
         'part-ratchet': (...args) => DB.put.parts(...args),
         'part-bit': (...args) => DB.put.parts(...args),
         'part-meta': (json) => DB.put('meta', {part: json}),
-        'prod-beys': (beys) => DB.put('products', {schedule: beys.map(bey => bey[2])}),
+        'prod-beys': (beys) => DB.put('product', {schedule: beys.map(bey => bey[2])}),
     },
     fetch: file => fetch(`/db/${file}.json?${Math.random()}`).then(resp => console.log('fetch '+file)??resp.json())
-        .then(json => DB.action[file](json, file)).then(() => localStorage.setItem(`/db/${file}.json`, Math.round(new Date() / 1000)))
-        .catch(er => console.error(er)),
+        .then(json => DB.action[file](json, file))
+        .then(() => localStorage.setItem(`/db/${file}.json`, Math.round(new Date() / 1000))),
 
     trans: (store, mode, oncomplete) => console.log('new tran '+store)??Object.assign(DB.db.transaction(store, mode), {oncomplete}),
     store: (...args) => DB.trans(...args).objectStore(args[0]),
 
     get: (store, key) => {
+        !key && ([store, key] = store.split('.').reverse());
         let part = DB.components.includes(store);
         return new Promise(res => DB.store(part ? `.${store}` : store).get(key).onsuccess = ev => res(
             part ? {...ev.target.result, comp: store} : ev.target.result
@@ -125,23 +126,18 @@ const DB = {
     },
     put: (store, items, success) => items && new Promise(res => {
         if (Array.isArray(items)) {
-            DB.tr = DB.trans(store, 'readwrite', () => res(DB.tr = null));
+            DB.tr = DB.trans(DB.lastStore = store, 'readwrite', () => res(DB.tr = null));
             items.forEach(c => DB.put(store, c, success));
-        } else {
-            DB.tr ??= DB.trans(store, 'readwrite', () => res(DB.tr = null));
+        } else {console.log(store);
+            (!DB.tr || store != DB.lastStore) && (DB.tr = DB.trans(DB.lastStore = store, 'readwrite', () => res(DB.tr = null)));
             DB.tr.objectStore(store).put(...items.abbr ? [items] : Object.entries(items)[0].reverse()).onsuccess = success;
         }
-    }).catch(console.error),
+    }),
 }
 Object.assign(DB.put, {
     parts: (parts, file) => DB.put(file.replace('part-', '.'), Object.entries(parts).map(([abbr, part]) => ({...part, abbr}) ), () => DB.indicator.update()),
 });
 Object.assign(DB.get, {
-    names: (comps = ['blade', 'bit']) => 
-        Promise.all(comps.map(comp => Fetch(`/db/part-${comp}.json`).then(resp => resp.json())))
-        .then(PARTS => comps.reduce((obj, comp, i) => ({...obj, 
-            [comp]: Object.fromEntries(Object.entries(PARTS[i]).map(([sym, {names}]) => [sym, names])), 
-        }), {})),
     all: comp => new Promise(res => DB.tr.objectStore(`.${comp}`).getAll().onsuccess = ev => res(ev.target.result.map(p => ({...p, comp})))),
     parts (comps = DB.components, toNames) {
         comps = [comps].flat();
@@ -150,7 +146,7 @@ Object.assign(DB.get, {
             DB.get.all(comps[0]) : 
             Promise.all(comps.map(c => DB.get.all(c).then(parts => [c, parts]))).then(PARTS => toNames ? PARTS : Object.fromEntries(PARTS));
     },
-    _names: (comps = ['blade', 'bit']) => DB.get.parts(comps, true).then(PARTS => 
+    names: (comps = ['blade', 'bit']) => DB.get.parts(comps, true).then(PARTS => 
         Object.fromEntries(PARTS.map(([comp, parts]) => [comp, parts.reduce((obj, {abbr, names}) => ({...obj, [abbr]: names}), {})]))
     ),
     async meta (comp, category) {

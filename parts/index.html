@@ -10,7 +10,7 @@
     <script>nav(location.hash || location.search ? ['/parts/'] : ['/', '/prize/'])</script>
     <data class=part-result></data>
 </nav>
-<!--db-status callback="location.search && Parts.catalog() || location.hash && Parts.list()"></db-status-->
+<db-status callback="location.search && Parts.catalog() || location.hash && Parts.list()"></db-status>
 <!--cmd: for %F in (*.png) do backgroundremover -i %F -o o/%F && magick mogrify -fuzz 5% -trim o/%F-->
 <main id=catalog>
     <span class=loading></span>
@@ -79,4 +79,3 @@
         }
     </style>
 </main>
-<script>location.search && Parts.catalog() || location.hash && Parts.list();</script>
