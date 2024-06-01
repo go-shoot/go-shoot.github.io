@@ -72,7 +72,7 @@ const DB = {
     })),
     transfer: {
         out: () => DB.get.all('user').then(data => sessionStorage.setItem('user', JSON.stringify(data))),
-        in: () => DB.put('user', JSON.parse(sessionStorage.getItem('user')).map(item => ({[Array.isArray(item) ? '#deck' : '#tier'] : item})))
+        in: () => DB.put('user', JSON.parse(sessionStorage.getItem('user') ?? '[]').map(item => ({[Array.isArray(item) ? '#deck' : '#tier'] : item})))
     },
     open: () => DB.db ? true : 
         new Promise(res => Object.assign(indexedDB.open(DB.current, 1), {onsuccess: res, onupgradeneeded: res}))

@@ -136,7 +136,7 @@ Object.assign(App, {
         )(new MutationObserver(() => App.save(location.hash)));
 
         new Dragging(Q('#deck'), {
-            hold: {to: bey => location.href = `/parts/#${bey.abbr.map(([comp, abbr]) => `${abbr}.${comp}`)}`},
+            hold: {to: bey => bey.abbr.length && (location.href = `/parts/#${bey.abbr.map(([comp, abbr]) => `${abbr}.${comp}`)}`)},
             drop: {
                 targets: 'main bey-x',
                 when: ev => ev.target.classList.contains('selected')

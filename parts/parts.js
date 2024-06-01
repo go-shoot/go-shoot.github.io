@@ -4,7 +4,6 @@ let Parts = {
     count: () => Q('.part-result').value = document.querySelectorAll('.catalog>a:not([id^="+"]):not([hidden])').length,
 
     async firstly () {
-        Q('#menu').hidden = true;
         Object.assign(Parts, await DB.get.meta(Parts.comp, Parts.category));
     },
     before () {
