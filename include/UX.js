@@ -1,7 +1,7 @@
 class Dragging {
-    constructor (el, {what, scroll, drop, holdToRedispatch, ...custom}) {
+    constructor (el, {what, scroll, drop, hold, ...custom}) {
         if (!el) return;
-        this.what = what, this.scroll = scroll, this.drop = drop, this.holdToRedispatch = holdToRedispatch;
+        this.what = what, this.scroll = scroll, this.drop = drop, this.hold = hold;
         el.onpointerdown = ev => this.press(ev, custom ?? {});
     }
     events = new Proxy(
@@ -12,7 +12,7 @@ class Dragging {
         this.mode = 
             !this.scroll && !this.drop ? 'drag' : 
             this.scroll?.when(ev) ? 'scroll' : this.drop?.when(ev) ? 'drop' : null;
-        this.timer ??= this.holdTimer(ev, this.holdToRedispatch);
+        this.timer ??= this.holdTimer(ev, this.hold);
         if (!this.mode && !this.timer) return;
         this.dragged = ev.target.closest(this[this.mode]?.what || this.what || '*');
         this._press?.[this.mode]?.();
@@ -63,9 +63,9 @@ class Dragging {
     }
 
     holdTimer = (ev, action) => action && setTimeout(() => {
-        action(ev.target);
+        action.to(ev.target);
         this.events.remove();
-        ev.target.dispatchEvent(new MouseEvent('pointerdown', ev));
+        action.redispatch && ev.target.dispatchEvent(new MouseEvent('pointerdown', ev));
     }, 500);
     autoScroll () {
         let [proportion, bottomed] = [this.clientY / innerHeight, scrollY >= document.body.offsetHeight - innerHeight];

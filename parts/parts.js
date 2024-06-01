@@ -51,7 +51,6 @@ const Magnifier = () => {
     Q(`#${Cookie.pref?.button || 'mag2'}`).checked = true;
     Magnifier.knob = Q('spin-knob');
     Magnifier.events();
-    setTimeout(Magnifier.switch);
 };
 Object.assign(Magnifier, {
     create: () => E('div', {classList: 'part-mag'}, [
@@ -60,10 +59,10 @@ Object.assign(Magnifier, {
     ]),
     events () {
         Q('.part-mag').onchange = ({target: input}) => input.checked && Cookie.set('pref', {button: input.id});
-        Magnifier.knob.onchange = ev => (Q('.catalog').style.fontSize = `${ev.target.value}em`) && Cookie.set('pref', {slider: ev.target.value});
-        onresize = Magnifier.switch;
+        Magnifier.knob.onchange = ev => ev && (Q('.catalog').style.fontSize = `${ev.target.value}em`) && Cookie.set('pref', {knob: ev.target.value});
+        setTimeout((onresize = Magnifier.switch));
     },
-    switch: () => Q('.catalog').style.fontSize = innerWidth > 630 ? (Magnifier.knob.value = Cookie.pref?.slider || '1') + 'em' : ''
+    switch: () => Q('.catalog').style.fontSize = innerWidth > 630 ? (Magnifier.knob.value = Cookie.pref?.knob || '1') + 'em' : ''
 });
 
 const Filter = function(type) {

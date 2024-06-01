@@ -7,7 +7,8 @@ Object.assign(Table, {
         Table.table.Q('caption').classList.add('loading');
         Q('input:not([type])', input => input.disabled = input.value = 'Loading');
         Table.events();
-        return Promise.all([DB.get.names(), DB.get.meta()]).then(([names, meta]) => (NAMES = names, Parts = meta));
+        return Promise.all([DB.get.names(), DB.get.meta()]).then(([names, meta]) => (NAMES = names, Parts = meta))
+            .then(() => Cell.prototype.dissect.regex.pref = new RegExp(`^[${Parts.bit.prefix}]+(?=[^a-z].*)`));
     },
     async tabulate () {
         let beys = await DB.get('product', 'beys');
@@ -19,7 +20,7 @@ Object.assign(Table, {
             //beys = beys.reduce((html, tr) => html += tr.outerHTML, '').replace(/<\/t[dr]>| (?=>)| (?:\s+)| role="row"/g, '').replaceAll('"', "'");
             //DB.put('html', [key, beys]);
         }
-        beys.forEach(tr => tr && Row.connectedCallback(tr));
+        Table.show.names(['eng', 'chi']);
     },
     finally () {
         $(Table.table).tablesorter();
@@ -27,32 +28,35 @@ Object.assign(Table, {
         Q('input:not([type])', input => input.disabled = input.value = '');
         if (new URLSearchParams(location.search).size)
             return Finder.find([...new URLSearchParams(location.search.replaceAll('+','%2B'))]);
-        Table.count().flush();    
+        Table.show.count();
     },
     events () {
         Q('#jap').onchange = ev => {
             Q('#eng').checked = false;
             Q('#eng').disabled = ev.target.checked;
             Q('tbody tr', tr => Row.names([null, ev.target.checked ? 'jap' : 'chi'], tr));
-            Table.flush();
         };
         Q('#eng').onchange = ev => Table.colspan(ev.target.checked ? 'eng' : 'cjk');
         Q('.prod-reset').onclick = Table.reset;
         Q('table button').onclick = Table.entire;
         Q('tbody').onclick = ev => ev.target.custom().preview();
-        onresize = () => Table.flush();
-    },
-    count () {
-        Q('.prod-result').value = document.querySelectorAll(`tbody tr:not(.hidden):not([hidden])`).length;
-        return this;
+        (onresize = () => Table.flush())();
     },
     flush () {
         document.body.scrollWidth > 550 ?
             Table.set.colspan(Q('#jap').checked ? 'cjk' : 'both') : Table.set.colspan(Q('#eng').checked ? 'eng' : 'cjk');
-        $(Table.table).trigger('update', [false]);
+        //$(Table.table).trigger('update', [false]);
+    },
+    show: {
+        names (lang) {
+            Table.table.Q(`td[headers=blade]`, td => td.custom().next2((td, i) => td.custom().fullname(lang[i])));
+            Table.table.Q(`td[headers=bit]+td`, td => td.custom().fullname(lang[1] == 'chi' ? 'eng' : lang[1]));
+        },
+        count: () => Q('.prod-result').value = document.querySelectorAll(`tbody tr:not(.hidden):not([hidden])`).length,
+        entire: () => Table.table.classList.remove('new')
     },
     set: {
-        colspan(lang) {
+        colspan (lang) {
             let colspan = {eng: [1, 1], cjk: [1, 1]}[lang] ?? [1, 1];
             //Q('td[abbr$=blade],tbody td:not([abbr]):nth-child(2)', td => new Cell(td).next2(({td}, i) => td.colSpan = colspan[i]));
             Table.table.classList.toggle('bilingual', lang == 'both');
@@ -65,9 +69,8 @@ Object.assign(Table, {
         Q('#filter').classList.remove('active');
         Q('tr[hidden],tr.hidden', tr => tr.classList.toggle('hidden', tr.hidden = false));
         Table.table.classList.add('new');
-        Table.count();
+        Table.show.count();
     },
-    entire: () => (Table.table.classList.remove('new'), Table.flush(true)),
 });
 
 const Filter = () => {
@@ -83,7 +86,7 @@ Object.assign(Filter, {
         this.el.classList.toggle('active', hide.length);
         Q('tbody tr', tr => tr.classList.toggle('hidden', 
             hide.length && tr.matches(hide) || this.systems.some(i => !i.checked) && tr.matches('[abbr^="/"]')));
-        Table.count();
+        Table.show.count();
     },
     events () {
         this.systems.forEach((input, _, all) => input.addEventListener('change', () => all.forEach(i => i.checked = i == input)));
@@ -136,7 +139,7 @@ Object.assign(Finder, {
                 !/^[^一-龥]{1,2}(′|\\\+)?$/.test(typed) && Object.values(NAMES[comp][abbr] ?? {}).some(n => new RegExp(typed, 'i').test(n))
             ),
         beys (where) {
-            Q('#regular.new') && Table.entire();
+            Q('#regular.new') && Table.show.entire();
             Q('tbody tr', tr => tr.hidden = !(
                 Finder.target.free.length >= 2 && tr.Q('td:first-child').textContent.toLowerCase().includes(Finder.target.free.toLowerCase()) ||
                 Finder.regexp.some(regex => regex.test(tr.dataset.abbr)) || 
@@ -162,7 +165,7 @@ Object.assign(Finder, {
         Table.table.classList.toggle('searching', searching);
         Q('html,body', el => el.scrollTop = searching ? Q('tfoot').offsetTop : 0);
         Q('input:not([type])', input => searching ? input.blur() : input.value = '');
-        Table.count().flush(true);
+        Table.show.count();
 
         let [comp, abbr] = obake ? Object.entries(Finder.target.parts)[0] : [];
         abbr &&= comp == 'blade' ? NAMES[comp][abbr].jap : abbr;

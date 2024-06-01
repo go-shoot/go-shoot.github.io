@@ -63,7 +63,7 @@ customElements.define('db-status', class extends HTMLElement {
 const DB = {
     components: ['bit', 'blade', 'ratchet'],
     current: 'V2',
-    discard: (ver, handler) => DB.transfer.out().then(() => new Promise(res => {
+    discard: (ver = DB.current, handler) => DB.transfer.out().then(() => new Promise(res => {
         ver == DB.current && DB.db?.close();
         Object.assign(indexedDB.deleteDatabase(ver), {        
             onsuccess: () => res(ver == DB.current && (DB.db = null)),
@@ -103,9 +103,7 @@ const DB = {
         DB.indicator.init(outdated); console.log(outdated);
         return Promise.all(Object.keys(DB.action).map(f => (outdated?.some(p => p.includes(f)) ?? true) && DB.fetch(f)))
         .then(() => DB.indicator.update(true));
-        //update(['beys'].map(f => `prod-${f}`), (json, file) => DB.put('html', [file, json])),
         //update(['layer7', 'layer6', 'layer5'],       json => Promise.all(Object.entries(json).map(([comp, parts]) => DB.put.parts(parts, comp)))),
-        //update(['part-meta'], json => Promise.all(Object.entries(json).map(info => DB.put('meta', info))))
     },
     action: {
         'part-blade': (...args) => DB.put.parts(...args),
@@ -118,7 +116,7 @@ const DB = {
         .then(json => DB.action[file](json, file))
         .then(() => localStorage.setItem(`/db/${file}.json`, Math.round(new Date() / 1000))),
 
-    trans: (store, complete) => DB.tr && DB.tr.objectStoreNames.contains(store) ? DB.tr : 
+    trans: (store, complete) => DB.tr?.objectStoreNames.contains(store) ? DB.tr : 
         DB.tr = console.log('NEW TRAN '+store)??Object.assign(DB.db.transaction(store, complete ? 'readwrite' : 'readonly'), {oncomplete: () => (DB.tr = null) || complete?.()}),
 
     store: (...args) => DB.trans(...args).objectStore(args[0]),
@@ -130,12 +128,10 @@ const DB = {
             .onsuccess = ev => res(part ? {...ev.target.result, comp: store} : ev.target.result));
     },
     put: (store, items, success) => items && new Promise(res => {
-        if (Array.isArray(items)) {
-            DB.trans(store, res);
-            items.forEach(item => DB.put(store, item, success));
-        } else {console.log(store);
-            DB.store(store, res).put(...items.abbr ? [items] : Object.entries(items)[0].reverse()).onsuccess = success;
-        }
+        if (!Array.isArray(items))
+            return DB.store(store, res).put(...items.abbr ? [items] : Object.entries(items)[0].reverse()).onsuccess = success;
+        DB.trans(store, res);
+        items.forEach(item => DB.put(store, item, success));
     }),
 }
 Object.assign(DB.put, {

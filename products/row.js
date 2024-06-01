@@ -43,14 +43,6 @@ class Bit extends AbsPart {
 
 class Row {
     constructor(hidden = false) {this.hidden = hidden;}
-    static connectedCallback(tr) {
-        Cell.prototype.dissect.regex.pref ??= new RegExp(`^[${Parts.bit.prefix}]+(?=[^a-z].*)`);
-        Row.names(['eng', 'chi'], tr);
-    }
-    static names(lang, tr) {
-        tr.Q(`td[headers=blade]`).custom().next2((td, i) => td.custom().fullname(lang[i]));
-        tr.Q(`td[headers=bit]+td`).custom().fullname(lang[1] == 'chi' ? 'eng' : lang[1]);
-    }
     create([code, type, abbr, ...others]) {
         if (code == 'BH') return;
         let [video, extra] = ['string', 'object'].map(t => others.find(o => typeof o == t));

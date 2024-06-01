@@ -136,16 +136,18 @@ Object.assign(App, {
         )(new MutationObserver(() => App.save(location.hash)));
 
         new Dragging(Q('#deck'), {
+            hold: {to: bey => location.href = `/parts/#${bey.abbr.map(([comp, abbr]) => `${abbr}.${comp}`)}`},
             drop: {
                 targets: 'main bey-x',
                 when: ev => ev.target.classList.contains('selected')
             },
-            lift: {
-                drop: drop => drop.to.swap()
-            }
+            lift: {drop: drop => drop.to.swap()}
         });
         new Dragging(Q('#tier'), {
-            holdToRedispatch: pressed => pressed.select(),
+            hold: {
+                to: pressed => pressed.select(),
+                redispatch: true
+            },
             drop: {
                 targets: ['#tier bey-x', '#tier section', '#tier'],
                 when: ev => ev.target.classList.contains('selected')
@@ -165,7 +167,10 @@ Object.assign(App, {
             }
         });
         new Dragging(Q('aside'), {
-            holdToRedispatch: pressed => pressed.select(),
+            hold: {
+                to: pressed => pressed.select(),
+                redispatch: true
+            },
             scroll: {
                 what: 'ul',
                 when: ev => !ev.target.matches('.selected'),

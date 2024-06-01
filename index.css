@@ -178,6 +178,7 @@ section h3 {
 #reboot {
     user-select:none;-webkit-user-select:none;
     text-align:right;
+    padding-right:.5em;
 }
 #reboot h5 {
     display:block;
@@ -254,17 +255,16 @@ article img+:not(img) {
     margin-top:.5rem; margin-bottom:1rem;
 }
 summary {
-    list-style:revert; 
     background:rgba(100,100,100,.75); padding:.5em 0;
 }
-summary::marker {content:'▶';}
+summary::before {content:'▶';}
 summary::after  {content:'◀';}
-details[open]>summary::marker,details[open]>summary::after {content:'▼';}
+details[open]>summary::before,details[open]>summary::after {content:'▼';}
 
 /*font-size*/
 footer
 {font-size:0.6em;}
-#products
+#products,#reboot
 {font-size:0.8em;}
 #reboot span
 {font-size:1.05em;}
