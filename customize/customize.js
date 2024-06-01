@@ -130,7 +130,7 @@ Object.assign(App, {
     events () {
         document.onpointerdown = ev => (App.interacted = true) && ev.target.closest('aside')?.classList.remove('first');
         onhashchange = App.switch;
-        Q('#lang').onchange = ev => Bey.lang(ev.target.value) ?? App.save();
+        Q('#lang').onchange = ev => Bey.lang(ev?.target.value) ?? App.save();
         this.events.observe = () => (observer => 
             Q('article,section', el => observer.observe(el, { subtree: true, childList: true, attributeFilter: Bey.observedAttributes }))
         )(new MutationObserver(() => App.save(location.hash)));

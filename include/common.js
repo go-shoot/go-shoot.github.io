@@ -52,22 +52,3 @@ class Mapping {
     }
     static maps = {};
 }
-let files = {
-    updated: JSON.parse(localStorage.getItem('updated') || '{}'),
-    stored: JSON.parse(localStorage.getItem('stored') || '{}')
-}
-location.pathname == '/' && fetch('/db/-update.json').then(resp => resp.json())
-.then(({news, ...others}) => Object.entries(others).forEach(([url, [time]]) => files.updated[url] = new Date(time).getTime()))
-.then(() => localStorage.setItem('updated', JSON.stringify(files.updated)));
-
-const Fetch = url =>
-    (files.stored[url] >= files.updated[url] ? 
-        caches.match(url).then(resp => (resp && console.log(`cached: ${url}`) || resp) || Promise.reject()) :
-        Promise.reject()
-    ).catch(() => console.log(`fetch: ${url}`) ??
-        fetch(url).then(resp => caches.open('json').then(cache => {
-            cache.add(url, resp);
-            localStorage.setItem('stored', JSON.stringify(files.stored = {...files.stored, [url]: new Date().getTime()}));
-            return resp;
-        }))
-    )

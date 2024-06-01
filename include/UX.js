@@ -185,7 +185,7 @@ class Knob extends HTMLElement {
         this.type = this.Q('option') ? 'discrete' : 'continuous';
         this.input = this.Q('input,select');
         this[this.type].setup();
-        this.input.onchange = ev => this.event(ev);
+        (this.input.onchange = ev => this.event(ev))();
     }
     discrete = {
         setup: () => {
@@ -237,6 +237,7 @@ class Knob extends HTMLElement {
     }
     css = `
     meter {all:unset;}
+    ::-webkit-meter-bar {background:none;} /*safari*/
     :host {
         position:relative;
         font-size:2em;

@@ -10,7 +10,7 @@ Object.assign(Table, {
         return Promise.all([DB.get.names(), DB.get.meta()]).then(([names, meta]) => (NAMES = names, Parts = meta));
     },
     async tabulate () {
-        let beys = await (await Fetch('/db/prod-beys.json')).json();
+        let beys = await DB.get('product', 'beys');
         if (typeof beys == 'string') {
             beys = [...E('template', {innerHTML: beys}).content.children];
             Table.table.append(...beys);
@@ -101,7 +101,7 @@ Object.assign(Finder, {
     esc: string => (string ?? '').replaceAll(' ', '').replace(/[’'ʼ´ˊ]/g, '′').replace(/([^\\])?([.*+?^${}()|[\]\\])/g, '$1\\$2'),
     find (query) {
         Finder.regexp = [], Finder.target = {more: [], parts: {}, free: ''};
-        query && Q('form details').replaceChildren(...query.map(([comp, sym]) => E('input', {name: comp, value: sym})));
+        query && Q('form details').replaceChildren(...query.map(([comp, abbr]) => E('input', {name: comp, value: abbr})));
         for (let where of ['free', 'form'])
             if (Finder.read(where)) 
                 return Finder.process(where).build(where).search.beys(where);
@@ -116,33 +116,26 @@ Object.assign(Finder, {
     },
     process (where) {
         where == 'free' && Finder.target.free && Finder.search.parts();
-        //Find.target.more.push(...Object.entries(Find.target.parts).flatMap(([comp, syms]) => syms.map(s => `${s}.${comp}`)));
+        //Find.target.more.push(...Object.entries(Find.target.parts).flatMap(([comp, abbrs]) => abbrs.map(s => `${s}.${comp}`)));
         return this;
     },
     search: {
-        parts: () => {
-            let terms = Object.values(Part.revise.name).map(terms => new RegExp(Object.values(terms).join('|').replace(/ |\|(?!.)/g,''), 'i'));
-            let prefix = [];
-            Object.keys(Part.revise.name).forEach((p, i) => {
-                if (terms[i].test(Finder.target.free)) {
-                    prefix.push(p);
-                    Finder.target.free = Finder.target.free.replace(terms[i], '')
-                }
-            });
+        parts () {
+            let regex = Object.entries(Parts.meta.prefix).map(([p, t]) => [p, new RegExp(Object.values(t).join('|').replace(/ |\|(?!.)/g,''), 'i')]);
+            let prefix = regex.filter(([,t]) => t.test(Finder.target.free)).map(([p]) => p);
+            Finder.target.free = Object.values(regex).reduce((str, reg) => str.replace(reg, ''), Finder.target.free);
             Object.keys(NAMES).forEach(comp => {
                 let found = Finder.target.free && Finder.target.free.split('/').flatMap(typed => Finder.search.names(comp, typed)) || [];
                 Finder.target.parts[comp] = [...new Set(found)];
-                comp == 'bit' && (Finder.target.parts[comp].prefix = prefix);
             });
+            Finder.target.parts.bit.prefix = prefix;
         },
-        names: (comp, typed) => {
-            let tooShort = /^[^一-龥]{1,2}(′|\\\+)?$/.test(typed); 
-            return Object.keys(NAMES[comp]).filter(sym => 
-                new RegExp(`^${typed}$`, 'i').test(sym) || 
-                !tooShort && Object.values(NAMES[comp][sym] ?? {}).some(n => new RegExp(typed, 'i').test(n))
-            );
-        },
-        beys: where => {
+        names: (comp, typed) =>
+            Object.keys(NAMES[comp]).filter(abbr => 
+                new RegExp(`^${typed}$`, 'i').test(abbr) || 
+                !/^[^一-龥]{1,2}(′|\\\+)?$/.test(typed) && Object.values(NAMES[comp][abbr] ?? {}).some(n => new RegExp(typed, 'i').test(n))
+            ),
+        beys (where) {
             Q('#regular.new') && Table.entire();
             Q('tbody tr', tr => tr.hidden = !(
                 Finder.target.free.length >= 2 && tr.Q('td:first-child').textContent.toLowerCase().includes(Finder.target.free.toLowerCase()) ||
@@ -171,10 +164,10 @@ Object.assign(Finder, {
         Q('input:not([type])', input => searching ? input.blur() : input.value = '');
         Table.count().flush(true);
 
-        let [comp, sym] = obake ? Object.entries(Finder.target.parts)[0] : [];
-        sym &&= comp == 'blade' ? NAMES[comp][sym].jap : sym;
+        let [comp, abbr] = obake ? Object.entries(Finder.target.parts)[0] : [];
+        abbr &&= comp == 'blade' ? NAMES[comp][abbr].jap : abbr;
         comp &&= {blade: 'ブレード', ratchet: 'ラチェット', bit: 'ビット'}[comp];
-        Q('a[href*=obake]').href = 'http://obakeblader.com/' + (obake && Q('.prod-result').value > 1 ? `${comp}-${sym}/#toc2` : `?s=入手法`);
+        Q('a[href*=obake]').href = 'http://obakeblader.com/' + (obake && Q('.prod-result').value > 1 ? `${comp}-${abbr}/#toc2` : `?s=入手法`);
     },
     events () {
         Q('input:not([type])', input => input.onkeypress = ({keyCode}) => keyCode == 13 ? Finder.find() : '');

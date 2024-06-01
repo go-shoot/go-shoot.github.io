@@ -5,7 +5,7 @@
 <script src=/include/common.js></script>
 
 <nav><script>nav(['/', '/products/'])</script></nav>
-<db-status callback="prize()"></db-status>
+<db-status callback="display()"></db-status>
 <main>
     <a href="https://beyblade.takaratomy.co.jp/beyblade-x/news/news_stickerlist.html">
         <img src="https://beyblade.takaratomy.co.jp/beyblade-x/news/_image/news_stickerlist_12.png">
@@ -38,7 +38,7 @@
 </label>
 <script>
 class Keihin {
-    constructor({type, note, link, date, code, bey, ver, img}) {
+    constructor({type, note, link, date, code, bey, ver, img}, NAMES) {
         let [blade, ...others] = bey.split(' ');
         this.li = E('li', {classList: `keihin-${type}`}, [
             E('b', Keihin.type[type]), E('p', link ? [E('a', {href: link}, note)] : note),
@@ -46,41 +46,39 @@ class Keihin {
                 E('figure', [E('img', {src: img[0], style: img[1]})]), 
                 E('h5', [
                     code ? E('span', code, {classList: 'code'}) : '', 
-                    E('span', names.blade[blade].jap), 
+                    E('span', NAMES.blade[blade].jap), 
                     ` ${others}`.replace('-', '‑'), 
                     E('small', {innerHTML: ver[0]})
                 ]),
             ]),
-            E('i', [names.blade[blade].chi.replace(' ', '⬧') + ` ${names.blade[blade].chi ? others : ''}`.replace('-', '‑') || '　', E('small', ver[1])]),
+            E('i', [NAMES.blade[blade].chi.replace(' ', '⬧') + ` ${NAMES.blade[blade].chi ? others : ''}`.replace('-', '‑') || '　', E('small', ver[1])]),
             E('time', date.replace('-','‒'))
         ]);
     }
     static type = {t: '比賽', d: '抽獎', g: '贈品', m: '限定商品'}
 }
-let names;
-const prize = () =>
-DB.get.names(['blade']).then(result => names = result)
-.then(() => Fetch('/db/prod-keihin.json')).then(resp => resp.json())
-.then(keihins => Q('.diamonds').append(...keihins.map(k => new Keihin(k).li)))
-.then(() => (onresize = () => {
-    //nw+(n-1)g=W, n=(W+g)/(w+g)
-    //nw+(n-1)g=W-(w+g/2), n=(2W-w+g)/2(w+g)
-    let W = Q('.diamonds').getBoundingClientRect().width, 
-        g = parseFloat(getComputedStyle(Q('.diamonds')).gap),
-        w = Q('.diamonds li:first-child').getBoundingClientRect().width;
-    let more = Math.floor((W + g) / (w + g)),
-        less = Math.floor((2*W - w + g) / 2 / (w + g));
+const display = () =>
+    fetch('/db/prod-keihin.json').then(resp => Promise.all([DB.get.names(['blade']), resp.json()]))
+    .then(([names, keihins]) => Q('.diamonds').append(...Keihin.all = keihins.map(k => new Keihin(k, names).li)))
+    .then(() => (onresize = () => {
+        //nw+(n-1)g=W, n=(W+g)/(w+g)
+        //nw+(n-1)g=W-(w+g/2), n=(2W-w+g)/2(w+g)
+        let W = Q('.diamonds').getBoundingClientRect().width, 
+            g = parseFloat(getComputedStyle(Q('.diamonds')).gap),
+            w = Keihin.all[0].getBoundingClientRect().width;
+        let more = Math.floor((W + g) / (w + g)),
+            less = Math.floor((2*W - w + g) / 2 / (w + g));
 
-    Q('.diamonds li', li => li.classList.remove('left', 'right', 'next'));
-    if (more === less)
-        return Q('.diamonds li', (li, i) => li.classList.add(Math.ceil((i+1)/more)%2 === 0 ? 'left' : 'right'));
-    
-    Q(`.diamonds li:nth-child(${2*more-1}n-${more-2})`, li => {
-        let [last, ...others] = li.withNext(less).reverse();
-        last.classList.add(last.matches(':last-child') && (others.length == less - 1 || !others.length) ? 'left' : 'next');
-        others.forEach(li => li.classList.add('left'));
-    });
-})());
+        Keihin.all.forEach(k => k.classList.remove('left', 'right', 'next'));
+        if (more === less)
+            return Keihin.all.forEach((k, i) => k.classList.add(Math.ceil((i+1)/more)%2 === 0 ? 'left' : 'right'));
+        
+        Q(`.diamonds li:nth-child(${2*more-1}n-${more-2})`, li => {
+            let [last, ...others] = li.withNext(less).reverse();
+            last.classList.add(last.matches(':last-child') && (others.length == less - 1 || !others.length) ? 'left' : 'next');
+            others.forEach(li => li.classList.add('left'));
+        });
+    })());
 HTMLLIElement.prototype.withNext = function(n) {
     let next = [this], current = this;
     while (next.length <= n && current.nextElementSibling)

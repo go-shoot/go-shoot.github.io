@@ -32,50 +32,48 @@
     </div>
 
     <!--a id=TopTier onclick='setTimeout(() => location.reload())'>Top tier 最強級部件舉例</a-->
-    <div class=catalog></div>
-
     <style>
-        #menu {
-            padding-bottom:5em;
-        }
-        #catalog {
-            display:none;
-        }
-        h4 {
-            font-size:.8em;
-            display:flex; flex-direction:column; justify-content:center; align-items:center;
-            width:7rem; height:7rem;
-            border-radius:9em;
-            box-shadow:0 0 1em .1em hsl(var(--c),calc(65% + var(--s-adj,0%)),calc(50% + var(--b-adj)));
-            position:relative;
-            margin:2em auto;
-            color:hsl(var(--c),65%,50%);
-        }
-        h4::before {
-            content:attr(title); font-size:2em;
-            display:block;
-        }
-        h4::after {
-            content:'';
-            position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-            width:80%; height:80%;
-            z-index:-1;
-            background:url(/img/blade/CbDr.png) center / contain no-repeat;
-            filter:contrast(0) brightness(20);
-        }
-        .ratchet h4::after {background-image:url(/img/ratchet/3-60.png);}
-        .bit h4::after {background-image:url(/img/bit/B.png);}
+    #menu {
+        padding-bottom:5em;
+    }
+    #catalog:has(+#menu:not([hidden])) {
+        display:none;
+    }
+    #menu h4 {
+        font-size:.8em;
+        display:flex; flex-direction:column; justify-content:center; align-items:center;
+        width:7rem; height:7rem;
+        border-radius:9em;
+        box-shadow:0 0 1em .1em hsl(var(--c),calc(65% + var(--s-adj,0%)),calc(50% + var(--b-adj)));
+        position:relative;
+        margin:2em auto;
+        color:hsl(var(--c),65%,50%);
+    }
+    #menu h4::before {
+        content:attr(title); font-size:2em;
+        display:block;
+    }
+    #menu h4::after {
+        content:'';
+        position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+        width:80%; height:80%;
+        z-index:-1;
+        background:url(/img/blade/CbDr.png) center / contain no-repeat;
+        filter:contrast(0) brightness(20);
+    }
+    #menu .ratchet h4::after {background-image:url(/img/ratchet/3-60.png);}
+    #menu .bit h4::after {background-image:url(/img/bit/B.png);}
 
-        div a[href]:not(:has(h4)) {
-            background:hsl(var(--c),65%,80%);border-radius:9em;
-            margin:0 .5em;
-            min-width:3em;height:1.6em;
-            color:black;line-height:1.6em;
-        }
-        #TopTier {
-            background:var(--theme);border-radius:9em;
-            padding:.25em .75em;
-            color:black;
-        }
+    #menu div a[href]:not(:has(h4)) {
+        background:hsl(var(--c),65%,80%);border-radius:9em;
+        margin:0 .5em;
+        min-width:3em;height:1.6em;
+        color:black;line-height:1.6em;
+    }
+    #TopTier {
+        background:var(--theme);border-radius:9em;
+        padding:.25em .75em;
+        color:black;
+    }
     </style>
 </main>

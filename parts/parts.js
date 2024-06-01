@@ -4,23 +4,19 @@ let Parts = {
     count: () => Q('.part-result').value = document.querySelectorAll('.catalog>a:not([id^="+"]):not([hidden])').length,
 
     async firstly () {
-        Q('#menu').remove();
+        Q('#menu').hidden = true;
         Object.assign(Parts, await DB.get.meta(Parts.comp, Parts.category));
-        Filter();
     },
-    async before () {
-        //['info', 'title', 'label'].forEach(async m => {
-        //    let meta = await DB.get('meta', m);
-        //    Parts.meta[m] = Parts.meta.groups.reduce((obj, g) => ({...obj, [g]: meta[g] ?? Parts.meta[m]}), {});
-        //});
+    before () {
+        Filter();
     },
     async cataloging () {
         Parts.all = DB.get.parts(Parts.comp).then(parts => parts.map((p, _, ar) => new Part(p, ar).prepare().catalog()));
         Parts.all = await Promise.all(await Parts.all);
     },
     async listing () {
-        Parts.all = await Promise.all(location.hash.substring(1).split(',').map(p => DB.get('parts', decodeURI(p))));
-        Parts.all = Parts.all.map(p => new Part(p).prepare().catalog());
+        Parts.all = await Promise.all(location.hash.substring(1).split(',').map(p => DB.get(p)));
+        Parts.all = Parts.all.map(p => new Part(p).prepare().catalog(true));
     },
     after () {
         let hash = decodeURI(location.hash.substring(1));
@@ -124,23 +120,24 @@ const Sorter = () => {
         Q('.catalog').append(...Parts.all.sort(Sorter.sort[input.id]).map(p => p.a));
         input.checked && Cookie.set('sort', input.id);
     };
+    Sorter.release(Parts.comp);
     return dl;
 }
 Object.assign(Sorter, {
     compare: (u, v, f = p => p) => +(f(u) > f(v)) || -(f(u) < f(v)),
     sort: {
         name: (p, q) =>
-            (/^MFB|BSB$/.test(p.group) || /^MFB|BSB$/.test(q.group)) && Sorter.compare(q, p, p => p.group)
+            [p.group, q.group].includes('remake') && Sorter.compare(p, q, p => p.group)
             || Sorter.compare(p, q, p => p.abbr[0] == '+')
             || Sorter.compare(p, q, p => parseInt(p.abbr))
-            || Sorter.compare(p, q, p => p.strip().toLowerCase())
-            || p.comp == 'bit' && Sorter.compare(p, q, p => p.abbr.match(new RegExp(`^[${Parts.bit.prefix}]`))),
+            || p.comp == 'bit' && Sorter.compare(p, q, p => p.strip().toLowerCase())
+            || p.comp == 'bit' && Sorter.compare(p, q, p => p.abbr.length),
 
         weight: (p, q) => Sorter.compare(q, p, p => (w => parseInt(w) + ({'+': .2, '-': -.2}[w.at(-1)] ?? 0))(p.stat[0] || '0')),
-        time: (p, q) => Sorter.compare(p, q, p => Sorter.schedule(p.comp).lastIndexOf(p.abbr)),
+        time: (p, q) => Sorter.compare(p, q, p => (i => i == -1 ? 999 : i)(Sorter.release().lastIndexOf(p.abbr))),
         rank: (p, q) => Sorter.compare(p, q, p => p.rank || 'Z')
     },
-    schedule: comp => Sorter._schedule ?? Fetch('/db/prod-beys.json').then(resp => resp.json())
-        .then(products => Sorter._schedule = products.map(([_1, _2, bey]) => bey.split(' ')[{blade: 0, ratchet: 1, bit: 2}[comp]]))
+    release: comp => Sorter.schedule ?? DB.get('product', 'schedule').then(beys => 
+        Sorter.schedule = beys.map(bey => bey[{blade: 0, ratchet: 1, bit: 2}[comp]])
+    )
 });
-Sorter.schedule(Parts.comp);

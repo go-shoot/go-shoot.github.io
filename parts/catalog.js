@@ -1,27 +1,26 @@
 const concat = (...objs) => objs.reduce((summed, o, i) => i === 0 ? summed : Object.fromEntries(Object.entries(summed).map(([k, v]) => [k, v += o[k] ?? ''])), objs[0]);
 class Part {
-    constructor(dict, array) {this.array = array;
+    constructor(dict) {
         dict.key && ([dict.abbr, dict.comp] = dict.key.split('.'));
         Object.assign(this, dict);
     }
-    async revise(bits = this.array) {
+    async revise(bits) {
         if (this.comp != 'bit' || this.names)
             return this;
         Parts.bit?.prefix ?? Object.assign(Parts, await DB.get.meta());
         let [, pref, ref] = new RegExp(`^([${Parts.bit.prefix}]+)([^a-z].*)$`).exec(this.abbr);
-        Parts.ref ??= {};
-        Parts.ref[ref] ??= bits ? bits.find(p => p.abbr == ref || p.sym == ref) : await DB.get('bit', this.strip());
-        this._revise.name(Parts.ref[ref], pref);
-        this._revise.attr(Parts.ref[ref], pref);
-        this._revise.stat(Parts.ref[ref]);
-        this._revise.desc(Parts.ref[ref], pref);
+        ref = bits ? bits.find(p => p.abbr == ref) : await DB.get('bit', this.strip());
+        this._revise.name(ref, pref);
+        this._revise.attr(ref, pref);
+        this._revise.stat(ref);
+        this._revise.desc(ref, pref);
         return this;
     }
     _revise = {
         name: (ref, pref) => this.names = Part.revise.name(ref, pref),
         attr: (ref, pref) => [this.group, this.attr] = [ref.group, [...this.attr ?? [], ...ref.attr, ...pref]],
         stat: ref => this.stat.length === 1 && this.stat.push(...ref.stat.slice(1)),
-        desc: (ref, pref) => this.desc = [...pref].map(p => Parts.meta.prefix[p].desc).join('、') + `的【${ref.abbr || ref.sym}】bit${this.desc ? `，${this.desc}` : '。'}`
+        desc: (ref, pref) => this.desc = [...pref].map(p => Parts.meta.prefix[p].desc).join('、') + `的【${ref.abbr}】bit${this.desc ? `，${this.desc}` : '。'}`
     }
     static revise = {
         name: (ref, pref) => [...pref].reverse().reduce((names, p) => concat(Parts.meta.prefix[p], names), ref?.names ?? ref),
@@ -51,7 +50,6 @@ class Part {
         return this;
     }
 }
-
 
 Part.prototype.catalog.html = function() {
     Q('#triangle') || Part.triangle();

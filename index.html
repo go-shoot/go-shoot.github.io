@@ -26,6 +26,8 @@
 </header>
 
 <db-status callback="Q('header,section,time,.scroller', content => observer.observe(content));"></db-status>
+
+<a href="customize/" style="display:block;">我的陀螺盒</a>
 <section id=contents>
     <h3>本站内容</h3>
     <a href=products/ >商品</a>
@@ -91,55 +93,56 @@
     </article>
 </details>
 
-<!--section id=reboot>
+<section id=reboot>
     <div>
         <p><i id=flush>&#xe010;</i><span>更新檔案（～250 KB）</span><i></i></p>
         &#xe00d; 如在本網遇上問題 &#xe00e;
         <p><i id=reset>&#xe010;</i><span>重設儲存（～30 MB）</span><i></i></p>
     </div>
-</section-->
+</section>
 
 <script>    
-    Q('#links a[href=_]').href = navigator.appVersion.includes('Mac') ? 'https://apps.apple.com/tw/app/id1670801696':'https://play.google.com/store/apps/details?id=jp.co.takaratomy.beyblade&pli=1';
+Q('#links a[href=_]').href = navigator.appVersion.includes('Mac') ? 'https://apps.apple.com/tw/app/id1670801696':'https://play.google.com/store/apps/details?id=jp.co.takaratomy.beyblade&pli=1';
 
-    const observer = new IntersectionObserver(entries => entries.forEach(entry => entry.target.classList.toggle('seeing', entry.isIntersecting)));
-        
-    const announce = news => Object.entries(news).forEach(([date, beys]) => {
-        let base = `https://beyblade.takaratomy.co.jp/beyblade-x/lineup/_image/`;
-        Q('#products').append(E('time', {title: date}));
-        beys.forEach(bey => {
-            let {code, name, imgs, desc, type, color, class: cl} = bey;
-            imgs ??= [];
-            if (name && /[BU]XG?-/.test(code)) {
-                let c = code.match(/[BU]XG?-\d+/)[0].replace('-','');
-                imgs = [base + `${c}@1.png`, ...imgs];
-                imgs.push(...[2,3,4,5,6,7,8].map(n => base + `${c}${color ? `_${color}` : ''}_0${n}@1.png`));
-            }
-            let div = E('div', [
-                E('h5', code, {classList: type ?? ''}),
-                E('h4', name?.replaceAll('-', '‑').replaceAll('<br>', String.fromCharCode(10))), 
-                ...imgs.map(src => E('figure', [E('a', '🖼️', {href: src}), E('img', {src})])), 
-                ...([desc ?? []].flat()).map(d => E('p', {innerHTML: d.replaceAll('-', '‑')}))
-            ], {classList: `scroller ${cl || announce.colors.find(code)}`});
+const observer = new IntersectionObserver(entries => entries.forEach(entry => entry.target.classList.toggle('seeing', entry.isIntersecting)));
+    
+const announce = news => Object.entries(news).forEach(([date, beys]) => {
+    let base = `https://beyblade.takaratomy.co.jp/beyblade-x/lineup/_image/`;
+    Q('#products').append(E('time', {title: date}));
+    beys.forEach(bey => {
+        let {code, name, imgs, desc, type, color, class: cl} = bey;
+        imgs ??= [];
+        if (name && /[BU]XG?-/.test(code)) {
+            let c = code.match(/[BU]XG?-\d+/)[0].replace('-','');
+            imgs = [base + `${c}@1.png`, ...imgs];
+            imgs.push(...[2,3,4,5,6,7,8].map(n => base + `${c}${color ? `_${color}` : ''}_0${n}@1.png`));
+        }
+        let div = E('div', [
+            E('h5', code, {classList: type ?? ''}),
+            E('h4', name?.replaceAll('-', '‑').replaceAll('<br>', String.fromCharCode(10))), 
+            ...imgs.map(src => E('figure', [E('a', '🖼️', {href: src}), E('img', {src})])), 
+            ...([desc ?? []].flat()).map(d => E('p', {innerHTML: d.replaceAll('-', '‑')}))
+        ], {classList: `scroller ${cl || announce.colors.find(code)}`});
 
-            Q('#products').appendChild(div);
-        });
+        Q('#products').appendChild(div);
     });
-    announce.colors = new Mapping(
-        /entry set/i, 'SS',
-        /組合|Set/i, 'St',
-        /Starter/i, 'S',
-        /Random/i, 'RB',
-        /Booster/i, 'B',
-        /[BU]XG?-/, 'others',
-        'Lm'
-    );
-    new Dragging(Q('#products'), {scroll: {what: '.scroller', when: () => true}});
+});
+announce.colors = new Mapping(
+    /entry set/i, 'SS',
+    /組合|Set/i, 'St',
+    /Starter/i, 'S',
+    /Random/i, 'RB',
+    /Booster/i, 'B',
+    /[BU]XG?-/, 'others',
+    'Lm'
+);
+new Dragging(Q('#products'), {scroll: {what: '.scroller', when: () => true}});
 
+(() => {
     const flush = message => fetch('/sw/update').then(resp => message.innerText = resp.status == 200 ? '成功' : '失敗');
     const reset = message => Promise.all([
-        DB.discard('V6', ev => message.innerText = ev.type == 'blocked' ? '請先關閉所有本網的分頁' : ev.type),
-        caches.delete('V6'), caches.delete('parts'),
+        DB.discard('V2', ev => message.innerText = ev.type == 'blocked' ? '請先關閉所有本網的分頁' : ev.type),
+        caches.delete('V2'), caches.delete('parts'),
         document.cookie.split(/;\s?/).forEach(c => document.cookie = c.replace(/=.*/, `=; max-age=0; path=/`))
     ]);
     new Dragging(Q('#reboot'), {
@@ -163,6 +166,7 @@
             }
         }
     });
+})();
 </script>
 
 <a href="https://beyblade-burst.github.io/" id=bbb><img src="/img/system-BBB.png"></a>
