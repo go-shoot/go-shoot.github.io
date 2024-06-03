@@ -1,7 +1,14 @@
 <!DOCTYPE HTML>
-<script src=/include/common.js></script>
 <title>陀螺商品⬧Merchandise</title>
+<script src=/include/common.js></script>
+<script defer src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js></script>
+<script defer src=https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js></script>
+<script defer src=/parts/catalog.js></script>
+<script defer src=table.js></script>
+<script defer src=maps.js></script>
+<script defer src=row.js></script>
 <link rel=stylesheet href=products.css>
+<link rel=stylesheet href=/parts/catalog.css>
 
 <nav>
     <script>nav(['/', '/parts/'])</script>
@@ -75,16 +82,4 @@
         <tfoot></tfoot>
     </table>
 </main>
-<label id=popup>
-    <input type=checkbox>
-</label>
-
-<script src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js></script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js></script>
-<script src=/parts/catalog.js></script>
-<script src=table.js></script>
-<script src=maps.js></script>
-<script src=row.js></script>
-
-<link rel=stylesheet href=/parts/catalog.css>
-<link rel=stylesheet href=/parts/typography.css>
+<aside popover onclick="this.hidePopover()"></aside>

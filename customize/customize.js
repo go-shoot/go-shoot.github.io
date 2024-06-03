@@ -7,6 +7,7 @@ const App = () => {
     }
     [1,2,3,4,5].forEach(t => create('#deck', t));
     [1,2,3,4,5].forEach(t => create('#tier div', t));
+    App.popup = Q('[popover]');
     App.events();
     App.act.events();
 };
@@ -52,13 +53,13 @@ Object.assign(App.act, {
             let target = Q(n ? `#deck article:nth-of-type(${n})` : '#tier div');
             target.style.background = 'black';
             !n && (target.style.minWidth = '35rem') && (target.style.maxWidth = '40rem');
-            setTimeout(() => html2canvas(target, {scale: 5}).then(canvas => {
+            setTimeout(() => html2canvas(target, {scale: 2}).then(canvas => {
                 E('a', {
                     href: canvas.toDataURL("image/png"),
                     download: n ? `DECK${n}.png` : 'TIER.png'
                 }).click(); 
                 target.removeAttribute('style');
-            }).catch(er => console.error(er) ?? (Q('#popup').textContent = er)), 100);
+            }).catch(er => console.error(er) ?? (App.popup.textContent = er)), 100);
         },
         text (n) {
             App.act.popup('text');
@@ -66,7 +67,7 @@ Object.assign(App.act, {
                 Q(`#deck article:nth-of-type(${n}) bey-x`).map(bey => bey.name).join('\n') :
                 Q('#tier article').filter(ar => ar.Q('bey-x'))
                 .map(ar => `T${ar.Q('h2').title}：`+ [...ar.querySelectorAll('bey-x')].map(bey => bey.name).join('、')).join('\n');
-            Q('#popup blockquote').innerText = text;
+            App.popup.Q('blockquote').innerText = text;
             navigator.clipboard.writeText(text);
         },
     },
@@ -79,16 +80,16 @@ Object.assign(App.act, {
         }, {once: true})
     },
     popup (t) {
-        Q(`#popup .${t}`).hidden = false;
-        Q('#popup input').checked = true;
+        App.popup.Q(`.${t}`).hidden = false;
+        App.popup.showPopover();
     },
     reset () {
-        Q('#popup p:not([hidden])')?.setAttribute('hidden', '');
-        Q('button.selected')?.classList.remove('selected');
+        App.popup.Q('p:not([hidden])')?.setAttribute('hidden', '');
+        Q('#deck bey-x,.selected', el => el.classList.remove('selected'));
         Q('.actioning')?.classList.remove('actioning');
     },
     events () {
-        Q('#popup input').addEventListener('change', ev => ev.target.checked || App.act.reset(ev));
+        App.popup.addEventListener('click', ev => ev.target.matches(':popover-open') || App.act.reset(ev));
         Q('nav').onclick = ev => {
             if (ev.target.tagName != 'BUTTON') return;
             if (ev.target.classList.contains('selected')) return App.act.reset();

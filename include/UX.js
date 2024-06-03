@@ -244,9 +244,6 @@ class Knob extends HTMLElement {
         display:inline-block; width:2em; height:2em;
         touch-action:none; user-select:none;
     }
-    :host(.hover),:host([discrete]) meter::after {
-        transition:--angle .5s;
-    }
     meter,meter::before,slot {
         width:100%; height:100%;
     }
@@ -262,40 +259,45 @@ class Knob extends HTMLElement {
         );
         transform:scale(-1);
         -webkit-user-drag:none;
+
+        &.dragged {
+            --theme:var(--theme-alt); color:hsl(45,90%,48%); --dark:hsl(45,90%,20%);
+        }
+        &::before {
+            content:'';
+            position:absolute; left:0;
+            border-radius:inherit; 
+            background:conic-gradient(
+                transparent var(--min),
+                var(--light) var(--min) var(--angle),
+                transparent var(--angle)
+            );
+            filter:drop-shadow(0 0 .1em var(--light));
+        }
+        &::after {
+            content:'·';
+            position:absolute; inset:.3em;
+            border-radius:inherit; outline:.2em solid var(--bg,#333);
+            background:var(--dark);
+            text-align:center; line-height:.4;
+            transform:rotate(var(--angle));
+            text-shadow:0 0 .1em var(--theme);
+        }
     }
-    meter.dragged {
-        --theme:var(--theme-alt); color:hsl(45,90%,48%); --dark:hsl(45,90%,20%);
+    :host([discrete]) {
+        meter::before {
+            background:conic-gradient(
+                transparent calc(var(--angle) - 1.5deg),
+                var(--light) calc(var(--angle) - 1.5deg) calc(var(--angle) + 1.5deg),
+                transparent calc(var(--angle) + 1.5deg)
+            );
+        }
+        meter::after {
+            outline-width:.1em;
+        }   
     }
-    meter::before {
-        content:'';
-        position:absolute; left:0;
-        border-radius:inherit; 
-        background:conic-gradient(
-            transparent var(--min),
-            var(--light) var(--min) var(--angle),
-            transparent var(--angle)
-        );
-        filter:drop-shadow(0 0 .1em var(--light));
-    }
-    :host([discrete]) meter::before {
-        background:conic-gradient(
-            transparent calc(var(--angle) - 1.5deg),
-            var(--light) calc(var(--angle) - 1.5deg) calc(var(--angle) + 1.5deg),
-            transparent calc(var(--angle) + 1.5deg)
-        );
-    }
-    meter::after {
-        content:'·';
-        position:absolute; left:.3em; top:.3em;
-        width:calc(-.6em + 100%); height:calc(-.6em + 100%);
-        border-radius:inherit; outline:.2em solid var(--bg,#333);
-        background:var(--dark);
-        text-align:center; line-height:.4;
-        transform:rotate(var(--angle));
-        text-shadow:0 0 .1em var(--theme);
-    }
-    :host([discrete]) meter::after {
-        outline-width:.1em;
+    :host(.hover),:host([discrete]) meter::after {
+        transition:--angle .5s;
     }
     slot {
         z-index:1;

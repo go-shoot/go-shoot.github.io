@@ -140,22 +140,23 @@ class Bey extends HTMLElement {
         content:attr(title);
     }
     i {
-        grid-area:1/1/2/2; justify-self:end; align-self:start;
+        grid-area:1/1/2/2;
         font-style:normal;
         display:flex; justify-content:space-between; width:100%;
         padding:.3em; box-sizing:border-box;
+
+        &::before {
+            content:'';
+            height:1.5em; width:1.5em; display:inline-block;
+            background:url() no-repeat center / contain;
+        }
+        &::after {
+            content:'';
+            font-size:1.2em; line-height:1.4;
+        }
     }
     :host([expand]) i {
         justify-content:end; gap:.2em;
-    }
-    i::before {
-        content:'';
-        height:1.5em; width:1.5em; display:inline-block;
-        background:url() no-repeat center / contain;
-    }
-    i::after {
-        content:'';
-        font-size:1.2em; line-height:1.4;
     }
     :host([type=att]) i::before {background-image:url(/img/types.svg#att);}
     :host([type=bal]) i::before {background-image:url(/img/types.svg#bal);}
@@ -166,13 +167,14 @@ class Bey extends HTMLElement {
     :host([spin=dual]) i::after {content:'\ue01d \ue01e';}
     .part {
         overflow:hidden;
-    }
-    .part li {
-        width:90%; height:90%; margin:5%;
-        background:url() no-repeat center center / contain;
-    }
-    .part li:not([style]) {
-        display:none;
+
+        li {
+            width:90%; height:90%; margin:5%;
+            background:url() no-repeat center center / contain;
+        }
+        li:not([style]) {
+            display:none;
+        }
     }
     h4 {
         margin:0;
@@ -191,14 +193,16 @@ class Bey extends HTMLElement {
     :host([expand]) h4 span:nth-child(2)::before {content:' ';}
     :host([expand]) h4 span:nth-child(3)::before {content:' ';}
 
-    :host h4 {font-size:1em;}
-    :host h4.eng {font-size:.9em;}
-    :host h4.jap {font-size:.7em; margin-bottom:.2em;}
-
-    :host([expand]) h4 {font-size:.7em;}
-    :host([expand]) h4.eng {font-size:.65em;}
-    :host([expand]) h4.jap {font-size:.55em;}
-    :host([expand]) h4.jap span:first-child {letter-spacing:-.05em;}
-    `
+    :host h4 {
+        font-size:1em;
+        &.eng {font-size:.9em;}
+        &.jap {font-size:.7em; margin-bottom:.2em;}
+    }
+    :host([expand]) h4 {
+        font-size:.7em;
+        &.eng {font-size:.65em;}
+        &.jap {font-size:.55em;}
+        &.jap span:first-child {letter-spacing:-.05em;}
+    }`
 }
 customElements.define('bey-x', Bey);

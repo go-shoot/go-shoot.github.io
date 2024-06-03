@@ -5,6 +5,7 @@ let Parts = {
 
     async firstly () {
         Object.assign(Parts, await DB.get.meta(Parts.comp, Parts.category));
+        Magnifier();
     },
     before () {
         Filter();
@@ -24,7 +25,6 @@ let Parts = {
         Q(`#${Cookie.sort || 'name'}`).click();
     },
     finally () {
-        Magnifier();
         Q('.loading').classList.remove('loading');
     },
     async switch (groups, keep) {
@@ -53,15 +53,15 @@ const Magnifier = () => {
 };
 Object.assign(Magnifier, {
     create: () => E('div', {classList: 'part-mag'}, [
-        E('spin-knob', [E('input', {type: 'range', min: .75, max: 2, step: 'any'}), E('i', '🔍')]),
+        E('spin-knob', [E('input', {type: 'range', min: .75, max: 2, step: 'any'}), E('i', '')]),
         ...[1,2,3].map(n => E('label', [E('input', {id: `mag${n}`, type: 'radio', name: 'mag'})]))
     ]),
     events () {
         Q('.part-mag').onchange = ({target: input}) => input.checked && Cookie.set('pref', {button: input.id});
-        Magnifier.knob.onchange = ev => ev && (Q('.catalog').style.fontSize = `${ev.target.value}em`) && Cookie.set('pref', {knob: ev.target.value});
+        Magnifier.knob.onchange = ev => ev && (Q('.catalog').style.zoom = `${ev.target.value}`) && Cookie.set('pref', {knob: ev.target.value});
         setTimeout((onresize = Magnifier.switch));
     },
-    switch: () => Q('.catalog').style.fontSize = innerWidth > 630 ? (Magnifier.knob.value = Cookie.pref?.knob || '1') + 'em' : ''
+    switch: () => Q('.catalog').style.zoom = innerWidth > 630 ? (Magnifier.knob.value = Cookie.pref?.knob || '1') + 'em' : ''
 });
 
 const Filter = function(type) {

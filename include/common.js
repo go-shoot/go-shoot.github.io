@@ -1,5 +1,5 @@
 navigator.serviceWorker?.register('/worker.js').then(() =>
-    document.querySelector('link[href="/include/common.css"]') ?? location.reload()
+    document.querySelector('link[href="/include/common.css"]')
 );
 Q = Node.prototype.Q = function(el, func) {
     let els = this.querySelectorAll?.(el) ?? document.querySelectorAll(el);

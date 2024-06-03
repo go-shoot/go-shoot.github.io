@@ -5,15 +5,14 @@
 <link rel=stylesheet href=index.css>
 <link rel=stylesheet href=/include/component.css>
 <style>
-    html {background:black;}
     html::before {
         content:'請重新整理 Please refresh';
-        opacity:0;animation:appear .5s 2s forwards;
-        text-align:center;color:white;font-size:3em;
-        position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+        opacity:1; transition:opacity 1s;
+        text-align:center; color:white; font-size:3em;
+        position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
     }
-    @keyframes appear { to {opacity:1;} }
-    body {background:linear-gradient(#00000066,#00000088),url(bg.jpg) center / cover;}
+    @starting-style {html::before {opacity:0;}}
+    body {opacity:0;background:linear-gradient(#00000066,#00000088),url(bg.jpg) center / cover;}
 </style>
 <img src="https://beyblade.takaratomy.co.jp/anime/_image/kv_chara.png" hidden>
 

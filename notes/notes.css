@@ -1,0 +1,64 @@
+h2 {
+    display:block;
+
+    -webkit-text-stroke: var(--theme) 1px;
+    paint-order: stroke fill;
+}
+.container {
+    position: relative;
+    display: inline-block;
+    width: 200px;height: 200px;
+    border: 1px solid white;
+    .path {
+      width: 50px;height: 50px;
+      position: absolute;
+      background-color: magenta;
+      animation: move 5s linear infinite alternate;
+    }
+    .xywh-path-1 {offset-path: xywh(20px 20px 100% 100% round 10%);}
+    .xywh-path-2 {
+        offset-position: auto;
+        offset-path: ray(120deg farthest-corner)
+    }
+}
+@keyframes move {
+  0% {offset-distance: 0%;}
+  100% {offset-distance: 100%;}
+}
+h2:nth-of-type(3) {
+    background: -webkit-cross-fade(url("/img/types.svg#att"), url("/img/types.svg#bal"), 50%) center / contain;
+}
+h2:nth-of-type(4) {
+    background:color-mix(in hsl,var(--theme),black)
+}
+  
+
+.post {
+    container-type: inline-size;
+  }
+@container (width < 650px) {
+    .card {
+        width: 50%;
+        background-color: gray;
+        font-size: 1em;
+    }
+}
+@layer {
+
+}
+@scope (.article-body) to (figure) {
+  img {
+    border: 5px solid black;
+    background-color: goldenrod;
+  }
+}
+::highlight() {
+  color:black;background:yellow;
+  text-decoration: none;text-shadow: none;
+}
+dd {
+  backdrop-filter: ;
+  background-blend-mode: ;
+  isolation:;
+  shape-image-threshold: ;
+}

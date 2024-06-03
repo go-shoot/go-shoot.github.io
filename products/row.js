@@ -136,8 +136,8 @@ class Cell {
         Object.assign(this.preview, this._preview);
         Object.assign(this.preview.image, this.preview._image);
         this.preview.image.td = this.preview.td = this.td;
-        Q('#popup input').checked = true;
-        Q('#popup input~*', el => el.remove());
+        Cell.popup.showPopover();
+        Cell.popup.innerHTML = '';
         this.preview[this.td.matches('td:first-child') ? 'image' : 'part']();
     }
     _preview = {
@@ -181,7 +181,7 @@ class Cell {
         },
     }
     static text = td => td.childNodes[0].textContent;
-    static popup = Q('#popup');
+    static popup = Q('[popover]');
 }
 Object.assign(Cell.prototype.dissect, Cell.dissect);
 Object.assign(Cell.prototype.fullname, Cell.fullname);

@@ -82,7 +82,7 @@ const List = {
         '/parts/parts.js', '/parts/catalog.js',
         '/products/row.js', '/products/maps.js', '/products/table.js',
         '/include/common.css', '/index.css',
-        '/parts/catalog.css', '/parts/typography.css',
+        '/parts/catalog.css',
         '/products/products.css',
         '/products/', '/parts/', '/', '/prize/',
         '/prize/carousel.js',

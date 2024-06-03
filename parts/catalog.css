@@ -75,7 +75,7 @@ a object {
     width:100%;
 }
 .chi {
-    align-self:center; justify-self:start;
+    place-self:center start;
     margin-left:.2em; margin-top:.15em;
     letter-spacing:.1em;
     font-size:.8em; 
@@ -135,7 +135,7 @@ a>span {
     font-size:.8em; color:var(--theme);
     line-height:1;
     margin-left:.2em;
-    justify-self:start; align-self:end;
+    place-self:end start;
     z-index:1;
 }
 a>span::before {
@@ -165,7 +165,7 @@ a.bit h4 {
 }
 
 a dl {
-    align-self:end; justify-self:end;
+    place-self:end;
     display:grid; grid-template:repeat(2,1.5em) / repeat(4,auto); gap:.4em .2em;
 }
 a dt {
@@ -221,7 +221,7 @@ strong:empty {
 }
 
 figure {
-    align-self:center; justify-self:center;
+    place-self:center;
     width:6em; height:6em;
 }
 figure img {
@@ -270,7 +270,6 @@ menu .def {transform:translate(-50%,-50%) rotate(090deg) translateY(4.9em);}
     display:inline-block;
     animation:spin 1s infinite;
 }
-@keyframes spin {to {transform:rotate(360deg);}}
 #catalog details {
     position:relative;
     margin:2em 0;
