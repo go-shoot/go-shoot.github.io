@@ -125,9 +125,6 @@ main {
 body>db-status {
     margin:5em 0 0 0;
 }
-main>db-status {
-    margin:0 0 .5em 0;
-}
 a[href],nav,
 form summary,caption label,:is(caption,#filter) button,#filter summary,
 #catalog summary::after {

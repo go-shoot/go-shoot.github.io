@@ -34,7 +34,7 @@ Object.assign(Table, {
         Q('#jap').onchange = ev => {
             Q('#eng').checked = false;
             Q('#eng').disabled = ev.target.checked;
-            Q('tbody tr', tr => Row.names([null, ev.target.checked ? 'jap' : 'chi'], tr));
+            Table.show.names([null, ev.target.checked ? 'jap' : 'chi']);
         };
         Q('#eng').onchange = ev => Table.colspan(ev.target.checked ? 'eng' : 'cjk');
         Q('.prod-reset').onclick = Table.reset;
