@@ -298,6 +298,7 @@ class Knob extends HTMLElement {
     }
     :host(.hover),:host([discrete]) meter::after {
         transition:--angle .5s;
+        touch-action:initial;
     }
     slot {
         z-index:1;

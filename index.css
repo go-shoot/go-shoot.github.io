@@ -8,16 +8,16 @@ input {
 }
 header {
     padding:4em 0 1em 0;
-}
-header img {
-    width:min(30em,90%);
-    margin:auto;
-}
-h2 {
-    letter-spacing:1em; text-indent:1em;
-    display:block;
-    padding-top:.5em;
-    font-size:1.2em;
+    img {
+        width:min(30em,90%);
+        margin:auto;
+    }
+    h2 {
+        letter-spacing:1em; text-indent:1em;
+        display:block;
+        padding-top:.5em;
+        font-size:1.2em;
+    }
 }
 h2,h3 {
     color:transparent; -webkit-text-stroke:.02em white;
@@ -58,23 +58,23 @@ section h3 {
 
 #links {
     grid-template:repeat(2,1fr)/repeat(4,min-content);
-}
-#links h3 {
-    grid-area:1/4/3/5;
-}
-#links a {
-    -webkit-user-drag:none;
-}
-#links i {
-    font-size:.65em; line-height:3;
-    pointer-events:none;
-}
-#links spin-knob::after {
-    content:attr(title);
-    display:block; margin-top:.5em;
-    font-size:.4em;
-}
 
+    h3 {
+        grid-area:1/4/3/5;
+    }
+    a {
+        -webkit-user-drag:none;
+    }
+    i {
+        font-size:.65em; line-height:3;
+        pointer-events:none;
+    }
+    spin-knob::after {
+        content:attr(title);
+        display:block; margin-top:.5em;
+        font-size:.4em;
+    }
+}
 #contents {
     grid-template:repeat(3,1fr)/repeat(2,min-content);
 
@@ -123,7 +123,6 @@ section h3 {
     syntax:'<percentage>'; inherits:false;
     initial-value:0%;
 }
-
 #products {
     h3 {
         margin-right:calc(-1*var(--spacing));
@@ -171,7 +170,6 @@ section h3 {
     p:nth-of-type(4) {order:9;}
     figure:nth-of-type(n+6) {order:10;}
 }
-
 #reboot {
     user-select:none;-webkit-user-select:none;
     text-align:right;

@@ -50,6 +50,12 @@ nav {
 main {
     padding:5em 0 8em 0;
     text-align:left;
+    
+    &.actioning h2::before {
+        content:'\e010  ';
+        color:var(--theme);
+        animation:blink 1s infinite linear alternate-reverse;
+    }
 }
 details {
     margin:auto;
@@ -83,11 +89,6 @@ h2 {
     padding-bottom:1em;
     width:min(100vw,26rem);
 
-    &.actioning h2::before {
-        content:'\e010  ';
-        color:var(--theme);
-        animation:blink 1s infinite linear alternate-reverse;
-    }
     h2+bey-x {
         grid-column-start:1;
     }

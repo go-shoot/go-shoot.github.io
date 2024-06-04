@@ -5,6 +5,7 @@ Q = Node.prototype.Q = function(el, func) {
     let els = this.querySelectorAll?.(el) ?? document.querySelectorAll(el);
     return func ? els.forEach(func) : els.length > 1 ? [...els] : els[0];
 }
+Node.prototype.sQ = function(el) {return this.shadowRoot.Q(el);}
 const E = (el, ...stuff) => {
     let [text, attr, children] = ['String', 'Object', 'Array'].map(t => stuff.find(s => Object.prototype.toString.call(s).includes(t)));
     text && (attr = {textContent: text, ...attr ?? {}});

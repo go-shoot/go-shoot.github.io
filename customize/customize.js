@@ -19,7 +19,7 @@ App.load = {
                 Q(`#deck article:nth-of-type(${i+1}) bey-x`, (bey, j) => bey.init(deck[j]))
             )),
             DB.get('user', '#tier').then(re => Object.entries(re ?? {}).forEach(([tier, beys]) =>
-                Q(`#tier h2[title='${tier}']+section`).append(...beys.map(([c, p]) => [new Bey({[c]: p}), '']).flat())
+                Q(`#tier h2[title='${tier}']+section`).append(...beys.map(([c, p]) => [new Bey({[c]: p}, {collapse: true}), '']).flat())
             ))
         ]));
     },
@@ -36,7 +36,7 @@ App.load = {
         .then(PARTS => Object.entries(PARTS).forEach(([comp, parts]) => 
             Q(`aside .${comp}`).append(...parts
                 .filter(p => comp != 'blade' || comp == 'blade' && p.names.chi)
-                .sort(sorter[comp]).map((p, i) => E('li', [new Bey({[comp]: p.abbr}, {attr: p.attr, order: i})]) 
+                .sort(sorter[comp]).map((p, i) => E('li', [new Bey({[comp]: p.abbr}, {attr: p.attr, order: i, collapse: true})]) 
             )))
         );
     }
@@ -44,7 +44,8 @@ App.load = {
 App.act = (param) => ({
     'export-image': App.act.export.image,
     'export-text': App.act.export.text,
-    'delete-deck': App.act.delete
+    'delete-deck': App.act.delete,
+    'expand-deck': App.act.expand
 })[Q('button.selected')?.id]?.(param);
 Object.assign(App.act, {
     export: {
@@ -79,13 +80,18 @@ Object.assign(App.act, {
             App.act.reset();
         }, {once: true})
     },
+    expand () {
+        Q('bey-x[expand]') ? Q('#deck bey-x', bey => bey.removeAttribute('expand')) : Q('#deck bey-x', bey => bey.setAttribute('expand', true));
+        App.act.reset(!Q('#deck bey-x[expand]'));
+    },
     popup (t) {
         App.popup.Q(`.${t}`).hidden = false;
         App.popup.showPopover();
     },
-    reset () {
+    reset (button = true) {
         App.popup.Q('p:not([hidden])')?.setAttribute('hidden', '');
-        Q('#deck bey-x,.selected', el => el.classList.remove('selected'));
+        Q('#deck bey-x,bey-x.selected', el => el.classList.remove('selected'));
+        button && Q('button.selected')?.classList.remove('selected');
         Q('.actioning')?.classList.remove('actioning');
     },
     events () {
@@ -94,8 +100,8 @@ Object.assign(App.act, {
             if (ev.target.tagName != 'BUTTON') return;
             if (ev.target.classList.contains('selected')) return App.act.reset();
             ev.target.classList.add('selected');
-            ev.target.id == 'delete-deck' && App.act();
-            location.hash == '#tier' ? App.act() : Q(location.hash).classList.toggle('actioning');
+            ev.target.id.includes('-deck') || location.hash == '#tier' ? 
+                App.act() : Q(location.hash).classList.toggle('actioning');
         };
         Q('h2', h2 => h2.onclick = () => App.act(h2.title));
     },

@@ -11,7 +11,7 @@ class Bey extends HTMLElement {
             bey.blade && (this.spin = options.attr[1]);
             (bey.blade || bey.bit) && (this.type = options.attr[0]);
         }
-        options?.expand && this.setAttribute('expand', true);
+        options?.collapse && this.setAttribute('collapse', true);
         this.order = options?.order;
         this.init(bey);
         this.onclick = this.select;
@@ -31,13 +31,12 @@ class Bey extends HTMLElement {
     get name() {
         return this.shadowRoot.Q('h4 span').filter(span => span.title).map(span => span.title).join(' ').trim();
     }
-    sQ = el => this.shadowRoot.Q(el)
 
     static observedAttributes = ['blade', 'ratchet', 'bit']
     attributeChangedCallback(attr, _, after) {
         this[attr] = after;
         this.sQ(`.part .${attr}`).style.backgroundImage = `url(/img/${attr}/${after}.png)`;
-        after && this.change[attr] ? this.change[attr]() : this.sQ(`h4 .${attr}`).title = after || '';
+        after && this.change[attr] ? this.change[attr]() : (this.sQ(`h4 .${attr}`).title = after) || this.sQ(`h4 .${attr}`).removeAttribute('title');
         this.change.class(attr);
         this.dock?.tagName == 'MAIN' && this.main();
     }
@@ -49,7 +48,7 @@ class Bey extends HTMLElement {
                 let spin = this.spin || this[attr] && (this.refer.from.aside(attr)?.spin || (await this.refer.from.DB(attr)).attr?.[1]) || '';
                 this.setAttribute('spin', spin || '');
             } 
-            if (!this.hasAttribute('expand') && attr == 'blade' || attr == 'bit') {
+            if (this.hasAttribute('collapse') && attr == 'blade' || attr == 'bit') {
                 let type = this.type || this[attr] && (this.refer.from.aside(attr)?.type || (await this.refer.from.DB(attr)).attr?.[0]) || '';
                 this.setAttribute('type', type || '');
             }
@@ -112,14 +111,11 @@ class Bey extends HTMLElement {
     }
     static style = `
     :host {
-        display:inline-grid; grid-template:0 min(calc((100vw - 2rem)/3),8em) 0 / min(calc((100vw - 2rem)/3),8em);
+        display:inline-grid; grid-template:var(--headfoot) auto var(--headfoot) / min(calc((100vw - 2rem)/3),8em);
+        --headfoot:1.5em;
         border-radius:.5em;
-        outline:.1em solid; outline-offset:-.1em;
+        outline-offset:-.1em; outline:.2em solid transparent;
         background:var(--overlay2);
-    }
-    :host([expand]) {
-        grid-template-rows:1.5em min(calc((100vw - 2rem)/3),8em) 1.5em;
-        outline:.2em solid transparent;
     }
     :host(.used) {
         filter:brightness(.4);
@@ -134,29 +130,28 @@ class Bey extends HTMLElement {
     ol {
         list-style:none; padding:0; margin:0;
         height:100%; /*safari*/
+        aspect-ratio:1/1; transition:aspect-ratio .5s;
+    }
+    :host([expand]) ol {
+        aspect-ratio:1/3;
     }
 
-    h4 [title]:not([title=''])::after {
-        content:attr(title);
-    }
     i {
         grid-area:1/1/2/2;
         font-style:normal;
-        display:flex; justify-content:space-between; width:100%;
+        display:flex; justify-content:end; gap:.2em;
+        width:100%;
         padding:.3em; box-sizing:border-box;
 
         &::before {
             content:'';
-            height:1.5em; width:1.5em; display:inline-block;
+            height:1.5em; width:1.5em;
             background:url() no-repeat center / contain;
         }
         &::after {
             content:'';
             font-size:1.2em; line-height:1.4;
         }
-    }
-    :host([expand]) i {
-        justify-content:end; gap:.2em;
     }
     :host([type=att]) i::before {background-image:url(/img/types.svg#att);}
     :host([type=bal]) i::before {background-image:url(/img/types.svg#bal);}
@@ -169,40 +164,46 @@ class Bey extends HTMLElement {
         overflow:hidden;
 
         li {
-            width:90%; height:90%; margin:5%;
+            aspect-ratio:1/1;
+            margin:5%;
             background:url() no-repeat center center / contain;
-        }
-        li:not([style]) {
-            display:none;
         }
     }
     h4 {
         margin:0;
         text-align:center; font-weight:normal; /*safari*/
         white-space:nowrap;
-        align-self:end;
         color:white;
-    }
-    :host([expand]) h4 {
-        align-self:initial;
     }
     .duplicated {
         color:red;
     }
-    :host([expand]) h4:has(span[title]:not([title=''])) span:is([title=''],:not([title]))::after {content:'?';}
-    :host([expand]) h4 span:nth-child(2)::before {content:' ';}
-    :host([expand]) h4 span:nth-child(3)::before {content:' ';}
+    h4 [title]::after {content:attr(title);}
+    h4:has(span[title]) span:not([title])::after {content:'?';}
+    h4 span:nth-child(2)::before {content:' ';}
+    h4 span:nth-child(3)::before {content:' ';}
+
+    :host([collapse]) {
+        --headfoot:0;
+        outline:.1em solid;
+        
+        i {justify-content:space-between;}
+        .part li:not([style]) {display:none;}
+        h4 {align-self:end;}
+        span::before,span:not([title])::after {content:initial !important;}
+    }
 
     :host h4 {
-        font-size:1em;
-        &.eng {font-size:.9em;}
-        &.jap {font-size:.7em; margin-bottom:.2em;}
-    }
-    :host([expand]) h4 {
         font-size:.7em;
         &.eng {font-size:.65em;}
         &.jap {font-size:.55em;}
         &.jap span:first-child {letter-spacing:-.05em;}
-    }`
+    }
+    :host([collapse]) h4 {
+        font-size:1em;
+        &.eng {font-size:.9em;}
+        &.jap {font-size:.7em; margin-bottom:.2em;}
+    }
+    `
 }
 customElements.define('bey-x', Bey);

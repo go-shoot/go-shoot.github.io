@@ -1,27 +1,27 @@
 @media (max-width:630px) and (orientation:portrait) {
-    nav:has(#mag1:checked)+main section {font-size:0.54em;}
-    nav:has(#mag2:checked)+main section {font-size:0.81em;}
-    nav:has(#mag3:checked)+main section {font-size:1.60em;} 
+    html:has(#mag1:checked) .catalog {zoom:0.54;}
+    html:has(#mag2:checked) .catalog {zoom:0.81;}
+    html:has(#mag3:checked) .catalog {zoom:1.60;} 
 }
 @media (max-width:630px) and (orientation:landscape) {
-    nav:has(#mag1:checked)+main section {font-size:0.53em;}
-    nav:has(#mag2:checked)+main section {font-size:0.70em;}
-    nav:has(#mag3:checked)+main section {font-size:1.07em;}
+    html:has(#mag1:checked) .catalog {zoom:0.53;}
+    html:has(#mag2:checked) .catalog {zoom:0.70;}
+    html:has(#mag3:checked) .catalog {zoom:1.07;}
 }
 @media (max-width:630px){
-    .part-mag:has(#mag1:checked)::before,
-    .part-mag:has(#mag2:checked) label:has(#mag1)::before,
-    .part-mag:has(#mag3:checked) label:has(#mag2)::before {
+    html:has(#mag1:checked) .part-mag::before,
+    html:has(#mag2:checked) label:has(#mag1)::before,
+    html:has(#mag3:checked) label:has(#mag2)::before {
         content:'\e00c';--h:0;--s:0%;}
-    .part-mag:has(#mag1:checked) label:has(#mag2)::before,
-    .part-mag:has(#mag2:checked) label:has(#mag3)::before,
-    .part-mag:has(#mag3:checked)::after {
+    html:has(#mag1:checked) label:has(#mag2)::before,
+    html:has(#mag2:checked) label:has(#mag3)::before,
+    html:has(#mag3:checked) .part-mag::after {
         content:'\e00b';--h:0;--s:0%;}
-    .part-mag:has(#mag2:checked) label:has(#mag1),
-    .part-mag:has(#mag3:checked) label:has(#mag2) {
+    html:has(#mag2:checked) label:has(#mag1),
+    html:has(#mag3:checked) label:has(#mag2) {
         display:initial;--h:220;--s:60%;}
-    .part-mag:has(#mag1:checked) label:has(#mag2),
-    .part-mag:has(#mag2:checked) label:has(#mag3) {
+    html:has(#mag1:checked) label:has(#mag2),
+    html:has(#mag2:checked) label:has(#mag3) {
         display:initial;--h:40;--s:60%;}
     spin-knob {display:none;}
 }
@@ -107,28 +107,31 @@ a object {
 
 a ul {
     display:flex; gap:.2em;
-}
-a ul li:has(img[alt^=type]) {
-    order:0;
-    width:var(--icon);
-    margin-right:auto;
-}
-a ul li:has(img:is([alt^=system])) {
-    order:1;
-    width:2.5em;
-}
-a ul li:has(img:is([alt^=line])) {
-    order:1;
-    width:1.5em;
-}
-a ul li:not(:has(img)) {
-    order:2;
-    line-height:2;
-    font-size:1.1em;
-}
-a ul li img {
-    object-fit:contain;
-    height:100%; width:100%;
+
+    li {
+        &:has(img[alt^=type]) {
+            order:0;
+            width:var(--icon);
+            margin-right:auto;
+        }
+        &:has(img:is([alt^=system])) {
+            order:1;
+            width:2.5em;
+        }
+        &:has(img:is([alt^=line])) {
+            order:1;
+            width:1.5em;
+        }
+        &:not(:has(img)) {
+            order:2;
+            line-height:2;
+            font-size:1.1em;
+        }
+        img {
+            object-fit:contain;
+            height:100%; width:100%;
+        }
+    }
 }
 
 a>span {
@@ -137,11 +140,12 @@ a>span {
     margin-left:.2em;
     place-self:end start;
     z-index:1;
-}
-a>span::before {
-    content:'\e03c';
-    font-size:1.45em;
-    margin-right:.1em;
+
+    &::before {
+        content:'\e03c';
+        font-size:1.45em;
+        margin-right:.1em;
+    }
 }
 
 h4 {
@@ -167,33 +171,34 @@ a.bit h4 {
 a dl {
     place-self:end;
     display:grid; grid-template:repeat(2,1.5em) / repeat(4,auto); gap:.4em .2em;
-}
-a dt {
-    font-size:.6em;
-    text-align:right; line-height:1.1;
-    white-space:pre;
-    margin-left:1em;
-}
-a dd {
-    font-size:1.6em; font-style:italic;
-    text-align:left; line-height:.8;
-}
-a dt:first-of-type {
-    grid-column-start: 3;
-    justify-self:end;
-    border-bottom: .2em solid;
-    transform: translate(2em,-1.8em);
-    height: 1.4em; width: 3em;
-}
-a dd:first-of-type {
-    text-align:right;
-    min-width:1em;
-    transform:translateX(-.5em);
-}
-dd sup {
-    margin-left:.15em;
-    line-height:0;
-    position:absolute;
+
+    dt {
+        font-size:.6em;
+        text-align:right; line-height:1.1;
+        white-space:pre;
+        margin-left:1em;
+    }
+    dd {
+        font-size:1.6em; font-style:italic;
+        text-align:left; line-height:.8;
+    }
+    dt:first-of-type {
+        grid-column-start: 3;
+        justify-self:end;
+        border-bottom: .2em solid;
+        transform: translate(2em,-1.8em);
+        height: 1.4em; width: 3em;
+    }
+    dd:first-of-type {
+        text-align:right;
+        min-width:1em;
+        transform:translateX(-.5em);
+    }
+    sup {
+        margin-left:.15em;
+        line-height:0;
+        position:absolute;
+    }
 }
 strong {
     justify-self:start;
@@ -202,7 +207,7 @@ strong {
     color:black; text-shadow:none;
     position:relative;
     padding:.1em; margin-left:-.1em;
-    
+
     &::before {
         font-size:.3em;
         display:block;

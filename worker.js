@@ -56,6 +56,13 @@ const Head = {
       "background_color":"black",
       "icons":[{"src":"https://go-shoot.github.io/favicon.ico","type":"image/png","sizes":"120x120"},{"src":"https://go-shoot.github.io/favicon.ico","type":"image/png","sizes":"512x512","purpose":"maskable"}]
     }'>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MJMB14RTQP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-MJMB14RTQP');
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=IBM+Plex+Sans+JP:wght@500&display=swap" rel="stylesheet">
