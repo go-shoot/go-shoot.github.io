@@ -126,8 +126,7 @@ body>db-status {
     margin:5em 0 0 0;
 }
 a[href],nav,
-form summary,caption label,:is(caption,#filter) button,#filter summary,
-#catalog summary::after {
+form summary,caption label,:is(caption,#filter) button,#filter summary {
     color:var(--theme);
 }
 .loading,.part-result,.prod-result,

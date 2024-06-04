@@ -31,18 +31,18 @@ class Dragging {
         }
     }
     move (ev, move) {
-        ev && ([this.moveX, this.moveY] = [ev.x, ev.y]) && ev.preventDefault();
-        if (!this.dragged || Math.hypot(this.moveX-this.pressX, this.moveY-this.pressY) < 5) return;
+        ev && ([this.moveX, this.moveY, this.deltaX, this.deltaY] = [ev.x, ev.y, ev.x-this.pressX, ev.y-this.pressY]) && ev.preventDefault();
+        if (!this.dragged || Math.hypot(this.deltaX, this.deltaY) < 5) return;
         this.timer &&= clearTimeout(this.timer);
         this.dragged.classList.add('dragged');
         this._move?.[this.mode]?.(ev);
         move && (typeof move == 'object' ? move[this.mode] : move)?.(this, this.dragged);
     }
     _move = {
-        scroll: () => this.dragged.scrollTo(this.scrollInitX - this.moveX + this.pressX, 0),
+        scroll: () => this.dragged.scrollTo(this.scrollInitX - this.deltaX, 0),
         drop: (ev) => {
             ev ? (this.clientY = ev.clientY) : (this.scrollY = this.dragged.closest('aside') ? 0 : scrollY - this.scrollInitY);
-            let translate = [this.drop.x === false ? 0 : this.moveX-this.pressX, this.drop.y === false ? 0 : this.moveY-this.pressY+this.scrollY];
+            let translate = [this.drop.x === false ? 0 : this.deltaX, this.drop.y === false ? 0 : this.deltaY + this.scrollY];
             this.drop.x == 'min' && (translate[0] = Math.max(0, translate[0]));
             this.dragged.style.transform = `translate(${translate[0]}px,${translate[1]}px)`;
             (this.drop.autoScroll || this.drop.autoScroll == null) && this.autoScroll();
@@ -164,7 +164,7 @@ class Knob extends HTMLElement {
             what: 'spin-knob',
             press: (drag) => drag.pressθ = this.θ(),
             move: (drag) => {
-                let delta = Math.abs(drag.moveY - drag.pressY);
+                let delta = Math.abs(drag.deltaY);
                 if (this.type == 'continuous' && delta < 2 || this.type == 'discrete' && delta < 50) return;
                 location.pathname == '/' && this.hasAttribute('alt') && 
                     (this.Q('a').href = this.getAttribute('alt')) && this.shadowRoot.Q('meter').classList.add('dragged');
@@ -200,7 +200,7 @@ class Knob extends HTMLElement {
             return css.replace(/,$/, '');
         },
         getΔY (drag) {
-            this.index = Math.max(0, Math.min((this.index ?? 0) - Math.sign(drag.moveY - drag.pressY), this.total - 1));
+            this.index = Math.max(0, Math.min((this.index ?? 0) - Math.sign(drag.deltaY), this.total - 1));
             drag.pressY = drag.moveY;
         },
         adjustValue: (value) => {
@@ -218,7 +218,7 @@ class Knob extends HTMLElement {
             this.max = parseFloat(this.input.max), this.min = parseFloat(this.input.min);
         },
         getΔY: (drag) => {
-            this.continuous.θ = drag.moveθ = Math.max(this.minθ, Math.min(drag.pressθ - (drag.moveY - drag.pressY), this.maxθ));
+            this.continuous.θ = drag.moveθ = Math.max(this.minθ, Math.min(drag.pressθ - (drag.deltaY), this.maxθ));
             (drag.moveθ == this.minθ || drag.moveθ == this.maxθ) && ([drag.pressY, drag.pressθ] = [drag.moveY, drag.moveθ]);
             this.input.value = (drag.moveθ - this.minθ) / (this.maxθ - this.minθ) * (this.max - this.min) + this.min;
         },

@@ -195,12 +195,11 @@ Object.assign(App, {
             },
             move: {
                 scroll (drag) {
-                    let [dx, dy] = [drag.moveX - drag.pressX, drag.moveY - drag.pressY], aside = Q('aside');
-                    let slided = parseInt(getComputedStyle(aside).getPropertyValue('--slided') || 0);
-                    if (!drag.triggered && Math.abs(dy) > 50 && Math.atan(Math.abs(dy)/Math.abs(dx)) > Math.PI/3  
-                        && (slided === 0 && dy < 0 || slided === 1 || slided === 2 && dy > 0)) {
+                    let aside = Q('aside'), slided = parseInt(getComputedStyle(aside).getPropertyValue('--slided') || 0);
+                    if (!drag.triggered && Math.abs(drag.deltaY) > 50 && Math.atan(Math.abs(drag.deltaY/drag.deltaX)) > Math.PI/3  
+                        && (slided === 0 && drag.deltaY < 0 || slided === 1 || slided === 2 && drag.deltaY > 0)) {
                         drag.triggered = true; 
-                        slided -= Math.sign(dy);
+                        slided -= Math.sign(drag.deltaY);
                         aside.style.setProperty('--slided', slided);
                         Dragging.class.temp(aside, 'sliding');
                         Dragging.class.switch(`aside ul:nth-child(${slided+1})`, 'selecting');
