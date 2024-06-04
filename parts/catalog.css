@@ -282,24 +282,25 @@ menu {
 #catalog details {
     position:relative;
     user-select:none;
-    transform:translateY(calc(-100% - 1em)); transition:transform .5s;
+    transform:translateY(calc(-100% - 1em)); transition:transform .5s,opacity .5s;
     
     summary {
-        position:absolute; left:1.5em; bottom:-2em;
-        width:1em; height:calc(7em + 100%);
+        position:absolute; left:1.5em; bottom:-2.8em;
+        width:1em; height:calc(8em + 100%);
         border-bottom-left-radius:9em; border-bottom-right-radius:9em;
         background:var(--theme); color:black;
         display:flex; flex-direction:column; justify-content:end;
         touch-action:none;
-        line-height:.8;
+        line-height:1.1;
 
         &::before {content:'\e00d';}
         &::after {content:'\e00e';}
     }
+    &:not(.showing) summary::before,&.showing summary::after {opacity:0;}
     article {
         text-align:justify; line-height:1.5; font-size:.9em;
-        padding:0 1em 0 4em;
-        opacity:0; transition:opacity .5s;
+        padding:0 .5em 0 3.5em;
+        opacity:0;
     }
     ul {
         padding-left:1.5em;
