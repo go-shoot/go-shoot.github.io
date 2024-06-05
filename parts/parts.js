@@ -63,7 +63,7 @@ Object.assign(Magnifier, {
     ]),
     events () {
         Q('.part-mag').onchange = ({target: input}) => input.checked && Cookie.set('pref', {button: input.id});
-        Magnifier.knob.onchange = ev => ev && (Q('.catalog').style.fontSize = `${ev.target.value}`) && Cookie.set('pref', {knob: ev.target.value});
+        Magnifier.knob.onchange = ev => ev && (Q('.catalog').style.fontSize = `${ev.target.value}em`) && Cookie.set('pref', {knob: ev.target.value});
         setTimeout((onresize = Magnifier.switch));
     },
     switch: () => Q('.catalog').style.fontSize = innerWidth > 630 ? (Magnifier.knob.value = Cookie.pref?.knob || '1') + 'em' : ''
