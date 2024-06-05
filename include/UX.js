@@ -149,7 +149,7 @@ class Dragging {
 class Knob extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({mode: 'open'}).append(E('meter', [E('slot')]), E('span'), E('style', this.css));
+        this.attachShadow({mode: 'open'}).append(E('meter', [E('slot', {name: 'knob'})]), E('span'), E('style', this.css));
     }
     get value() {return this.input.value;}
     set value(value) {this[this.type].adjustValue(value);}
