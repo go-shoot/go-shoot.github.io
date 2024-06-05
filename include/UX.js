@@ -1,8 +1,9 @@
 class Dragging {
-    constructor (el, {what, scroll, drop, hold, ...custom}) {
+    constructor (el, {what, scroll, drop, hold, click, ...custom}) {
         if (!el) return;
         this.what = what, this.scroll = scroll, this.drop = drop, this.hold = hold;
-        el.onpointerdown = ev => this.press(ev, custom ?? {});
+        click === false && el.addEventListener('click', ev => ev.preventDefault());
+        el.addEventListener('pointerdown', ev => this.press(ev, custom ?? {}));
     }
     events = new Proxy(
         Object.defineProperty({}, 'remove', {value() {Object.entries(this).forEach(p => removeEventListener(...p))}, enumerable: false}),
@@ -161,7 +162,6 @@ class Knob extends HTMLElement {
         setTimeout(() => this.afterChildren());
 
         new Dragging(this, {
-            what: 'spin-knob',
             press: (drag) => drag.pressθ = this.θ(),
             move: (drag) => {
                 let delta = Math.abs(drag.deltaY);

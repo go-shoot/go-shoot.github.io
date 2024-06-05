@@ -10,9 +10,10 @@ let Parts = {
     before () {
         Filter();
         new Dragging(Q('summary'), {
+            click: false,
             move: (drag, dragged) => Math.abs(drag.deltaY) > 50 && 
                 dragged.parentElement.classList[drag.deltaY > 0 ? 'add' : 'remove']('showing')
-        })
+        });
     },
     async cataloging () {
         Parts.all = DB.get.parts(Parts.comp).then(parts => parts.map((p, _, ar) => new Part(p, ar).prepare().catalog()));

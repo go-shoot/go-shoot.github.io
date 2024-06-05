@@ -285,16 +285,17 @@ menu {
     transform:translateY(calc(-100% - 1em)); transition:transform .5s,opacity .5s;
     
     summary {
-        position:absolute; left:1.5em; bottom:-2.8em;
-        width:1em; height:calc(8em + 100%);
+        position:absolute; left:1.5em; bottom:-2.3em;
+        width:1.2em; height:calc(8em + 100%);
         border-bottom-left-radius:9em; border-bottom-right-radius:9em;
         background:var(--theme); color:black;
         display:flex; flex-direction:column; justify-content:end;
         touch-action:none;
-        line-height:1.1;
+        line-height:1.5;
+        z-index:1;
 
-        &::before {content:'\e00d';}
-        &::after {content:'\e00e';}
+        &::before {content:'\e00d'; line-height:.6;}
+        &::after {content:'\e00e'; line-height:.6;}
     }
     &:not(.showing) summary::before,&.showing summary::after {opacity:0;}
     article {
@@ -382,8 +383,7 @@ menu {
         border-bottom:.1em solid transparent;
         text-transform:capitalize;
         margin-left:.3em; padding:0 .1em;
-        color:gray; text-shadow:0 0 .05em rgba(0,0,0,.2);
-        filter:saturate(0);
+        text-shadow:0 0 .05em rgba(0,0,0,.2);
         height:1.4em;
         line-height:1.5em;
 

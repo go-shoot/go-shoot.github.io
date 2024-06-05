@@ -68,7 +68,6 @@ const Head = {
     <link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=IBM+Plex+Sans+JP:wght@500&display=swap" rel="stylesheet">
     <script src=/include/DB.js></script>
     <script src=/include/UX.js></script>
-    <style>body {transition:opacity .5s;opacity:1 !important;}</style>   
     `,
     fetch: () => caches.match(Head.url).then(resp => resp.text()),
 

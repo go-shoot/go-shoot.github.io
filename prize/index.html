@@ -4,7 +4,10 @@
 <link rel=stylesheet href=/include/component.css>
 <link rel=stylesheet href=prize.css>
 
-<nav><script>nav(['/', '/products/'])</script></nav>
+<nav>
+    <script>nav(['/', '/products/'])</script>
+    <div></div>
+</nav>
 <db-status callback="display()"></db-status>
 <main>
     <a href="https://beyblade.takaratomy.co.jp/beyblade-x/news/news_stickerlist.html">
@@ -53,34 +56,43 @@ class Keihin {
         ]);
     }
     static type = {t: '比賽', d: '抽獎', g: '贈品', m: '限定商品'}
+    static all = []
 }
+Q('nav div').append(...Object.keys(Keihin.type).map(t => E('label', [E('input', {type: 'checkbox', id: `keihin-${t}`, checked: true})])));
+Q('nav input', (input, _, inputs) => input.onchange = () => {
+    let show = [...inputs].filter(i => i.checked).map(i => i.id);
+    Keihin.all.forEach(k => k.hidden = !show.includes(k.classList[0]));
+    onresize();
+})
+
 const display = () =>
     fetch('/db/prod-keihin.json').then(resp => Promise.all([DB.get.names(['blade']), resp.json()]))
     .then(([names, keihins]) => Q('.diamonds').append(...Keihin.all = keihins.map(k => new Keihin(k, names).li)))
-    .then(() => (onresize = () => {
-        //nw+(n-1)g=W, n=(W+g)/(w+g)
-        //nw+(n-1)g=W-(w+g/2), n=(2W-w+g)/2(w+g)
-        let W = Q('.diamonds').getBoundingClientRect().width, 
-            g = parseFloat(getComputedStyle(Q('.diamonds')).gap),
-            w = Keihin.all[0].getBoundingClientRect().width;
-        let more = Math.floor((W + g) / (w + g)),
-            less = Math.floor((2*W - w + g) / 2 / (w + g));
+    .then(onresize);
 
-        Keihin.all.forEach(k => k.classList.remove('left', 'right', 'next'));
-        if (more === less)
-            return Keihin.all.forEach((k, i) => k.classList.add(Math.ceil((i+1)/more)%2 === 0 ? 'left' : 'right'));
-        
-        Q(`.diamonds li:nth-child(${2*more-1}n-${more-2})`, li => {
-            let [last, ...others] = li.withNext(less).reverse();
-            last.classList.add(last.matches(':last-child') && (others.length == less - 1 || !others.length) ? 'left' : 'next');
-            others.forEach(li => li.classList.add('left'));
-        });
-    })());
-HTMLLIElement.prototype.withNext = function(n) {
-    let next = [this], current = this;
-    while (next.length <= n && current.nextElementSibling)
-        next.push(current = current.nextElementSibling);
-    return next;
+onresize = () => {
+    //nw+(n-1)g=W, n=(W+g)/(w+g)
+    //nw+(n-1)g=W-(w+g/2), n=(2W-w+g)/2(w+g)  
+    Keihin.all.forEach(li => li.classList.remove('left', 'right', 'next'));
+    let showing = Keihin.all.filter(li => !li.hidden);
+    if (!showing.length) return;
+    
+    let W = Q('.diamonds').getBoundingClientRect().width, 
+        g = parseFloat(getComputedStyle(Q('.diamonds')).gap),
+        w = showing[0].getBoundingClientRect().width;
+    let more = Math.floor((W + g) / (w + g)),
+        less = Math.floor((2*W - w + g) / 2 / (w + g));
+
+    if (more === less)
+        return showing.forEach((li, i) => li.classList.add(Math.ceil((i+1)/more)%2 === 0 ? 'left' : 'right'));
+    
+    let n = 1, k;
+    while (showing[k = (2*more-1)*n-(more-1)]) {
+        let [last, ...others] = showing.slice(k, k+less+1).reverse();
+        last.classList.add(last == showing.at(-1) && (others.length == less - 1 || !others.length) ? 'left' : 'next');
+        others.forEach(li => li.classList.add('left'));
+        n++;
+    }
 }
 location.hash && Q(location.hash)?.setAttribute('open', true);
 </script>

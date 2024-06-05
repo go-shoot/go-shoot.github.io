@@ -6,6 +6,23 @@ main>a span {
     width:3em; display:inline-block;
     line-height:1.1em; letter-spacing:.1em;
 }
+nav div {
+    grid-area:1/3/3/4;
+}
+label {
+    color:var(--type); border-bottom:.1em var(--type) solid;
+    font-size:1.2em; line-height:1.2;
+    margin:0 .5em;
+}
+label:has(#keihin-t),.keihin-t b {--type:olive;}
+label:has(#keihin-d),.keihin-d b {--type:lightslategray;}
+label:has(#keihin-g),.keihin-g b {--type:steelblue;}
+label:has(#keihin-m),.keihin-m b {--type:indianred;}
+label:has(#keihin-t)::after,.keihin-t b::before {content:'\e031';}
+label:has(#keihin-d)::after,.keihin-d b::before {content:'\e02f';}
+label:has(#keihin-g)::after,.keihin-g b::before {content:'\e002';}
+label:has(#keihin-m)::after,.keihin-m b::before {content:'\e001';}
+
 .diamonds {
     padding:calc(var(--size)/2) 0;
     display:grid; grid-template-columns:repeat(auto-fill,var(--size)); justify-content:center;
@@ -29,7 +46,8 @@ main>a span {
     b {
         grid-area:type; align-self:end;
         color:white; font-size:.9em;
-        padding-top:2em; 
+        padding-top:2em;
+        background:var(--type);
 
         &::before {
             display:block;
@@ -37,15 +55,6 @@ main>a span {
             line-height:.9;
         }
     }
-    .keihin-t b {background:olive;}
-    .keihin-t b::before {content:'\e031';}
-    .keihin-d b {background:darkslategray;}
-    .keihin-d b::before {content:'\e02f';}
-    .keihin-g b {background:steelblue;}
-    .keihin-g b::before {content:'\e002';}
-    .keihin-m b {background:darkred;}
-    .keihin-m b::before {content:'\e001';}
-
     p {
         grid-area:desc;
         font-size:.7em;

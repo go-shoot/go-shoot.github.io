@@ -23,6 +23,7 @@ Object.assign(Table, {
         Table.show.names(['eng', 'chi']);
     },
     finally () {
+        Q('#chi').checked = true;
         $(Table.table).tablesorter();
         Table.table.Q('caption').classList.remove('loading');
         Q('input:not([type])', input => input.disabled = input.value = '');
@@ -31,12 +32,7 @@ Object.assign(Table, {
         Table.show.count();
     },
     events () {
-        Q('#jap').onchange = ev => {
-            Q('#eng').checked = false;
-            Q('#eng').disabled = ev.target.checked;
-            Table.show.names([null, ev.target.checked ? 'jap' : 'chi']);
-        };
-        Q('#eng').onchange = ev => Table.colspan(ev.target.checked ? 'eng' : 'cjk');
+        Q('caption').onchange = ev => ev.target.id == 'eng' ? Table.set.colspan('eng') : Table.show.names([null, ev.target.id]);
         Q('.prod-reset').onclick = Table.reset;
         Q('table button').onclick = Table.entire;
         Q('tbody').onclick = ev => ev.target.custom().preview();
@@ -60,6 +56,7 @@ Object.assign(Table, {
             let colspan = {eng: [1, 1], cjk: [1, 1]}[lang] ?? [1, 1];
             //Q('td[abbr$=blade],tbody td:not([abbr]):nth-child(2)', td => new Cell(td).next2(({td}, i) => td.colSpan = colspan[i]));
             Table.table.classList.toggle('bilingual', lang == 'both');
+            Q('label:has(#eng)').hidden = lang == 'both';
         },    
     },
     reset () {
