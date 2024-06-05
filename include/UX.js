@@ -284,18 +284,16 @@ class Knob extends HTMLElement {
             text-shadow:0 0 .1em var(--theme);
         }
     }
-    :host([discrete]) {
-        meter::before {
-            background:conic-gradient(
-                transparent calc(var(--angle) - 1.5deg),
-                var(--light) calc(var(--angle) - 1.5deg) calc(var(--angle) + 1.5deg),
-                transparent calc(var(--angle) + 1.5deg)
-            );
-        }
-        meter::after {
-            outline-width:.1em;
-        }   
+    :host([discrete]) meter::before {
+        background:conic-gradient(
+            transparent calc(var(--angle) - 1.5deg),
+            var(--light) calc(var(--angle) - 1.5deg) calc(var(--angle) + 1.5deg),
+            transparent calc(var(--angle) + 1.5deg)
+        );
     }
+    :host([discrete]) meter::after {
+        outline-width:.1em;
+    }   
     :host(.hover),:host([discrete]) meter::after {
         transition:--angle .5s;
         touch-action:initial;
