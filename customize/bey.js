@@ -186,12 +186,11 @@ class Bey extends HTMLElement {
     :host([collapse]) {
         --headfoot:0;
         outline:.1em solid;
-        
-        i {justify-content:space-between;}
-        .part li:not([style]) {display:none;}
-        h4 {align-self:end;}
-        span::before,span:not([title])::after {content:initial !important;}
     }
+    :host([collapse]) i {justify-content:space-between;}
+    :host([collapse]) .part li:not([style]) {display:none;}
+    :host([collapse]) h4 {align-self:end;}
+    :host([collapse]) span::before,:host([collapse]) span:not([title])::after {content:initial !important;}
 
     :host h4 {
         font-size:.7em;
