@@ -149,7 +149,7 @@ class Dragging {
 class Knob extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({mode: 'open'}).append(E('meter', [E('slot', {name: 'knob'})]), E('span'), E('style', this.css));
+        this.attachShadow({mode: 'open'}).append(E('div', [E('slot')]), E('span'), E('style', this.css));
     }
     get value() {return this.input.value;}
     set value(value) {this[this.type].adjustValue(value);}
@@ -167,7 +167,7 @@ class Knob extends HTMLElement {
                 let delta = Math.abs(drag.deltaY);
                 if (this.type == 'continuous' && delta < 2 || this.type == 'discrete' && delta < 50) return;
                 location.pathname == '/' && this.hasAttribute('alt') && 
-                    (this.Q('a').href = this.getAttribute('alt')) && this.shadowRoot.Q('meter').classList.add('dragged');
+                    (this.Q('a').href = this.getAttribute('alt')) && this.shadowRoot.Q('div').classList.add('dragged');
                 location.pathname == '/' && this.hover('remove');
                 this[this.type].getΔY(drag);
                 this[this.type].adjustValue();
@@ -190,7 +190,7 @@ class Knob extends HTMLElement {
     discrete = {
         setup: () => {
             this.setAttribute('discrete', this.discrete.total = this.Q('option').length);
-            this.shadowRoot.Q('style').textContent += `:host([discrete]) meter {background:conic-gradient(${this.discrete.ticks()})}`;
+            this.shadowRoot.Q('style').textContent += `:host([discrete]) div {background:conic-gradient(${this.discrete.ticks()})}`;
         },
         ticks () {
             let css = `transparent ${this.θ(0) - 1.5}deg,`;
@@ -236,18 +236,16 @@ class Knob extends HTMLElement {
         this.onchange?.(ev);
     }
     css = `
-    meter {all:unset;}
-    ::-webkit-meter-bar {background:none;} /*safari*/
     :host {
         position:relative;
         font-size:2em;
         display:inline-block; width:2em; height:2em;
         touch-action:none; user-select:none;
     }
-    meter,meter::before,slot {
+    div,div::before,slot {
         width:100%; height:100%;
     }
-    meter {
+    div {
         display:block; 
         --light:var(--theme); --dark:var(--theme-dark);
         border-radius:9em;
@@ -284,17 +282,17 @@ class Knob extends HTMLElement {
             text-shadow:0 0 .1em var(--theme);
         }
     }
-    :host([discrete]) meter::before {
+    :host([discrete]) div::before {
         background:conic-gradient(
             transparent calc(var(--angle) - 1.5deg),
             var(--light) calc(var(--angle) - 1.5deg) calc(var(--angle) + 1.5deg),
             transparent calc(var(--angle) + 1.5deg)
         );
     }
-    :host([discrete]) meter::after {
+    :host([discrete]) div::after {
         outline-width:.1em;
     }   
-    :host(.hover),:host([discrete]) meter::after {
+    :host(.hover),:host([discrete]) div::after {
         transition:--angle .5s;
         touch-action:initial;
     }
