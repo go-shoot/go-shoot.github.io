@@ -5,8 +5,7 @@ const App = () => {
         deck.Q('h2').title = title;
         Q(where).append(deck);
     }
-    [1,2,3,4,5].forEach(t => create('#deck', t));
-    [1,2,3,4,5].forEach(t => create('#tier div', t));
+    [1,2,3,4,5].forEach(t => (create('#deck', t), create('#tier', t)));
     App.popup = Q('[popover]');
     App.events();
     App.act.events();
@@ -51,7 +50,7 @@ Object.assign(App.act, {
     export: {
         image (n) {
             App.act.popup('image');
-            let target = Q(n ? `#deck article:nth-of-type(${n})` : '#tier div');
+            let target = Q(n ? `#deck article:nth-of-type(${n})` : '#tier');
             target.style.background = 'black';
             !n && (target.style.minWidth = '35rem') && (target.style.maxWidth = '40rem');
             setTimeout(() => html2canvas(target, {scale: 2}).then(canvas => {

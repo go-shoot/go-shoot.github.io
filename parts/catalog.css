@@ -285,14 +285,15 @@ menu {
     transform:translateY(calc(-100% - 1em)); transition:transform .5s,opacity .5s;
     
     summary {
-        position:absolute; left:1.5em; bottom:-2.3em;
-        width:1.2em; height:calc(8em + 100%);
+        position:absolute; left:1.5em; bottom:-2.4em;
+        width:1.2em; height:2.4em;
         border-bottom-left-radius:9em; border-bottom-right-radius:9em;
         background:var(--theme); color:black;
         display:flex; flex-direction:column; justify-content:end;
         touch-action:none;
         line-height:1.5;
         z-index:1;
+        transition:height .5s,opacity .5s;
 
         &::before {content:'\e00d'; line-height:.6;}
         &::after {content:'\e00e'; line-height:.6;}
@@ -330,6 +331,9 @@ menu {
 #catalog details.showing {
     transform:none;
 
+    summary {
+        height:calc(3.3em + 100%);
+    }
     article {
         opacity:1;
     }

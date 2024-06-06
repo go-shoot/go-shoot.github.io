@@ -48,7 +48,7 @@ nav {
     pointer-events:none;
 }
 main {
-    padding:5em 0 8em 0;
+    margin:5em auto 8em auto;
     text-align:left;
     
     &.actioning h2::before {
@@ -94,40 +94,36 @@ h2 {
     }
 }
 #tier {
-    overflow-x:hidden;
+    padding-bottom:1em;
 
-    div {
-        margin:auto; padding-bottom:1em;
-
-        &[style] h2::before {
-            z-index:-1;
+    &[style] h2::before {
+        z-index:-1;
+    }
+    article {
+        width:min(100%,40rem);
+        padding:0 .5rem;
+    
+        h2 {
+            padding-left:.1em;
+        
+            &::before {
+                content:'';
+                position:absolute; left:0; top:.9em;
+                width:110%; height:.5em;
+                background:var(--tier);
+                mix-blend-mode:exclusion;
+                transform:skew(-20deg);
+            }
         }
-        article {
-            width:min(100%,40rem);
-            padding:0 .5rem;
-        
-            h2 {
-                padding-left:.1em;
-            
-                &::before {
-                    content:'';
-                    position:absolute; left:0; top:.9em;
-                    width:110%; height:.5em;
-                    background:var(--tier);
-                    mix-blend-mode:exclusion;
-                    transform:skew(-20deg);
-                }
-            }
-            section {
-                width:100%; min-height:calc(1em + min(calc((100vw - 2rem)/3),8em));
-                background:var(--overlay1); transition:background-color .5s;
-                font-size:.7em;
-                display:flex; flex-wrap:wrap; gap:.15em;
-                padding:.5em; 
-                border-radius:.75em;
-        
-                &.targeted {background:var(--overlay2);}
-            }
+        section {
+            width:100%; min-height:calc(1em + min(calc((100vw - 2rem)/3),8em));
+            background:var(--overlay1); transition:background-color .5s;
+            font-size:.7em;
+            display:flex; flex-wrap:wrap; gap:.15em;
+            padding:.5em; 
+            border-radius:.75em;
+    
+            &.targeted {background:var(--overlay2);}
         }
     }
 }

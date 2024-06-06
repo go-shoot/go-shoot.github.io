@@ -6,7 +6,7 @@
 
 <nav>
     <script>nav(['/', '/products/'])</script>
-    <div></div>
+    <div class="led"></div>
 </nav>
 <db-status callback="display()"></db-status>
 <main>
@@ -55,7 +55,7 @@ class Keihin {
             E('time', date.replace('-','‒'))
         ]);
     }
-    static type = {t: '比賽', d: '抽獎', g: '贈品', m: '限定商品'}
+    static type = {t: '比賽', d: '抽獎', m: '限定商品', g: '贈品'}
     static all = []
 }
 Q('nav div').append(...Object.keys(Keihin.type).map(t => E('label', [E('input', {type: 'checkbox', id: `keihin-${t}`, checked: true})])));

@@ -1,5 +1,5 @@
 navigator.serviceWorker?.register('/worker.js').then(() =>
-    document.querySelector('link[href="/include/common.css"]') ?? location.reload()
+    document.querySelector('link[href$="common.css"]') ?? location.reload()
 );
 Q = Node.prototype.Q = function(el, func) {
     let els = this.querySelectorAll?.(el) ?? document.querySelectorAll(el);
@@ -21,15 +21,14 @@ const Cookie = {
     parse: v => { try { return JSON.parse(v); } catch (e) { return console.error(v) ?? null; } }
 };
 Object.assign(Cookie, Object.fromEntries(document.cookie.split(/;\s?/).map(c => c.split('=')).map(([k, v]) => [k, v?.includes('{') ? Cookie.parse(v) : v])));
-addEventListener('DOMContentLoaded', () => document.title += ' ■ 戰鬥陀螺 X⬧爆旋陀螺 X⬧ベイブレード X⬧Beyblade X');
+addEventListener('DOMContentLoaded', () => {
+    document.title += ' ■ 戰鬥陀螺 X⬧爆旋陀螺 X⬧ベイブレード X⬧Beyblade X';
+    Q('[popover]')?.addEventListener('click', ev => ev.target.closest('[popover]').hidePopover());
+});
 
 const nav = links => {
     let icons = {'/': '&#xe000;', '/products/': '&#xe001;', '/prize/': '&#xe002;', '/parts/' : '&#xe003;'};
     Q('nav').replaceChildren(...links.map(l => l ? E('a', {href: l, innerHTML: icons[l] ?? ''}) : ''));
-    //<!--div class=menu-scroll>
-    //    <label onclick=window.scrollTo(0,0) data-icon=></label>
-    //    <label onclick=window.scrollTo(0,document.body.scrollHeight) data-icon=></label>
-    //</div-->`;
 }
 
 class Mapping {

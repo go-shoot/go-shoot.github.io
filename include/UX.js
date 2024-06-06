@@ -2,6 +2,7 @@ class Dragging {
     constructor (el, {what, scroll, drop, hold, click, ...custom}) {
         if (!el) return;
         this.what = what, this.scroll = scroll, this.drop = drop, this.hold = hold;
+        this.fixedPostioned = Q('aside');
         click === false && el.addEventListener('click', ev => ev.preventDefault());
         el.addEventListener('pointerdown', ev => this.press(ev, custom ?? {}));
     }
@@ -27,7 +28,7 @@ class Dragging {
         drop: () => {
             this.targets = [this.drop.targets].flat().map(el => [Q(el)].flat());
             this.dragged.initial = Dragging.getBoundingPageRect(this.dragged);
-            [this.scrollY, this.scrollInitY, this.limitY] = [0, scrollY, Q('aside')?.offsetTop];
+            this.scrollInitY = scrollY;
             this.events.scroll = () => this.move();
         }
     }
@@ -42,8 +43,8 @@ class Dragging {
     _move = {
         scroll: () => this.dragged.scrollTo(this.scrollInitX - this.deltaX, 0),
         drop: (ev) => {
-            ev ? (this.clientY = ev.clientY) : (this.scrollY = this.dragged.closest('aside') ? 0 : scrollY - this.scrollInitY);
-            let translate = [this.drop.x === false ? 0 : this.deltaX, this.drop.y === false ? 0 : this.deltaY + this.scrollY];
+            ev || this.fixedPostioned?.contains(this.dragged) || (this.scrollY = scrollY - this.scrollInitY); //update value only when
+            let translate = [this.drop.x === false ? 0 : this.deltaX, this.drop.y === false ? 0 : this.deltaY + (this.scrollY ?? 0)];
             this.drop.x == 'min' && (translate[0] = Math.max(0, translate[0]));
             this.dragged.style.transform = `translate(${translate[0]}px,${translate[1]}px)`;
             (this.drop.autoScroll || this.drop.autoScroll == null) && this.autoScroll();
@@ -69,14 +70,14 @@ class Dragging {
         action.redispatch && ev.target.dispatchEvent(new MouseEvent('pointerdown', ev));
     }, 500);
     autoScroll () {
-        let [proportion, bottomed] = [this.clientY / innerHeight, scrollY >= document.body.offsetHeight - innerHeight];
-        proportion < .05 ? scrollBy(0, -3) : 
-        proportion > .95 && !bottomed ? scrollBy(0, 3) : null;
+        let [proportion, bottomed] = [this.moveY / innerHeight, scrollY + innerHeight >= document.body.offsetHeight + 250];
+        proportion < .05 ? scrollBy(0, -4) : 
+        proportion > .95 && !bottomed ? scrollBy(0, 4) : null;
     }
     findTarget () {
         this.targeted = null;
         let i = 0;
-        if (!this.limitY || this.clientY <= this.limitY)
+        if (!Dragging.containsPointer(this.fixedPostioned, this.moveX, this.moveY))
             while (i < this.targets.length && !this.targeted)
                 this.targeted = this.targets[i++].find(el => el != this.dragged && Dragging.containsPointer(el, this.moveX, this.moveY));
         if (this.targeted?.matches('.targeted')) return;
@@ -87,13 +88,14 @@ class Dragging {
         this.dragged?.classList.remove('selected');
         this.targeted?.classList.remove('targeted');
         this.dragged = this.targeted = this.mode = null;
+        this.scrollY = 0;
     }
 
     static getBoundingPageRect = el => (({x, y}) => ({
         x: x + scrollX,
         y: y + scrollY,
     }))(el.getBoundingClientRect())
-    static containsPointer = (el, moveX, moveY) => (({x, y, width, height}) => 
+    static containsPointer = (el, moveX, moveY) => el && (({x, y, width, height}) => 
         moveX > x && moveY > y && moveX < x+width && moveY < y+height
     )(el.getBoundingClientRect())
 

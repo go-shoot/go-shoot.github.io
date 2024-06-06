@@ -53,6 +53,8 @@ form summary *,caption>* {
 
 #filter {
     padding:0 0.5em;
+    user-select:none; -webkit-user-select:none;
+    overflow:hidden;
 
     summary {
         text-align:left;
@@ -73,11 +75,15 @@ form summary *,caption>* {
         display:block;
         margin-bottom:.3em;
     }
-    div:not(.system) label {
-        border-bottom:.2em solid var(--light);
-        color:var(--light); -webkit-text-stroke:1px var(--on);
-        paint-order:stroke fill;
-        user-select:none; -webkit-user-select:none;
+    label {
+        position:relative;
+    }
+    div:not(.system) label::after {
+        content:'';
+        position:absolute; inset:.7em -.5em .2em -.5em;;
+        background:var(--light);
+        transform:skew(-20deg);
+        z-index:-1;
     }
     .system label {
         width:5em;
@@ -115,8 +121,12 @@ caption.loading::after {
     border:.1em solid;border-radius:5em;
 }
 caption label {
-    margin-left:.5em; padding-left:.3em;
-    border-left:.1em solid;
+    margin-left:.2em;
+    display:inline-block;
+    text-align:center;
+}
+caption label::before {
+    line-height:.7rem;
 }
 
 /*thead*/
