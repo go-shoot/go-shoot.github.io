@@ -132,9 +132,6 @@ class Bey extends HTMLElement {
         height:100%; /*safari*/
         aspect-ratio:1/1; transition:aspect-ratio .5s;
     }
-    :host([expand]) ol {
-        aspect-ratio:1/3;
-    }
 
     i {
         grid-area:1/1/2/2;
@@ -168,7 +165,11 @@ class Bey extends HTMLElement {
             margin:5%;
             background:url() no-repeat center center / contain;
         }
+        li:not([style]) {display:none;}
     }
+    :host([expand]) ol {aspect-ratio:1/3;}
+    :host([expand]) li:not([style]) {display:initial;}
+
     h4 {
         margin:0;
         text-align:center; font-weight:normal; /*safari*/
@@ -188,7 +189,6 @@ class Bey extends HTMLElement {
         outline:.1em solid;
     }
     :host([collapse]) i {justify-content:space-between;}
-    :host([collapse]) .part li:not([style]) {display:none;}
     :host([collapse]) h4 {align-self:end;}
     :host([collapse]) span::before,:host([collapse]) span:not([title])::after {content:'' !important;}
 
