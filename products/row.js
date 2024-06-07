@@ -123,7 +123,6 @@ class Cell {
         let {abbr, comp, pref, dash, core, mode} = this.dissect(true);
         let name = (comp == 'bit' && (pref || dash) ? Part.revise.name(NAMES[comp][abbr], pref[0]) : NAMES[comp]?.[abbr])?.[lang] ?? '';
         this.td.innerHTML = this.fullname[lang](name, comp, core) + this.fullname.add(name, dash, mode);
-        //this.td.classList.toggle('small', name.length >= (Mapping.maps.oversize[lang].find(comp) || 99));
     }
     static fullname = {
         eng: (name, comp, core) => (comp == 'bit' && name.length > 16 ? name.replace(' ', '<br>') : name),

@@ -281,7 +281,7 @@ class Knob extends HTMLElement {
             background:var(--dark);
             text-align:center; line-height:.4;
             transform:rotate(var(--angle));
-            text-shadow:0 0 .1em var(--theme);
+            text-shadow:0 0 .1em var(--theme); color:var(--theme);
         }
     }
     :host([discrete]) div::before {

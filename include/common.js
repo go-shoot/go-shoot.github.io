@@ -34,12 +34,12 @@ const nav = links => {
 class Mapping {
     constructor(...map) {
         this.default = map.length % 2 ? map.pop() : null;
-        this.map = map.reduce((pairs, item, i) => i % 2 ? pairs.at(-1).push(item) && pairs : [...pairs, [item[0] == '/' ? new RegExp(item.slice(1, -1)) : item]], []);
+        this.map = map.reduce((map, item, i, ar) => i % 2 === 0 ? map.set(item, ar[i + 1]) : map, new Map());
     }
     find = (...keys) => {
         let found, evaluate = typeof keys.at(-1) == 'boolean' && keys.pop();
         let key = keys.find(key => (found = 
-            this.map.find(([k]) =>
+            this.map.entries().find(([k]) =>
                 k instanceof RegExp && k.test(key) || k instanceof Array && k.find(item => item == key) ||
                 k instanceof Function && k(key) || k == key
             )?.[1] ?? this.default

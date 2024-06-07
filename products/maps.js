@@ -9,14 +9,6 @@ Mapping.maps = {
         ['BX-24','BX-14'], '封入比例：01、02 各 3；04、05 各 4；03、06 各 5',
         ['BX-31'], '封入比例：01、02 各 3；03、04 各 4；05、06 各 5',
     ),
-    oversize: {
-        eng: new Mapping(
-        ),
-        chi: new Mapping(
-        ),
-        jap: new Mapping(
-        )
-    },
     images: new Mapping(
         'BX-21', {detail: '${no}_(p|y|o)', more: '${no}_(p|y|o)'},
         'BX-20', {detail: '${no}(B|G|P)', more: '${no}_(b|g|p)'},

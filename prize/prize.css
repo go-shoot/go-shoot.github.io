@@ -27,8 +27,9 @@ label:has(#keihin-m)::after,.keihin-m b::before {content:'\e001';}
     padding:calc(var(--size)/4 + 2em) 0;
     display:grid; grid-template-columns:repeat(auto-fill,var(--size)); justify-content:center;
     gap:var(--gap);
-    --size:20em; --gap:.5em;
     font-size:.8em;
+    --size:20em; --gap:.5em;
+    --shift:calc(var(--size)/4 + var(--gap)/4);
 
     li {
         width:var(--size); height:var(--size);
@@ -36,11 +37,13 @@ label:has(#keihin-m)::after,.keihin-m b::before {content:'\e001';}
         background:#fbfbfd; color:black;
         display:grid; grid-template:20% 7.5% 45% 12.5% 15% / 10% 80% 7% 3%;
         grid-template-areas:'. type . .' '. desc . .' '. img img .' '. name . .' '. date . .';
-        margin:calc(var(--size)/-4 + var(--gap)/-4) 0;
+        margin:calc(var(--shift)*-1) 0;
+        transform:translate(calc(var(--shift)*var(--factor,0)));
+        transition:transform .5s;
 
-        &.left  {transform:translate(calc(var(--size)/2 + var(--gap)/2));}
-        &.right~.left {transform:translate(calc(var(--size)/4 + var(--gap)/4));}
-        &.right {transform:translate(calc(var(--size)/-4 + var(--gap)/-4));}
+        &.left {--factor:-1;}
+        &.right {--factor:1;}
+        &.center {--factor:2;}
         &.next {grid-column:1;}
     }
     b {

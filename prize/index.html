@@ -73,7 +73,7 @@ const display = () =>
 onresize = () => {
     //nw+(n-1)g=W, n=(W+g)/(w+g)
     //nw+(n-1)g=W-(w+g/2), n=(2W-w+g)/2(w+g)  
-    Keihin.all.forEach(li => li.classList.remove('left', 'right', 'next'));
+    Keihin.all.forEach(li => li.classList.remove('left', 'center', 'right', 'next'));
     let showing = Keihin.all.filter(li => !li.hidden);
     if (!showing.length) return;
     
@@ -84,13 +84,13 @@ onresize = () => {
         less = Math.floor((2*W - w + g) / 2 / (w + g));
 
     if (more === less)
-        return showing.forEach((li, i) => li.classList.add(Math.ceil((i+1)/more)%2 === 0 ? 'left' : 'right'));
+        return showing.forEach((li, i) => li.classList.add(Math.ceil((i+1)/more)%2 === 0 ? 'right' : 'left'));
     
     let n = 1, k;
     while (showing[k = (2*more-1)*n-(more-1)]) {
         let [last, ...others] = showing.slice(k, k+less+1).reverse();
-        last.classList.add(last == showing.at(-1) && (others.length == less - 1 || !others.length) ? 'left' : 'next');
-        others.forEach(li => li.classList.add('left'));
+        last.classList.add(last == showing.at(-1) && (others.length == less - 1 || !others.length) ? 'center' : 'next');
+        others.forEach(li => li.classList.add('center'));
         n++;
     }
 }

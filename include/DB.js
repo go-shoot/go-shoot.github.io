@@ -79,13 +79,13 @@ const DB = {
         .then(ev => ev.type == 'success' ? DB.check(ev.target) : DB.setup(ev.target))
         .then(DB.cache).catch(er => DB.indicator.error(er) ?? console.error(er)),
 
-    setup ({result, transaction}) {console.log('f setup');
+    setup ({result, transaction}) {
         DB.db = result;
         ['product','meta','user'].map(s => DB.db.createObjectStore(s));
         DB.components.map(s => DB.db.createObjectStore(`.${s}`, {keyPath: 'abbr'}).createIndex('group', 'group'));
         return new Promise(res => transaction.oncomplete = res).then(() => (DB.transfer.in(), DB.updates(true)));
     },
-    check ({result}) {console.log('f check');
+    check ({result}) {
         DB.db = result;        
         return DB.updates(false);
     },
@@ -98,9 +98,9 @@ const DB = {
             return fresh ? null : compare(files);
         });
     },
-    cache (outdated) {console.log('f cache');
-        if (outdated && !outdated.length) return DB.indicator.remove() ?? console.log('no updates');
-        DB.indicator.init(outdated); console.log(outdated);
+    cache (outdated) {
+        if (outdated && !outdated.length) return DB.indicator.remove();
+        DB.indicator.init(outdated);
         return Promise.all(Object.keys(DB.action).map(f => (outdated?.some(p => p.includes(f)) ?? true) && DB.fetch(f)))
         .then(() => DB.indicator.update(true));
         //update(['layer7', 'layer6', 'layer5'],       json => Promise.all(Object.entries(json).map(([comp, parts]) => DB.put.parts(parts, comp)))),
@@ -112,12 +112,12 @@ const DB = {
         'part-meta': (json) => DB.put('meta', {part: json}),
         'prod-beys': (beys) => DB.put('product', [{beys}, {schedule: beys.map(bey => bey[2].split(' '))}]),
     },
-    fetch: file => fetch(`/db/${file}.json?${Math.random()}`).then(resp => console.log('fetch '+file)??resp.json())
+    fetch: file => fetch(`/db/${file}.json?${Math.random()}`).then(resp => resp.json())
         .then(json => DB.action[file](json, file))
         .then(() => localStorage.setItem(`/db/${file}.json`, Math.round(new Date() / 1000))),
 
     trans: (store, complete) => DB.tr?.objectStoreNames.contains(store) ? DB.tr : 
-        DB.tr = console.log('NEW TRAN '+store)??Object.assign(DB.db.transaction(store, complete ? 'readwrite' : 'readonly'), {oncomplete: () => (DB.tr = null) || complete?.()}),
+        DB.tr = Object.assign(DB.db.transaction(store, complete ? 'readwrite' : 'readonly'), {oncomplete: () => (DB.tr = null) || complete?.()}),
 
     store: (...args) => DB.trans(...args).objectStore(args[0]),
 
