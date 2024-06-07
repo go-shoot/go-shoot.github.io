@@ -9,7 +9,7 @@ Node.prototype.sQ = function(el) {return this.shadowRoot.Q(el);}
 const E = (el, ...stuff) => {
     let [text, attr, children] = ['String', 'Object', 'Array'].map(t => stuff.find(s => Object.prototype.toString.call(s).includes(t)));
     text && (attr = {textContent: text, ...attr ?? {}});
-    el == 'img' && (attr = {alt: attr.src.match(/([^/.]+)(\.[^/.]+)$/)?.[1], onerror: ev => ev.target.remove(), ...attr ?? {}});
+    el == 'img' && (attr &&= {alt: attr.src.match(/([^/.]+)(\.[^/.]+)$/)?.[1], onerror: ev => ev.target.remove(), ...attr ?? {}});
     el = ['svg', 'use', 'path'].includes(el) ? document.createElementNS('http://www.w3.org/2000/svg', el) : document.createElement(el);
     el.append(...children ?? []);
     Object.assign(el.style, attr?.style ?? {});

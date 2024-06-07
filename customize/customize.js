@@ -94,7 +94,7 @@ Object.assign(App.act, {
         Q('.actioning')?.classList.remove('actioning');
     },
     events () {
-        App.popup.addEventListener('click', ev => ev.target.matches(':popover-open') || App.act.reset(ev));
+        App.popup.addEventListener('click', ev => App.act.reset(ev));
         Q('nav').onclick = ev => {
             if (ev.target.tagName != 'BUTTON') return;
             if (ev.target.classList.contains('selected')) return App.act.reset();

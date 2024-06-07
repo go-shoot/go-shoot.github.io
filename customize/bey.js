@@ -3,7 +3,7 @@ class Bey extends HTMLElement {
         super();
         this.attachShadow({mode: 'open'}).append(
             E('style', Bey.style), 
-            E('i'),
+            E('i', [E('img')]),
             E('ol', {classList: 'part'}, Bey.eachPart('li')),
             E('h4', Bey.eachPart('span'))
         );
@@ -16,7 +16,7 @@ class Bey extends HTMLElement {
         this.init(bey);
         this.onclick = this.select;
     }
-    static eachPart = el => Bey.observedAttributes.map(c => E(el, {classList: c}))
+    static eachPart = el => Bey.observedAttributes.map(c => E(el, {classList: c}, el == 'li' ? [E('img')] : null))
     init(bey) {
         bey && typeof bey == 'object' ?
             Object.entries(bey).forEach(([...p]) => this.setAttribute(...p)) :
@@ -35,7 +35,7 @@ class Bey extends HTMLElement {
     static observedAttributes = ['blade', 'ratchet', 'bit']
     attributeChangedCallback(attr, _, after) {
         this[attr] = after;
-        this.sQ(`.part .${attr}`).style.backgroundImage = `url(/img/${attr}/${after}.png)`;
+        this.sQ(`.part .${attr} img`).src = `/img/${attr}/${after}.png`;
         after && this.change[attr] ? this.change[attr]() : (this.sQ(`h4 .${attr}`).title = after) || this.sQ(`h4 .${attr}`).removeAttribute('title');
         this.change.class(attr);
         this.dock?.tagName == 'MAIN' && this.main();
@@ -50,7 +50,7 @@ class Bey extends HTMLElement {
             } 
             if (this.hasAttribute('collapse') && attr == 'blade' || attr == 'bit') {
                 let type = this.type || this[attr] && (this.refer.from.aside(attr)?.type || (await this.refer.from.DB(attr)).attr?.[0]) || '';
-                this.setAttribute('type', type || '');
+                this.sQ('i img').src = `/img/types.svg#${type}`;
             }
         }
     }
@@ -140,20 +140,16 @@ class Bey extends HTMLElement {
         width:100%;
         padding:.3em; box-sizing:border-box;
 
-        &::before {
-            content:'';
+        img {
             height:1.5em; width:1.5em;
-            background:url() no-repeat center / contain;
+
+            &:not([src]) {display:none;}
         }
         &::after {
             content:'';
             font-size:1.2em; line-height:1.4;
         }
     }
-    :host([type=att]) i::before {background-image:url(/img/types.svg#att);}
-    :host([type=bal]) i::before {background-image:url(/img/types.svg#bal);}
-    :host([type=def]) i::before {background-image:url(/img/types.svg#def);}
-    :host([type=sta]) i::before {background-image:url(/img/types.svg#sta);}
     :host([spin=right]) i::after {content:'\ue01e';}
     :host([spin=left]) i::after {content:'\ue01d';}
     :host([spin=dual]) i::after {content:'\ue01d \ue01e';}
@@ -163,12 +159,16 @@ class Bey extends HTMLElement {
         li {
             aspect-ratio:1/1;
             margin:5%;
-            background:url() no-repeat center center / contain;
+            display:flex; place-content:center; place-items:center;
         }
-        li:not([style]) {display:none;}
+        img {
+            max-width:100%; max-height:100%;
+            pointer-events:none;
+        }
+        li:not(:has(img[src])) {display:none;}
     }
     :host([expand]) ol {aspect-ratio:1/3;}
-    :host([expand]) li:not([style]) {display:initial;}
+    :host([expand]) li:not(:has(img[src])) {display:block;}
 
     h4 {
         margin:0;
