@@ -33,7 +33,7 @@
 const List = {
     headers: (where, products, determinant) => {
         for (let {eng, jap, desc, colors} of products.reverse()) {
-            let details = E('details', [
+            let details = E('details', {name: 'panel'}, [
                 E('summary', [
                     E('h3', {innerHTML: `${jap}<br>${eng}`}),
                     E('small', desc),

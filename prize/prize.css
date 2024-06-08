@@ -39,7 +39,7 @@ label:has(#keihin-m)::after,.keihin-m b::before {content:'\e001';}
         grid-template-areas:'. type . .' '. desc . .' '. img img .' '. name . .' '. date . .';
         margin:calc(var(--shift)*-1) 0;
         transform:translate(calc(var(--shift)*var(--factor,0)));
-        transition:transform .5s;
+        transition:transform .5s,margin .5s;
 
         &.left {--factor:-1;}
         &.right {--factor:1;}

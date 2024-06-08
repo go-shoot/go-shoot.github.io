@@ -34,7 +34,7 @@ const nav = links => {
 class Mapping {
     constructor(...map) {
         this.default = map.length % 2 ? map.pop() : null;
-        this.map = map.reduce((map, item, i, ar) => i % 2 === 0 ? map.set(item, ar[i + 1]) : map, new Map());
+        this.map = new Map(map.flatMap((item, i, ar) => i % 2 ? [] : [[item, ar[i + 1]]]));
     }
     find = (...keys) => {
         let found, evaluate = typeof keys.at(-1) == 'boolean' && keys.pop();
