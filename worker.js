@@ -22,7 +22,9 @@ fetch.net = req => {
         .then(Head.add)
     ).catch(console.error);
 }
-fetch.cache = res => caches.open(is.parts(res.url) ? 'parts' : 'V3').then(cache => cache.put(res.url.replace(/[?#].*$/, ''), res.clone()))
+fetch.cache = res => caches.open(is.parts(res.url) ? 'parts' : 'V3')
+    .then(cache => cache.put(res.url.replace(/[?#].*$/, ''), res.clone()))
+    .then(() => res);
 
 const Head = {
     url: '/include/head.html',
