@@ -1,42 +1,29 @@
 self.addEventListener('install', ev => {
     self.skipWaiting();
     caches.delete('BBX');
-    ev.waitUntil(caches.open('V3').then(cache => cache.put(Head.url, new Response(Head.code))));
+    ev.waitUntil(Head.cache());
 });
 self.addEventListener('activate', ev => ev.waitUntil(clients.claim()));
 self.addEventListener('fetch', ev => ev.respondWith(
-    (async () => {
-        let {url} = ev.request;
-        if (/\/sw\/update/.test(url))
-            return updateFiles(true);
-
-        //Promise.resolve(self.cached ?? Head.fetch().then(html => self.cached = parseInt(html.match(/content=(\d+)/)?.[1] ?? 0)))
-        //.then(() => new Date / 1000 > self.cached + 60*60*24*14 && updateFiles()) //14 days
-        //.then(() => caches.match(url, {ignoreSearch: true}))
-        //.then(cached => cached || goFetch(url))
-        return /woff2$/.test(url) ? fetch(ev.request) : goFetch(url).then(Head.add).catch(er => console.error(er));
-    })()
+    (is.internal(ev.request.url) ? caches.match(ev.request, {ignoreSearch: true}) : Promise.resolve())
+    .then(cached => cached ? fetch.net(ev.request) && Head.add(cached) : fetch.net(ev.request))
+    .catch(console.error)
 ));
-const updateFiles = resp => 
-    caches.open('BBX').then(cache => Promise.all(
-        Files.periodic.map(url => fetch(`${url}${/css|js|json$/.test(url) ? `?${Math.random()}` : ''}`).then(resp => cache.add(url, resp)))
-    ))
-    .then(() => resp ? new Response('', {status: 200}) : true)
-    .catch(er => console.error(er), resp ? new Response('', {status: 400}) : false);
-
 
 const is = {
     internal: url => 'go-shoot.github.io' == new URL(url).host,
     parts: url => /img\/.+?\/.+?\.png$/.test(url),
-    cacheable: url => /tier\.json$/.test(new URL(url).pathname) || !/\.json$/.test(new URL(url).pathname),
+    cacheable: url => is.internal(url) && !/\.json$/.test(new URL(url).pathname),
 }
-const goFetch = url =>
-    fetch(new Request(`${url}${/css|js|json$/.test(url) ? `?${Math.random()}` : ''}`, /js$/.test(url) ? {} : {mode: 'no-cors'})).then(async resp => {
-        //if (resp.status == 200 && is.internal(url) && is.cacheable(url))
-        //    (await caches.open(is.parts(url) ? 'parts' : 'BBX')).add(url.replace(/[?#].*$/, ''), resp.clone());
-        return resp;
-    });
-    
+fetch.net = req => {
+    /css|js|json$/.test(req.url) && (req.url += `?${Math.random()}`);
+    return fetch(req).then(res => 
+        (res.status == 200 && is.cacheable(req.url) ? fetch.cache(res) : Promise.resolve(res))
+        .then(Head.add)
+    ).catch(console.error);
+}
+fetch.cache = res => caches.open(is.parts(res.url) ? 'parts' : 'V3').then(cache => cache.put(res.url.replace(/[?#].*$/, ''), res.clone()))
+
 const Head = {
     url: '/include/head.html',
     code: `<!DOCTYPE HTML>
@@ -66,25 +53,11 @@ const Head = {
     <script src=/include/DB.js></script>
     <script src=/include/UX.js></script>
     `,
+    cache: () => caches.open('V3').then(cache => cache.put(Head.url, new Response(Head.code))),
     fetch: () => caches.match(Head.url).then(resp => resp.text()),
 
     add: async resp => (resp?.headers.get('content-type') || '').includes('text/html') ? 
         new Response(await Head.fetch() + await resp.text(), Head.response(resp)) : resp,
             
     response: ({status, statusText, headers}) => ({status, statusText, headers})
-}
-const Files = {
-    periodic: [
-        '/db/prod-launcher.json',
-        '/include/common.js',
-        '/parts/parts.js', '/parts/catalog.js',
-        '/products/row.js', '/products/maps.js', '/products/table.js',
-        '/include/common.css', '/index.css',
-        '/parts/catalog.css',
-        '/products/products.css',
-        '/products/', '/parts/', '/', '/prize/',
-        '/prize/carousel.js',
-        '/include/component.css',
-        '/include/fonts/Mincho.woff2', '/include/fonts/FiraSans-Regular.woff2', '/include/fonts/FiraSansExtraCondensed-Regular.woff2'
-    ],
 }
