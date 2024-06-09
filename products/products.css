@@ -257,8 +257,8 @@ form a span::before,form a span::after,caption span {
     font-size:1.4em;
 }
     
-thead {font-size:min(3vw,1em);}
-tbody {font-size:min(2.75vw,.9em);}
+thead {font-size:min(3vw,.7em);}
+tbody {font-size:min(2.75vw,.7em);}
 /*.bilingual thead {font-size:min(2.75vw,.9em);}
 .bilingual tbody {font-size:min(2.5vw,.9em);}
 #eng:checked~main tbody {font-size:min(2.5vw,.9em);}

@@ -1,10 +1,7 @@
 self.addEventListener('install', ev => {
     self.skipWaiting();
-    ev.waitUntil(caches.open('BBX').then(cache => {
-        cache.addAll(List.essential);
-        cache.put(Head.url, new Response(Head.code));
-        console.log('updated');
-    }));
+    caches.delete('BBX');
+    ev.waitUntil(caches.open('V3').then(cache => cache.put(Head.url, new Response(Head.code))));
 });
 self.addEventListener('activate', ev => ev.waitUntil(clients.claim()));
 self.addEventListener('fetch', ev => ev.respondWith(
@@ -22,7 +19,7 @@ self.addEventListener('fetch', ev => ev.respondWith(
 ));
 const updateFiles = resp => 
     caches.open('BBX').then(cache => Promise.all(
-        List.periodic.map(url => fetch(`${url}${/css|js|json$/.test(url) ? `?${Math.random()}` : ''}`).then(resp => cache.add(url, resp)))
+        Files.periodic.map(url => fetch(`${url}${/css|js|json$/.test(url) ? `?${Math.random()}` : ''}`).then(resp => cache.add(url, resp)))
     ))
     .then(() => resp ? new Response('', {status: 200}) : true)
     .catch(er => console.error(er), resp ? new Response('', {status: 400}) : false);
@@ -42,7 +39,7 @@ const goFetch = url =>
     
 const Head = {
     url: '/include/head.html',
-    code: `
+    code: `<!DOCTYPE HTML>
     <meta charset=UTF-8>
     <meta name=viewport content='width=device-width,initial-scale=1'>
     <meta name=theme-color content='#b0ff50'>
@@ -76,12 +73,7 @@ const Head = {
             
     response: ({status, statusText, headers}) => ({status, statusText, headers})
 }
-const List = {
-    essential: [
-        //'/parts/bg.svg', 
-        'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js',
-    ],
+const Files = {
     periodic: [
         '/db/prod-launcher.json',
         '/include/common.js',

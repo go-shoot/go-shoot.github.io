@@ -123,9 +123,6 @@ html {
     --dark:hsl(var(--row-c,0),var(--row-s,50%),calc(var(--row-b,25%) + var(--b-adj,0%)));
 }
 
-html::before {
-    content:initial !important;
-}
 body {
     margin:0;
     text-align:center; -webkit-text-size-adjust:100%;
