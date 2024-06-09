@@ -51,7 +51,7 @@ const Head = {
       "start_url":"https://go-shoot.github.io/",
       "theme_color":"rgb(181,251,92)",
       "background_color":"black",
-      "icons":[{"src":"https://go-shoot.github.io/favicon.ico","type":"image/png","sizes":"120x120"},{"src":"https://go-shoot.github.io/favicon.ico","type":"image/png","sizes":"512x512","purpose":"maskable"}]
+      "icons":[{"src":"https://go-shoot.github.io/favicon.png","type":"image/png","sizes":"192x192"},{"src":"https://go-shoot.github.io/favicon.ico","type":"image/png","sizes":"512x512","purpose":"maskable"}]
     }'>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MJMB14RTQP"></script>
     <script>
