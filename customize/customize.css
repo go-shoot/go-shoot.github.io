@@ -38,6 +38,7 @@ nav {
     spin-knob i {
         font-size:.6em; line-height:.8em;
         margin-top:.25em;
+        color:var(--theme-alt);
     }
 }
 
@@ -160,7 +161,7 @@ aside {
         padding-top:.2em;
         background:var(--theme-dark);
         z-index:1;
-        font-size:2em; color:var(--theme);
+        font-size:2em; color:var(--theme-alt);
         line-height:.9; text-align:center;
         white-space:pre;
         display:flex; place-content:center; place-items:center;

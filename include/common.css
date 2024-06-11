@@ -153,7 +153,7 @@ a[href],nav,form summary,caption label,:is(caption,#filter) button,#filter summa
 nav {
     width:100%; height:4.15rem;
     border-bottom:0.15rem solid;
-    display:grid; grid-template:1.7rem 1.7rem / 2.5em auto 1fr auto;
+    display:grid; grid-template:1.7rem 1.7rem / 3.2em auto 1fr auto;
     gap:.2rem .3rem;
     padding:.2rem .3rem;
     background:var(--overlay1);
@@ -163,34 +163,42 @@ nav {
     menu {
         grid-area:1/1/3/2; justify-self:end;
         display:flex;
-        margin:.1em -.2em .1em 0;
+        margin:.1em -.1em .1em 0;
         background:var(--overlay2);
         clip-path:polygon(calc(100% - 1em) 0%,100% 50%,calc(100% - 1em) 100%,0% 100%,0 0);
         z-index:1;
         touch-action:none;
 
+        &.dragged a {
+            pointer-events:none;
+        }
         &::after {
-            content:'';
-            width:1.3em; height:100%;
-            background:var(--theme);
-            clip-path:polygon(0 0,calc(100% - .3em) 50%,0 100%,100% 100%,100% 0);
-            margin-left:2em;
+            content:'\e010';
+            font-size:2em; 
+            transform:scaleY(1.65); line-height:1.89;
+            color:var(--theme-alt);
+            margin-left:-.4em; padding-right:.1em;
         }
         li {
             margin:.3rem; aspect-ratio:1/1;
             display:flex; justify-content:center; align-items:center;
             white-space:nowrap;
-            color:var(--theme); font-size:2em;
+            color:var(--theme);
             border-radius:.1em;
 
-            &:is(:empty)::after {
+            a {
+                font-size:2em;
+                -webkit-user-drag:none;
+                margin-top:.1em;
+            }
+            &:empty::after {
                 content:'';
                 display:inline-block; height:90%; aspect-ratio:1/1;
                 background:url() center / contain no-repeat;
                 filter:contrast(0) brightness(0);        
             }
             &:first-child {margin-left:-.01em;}
-            &:not(:is(:empty,.global)) {font-size:.9em;}
+            &:not(:empty) {font-size:.9em;}
             &:not(.global) {border-radius:9em;}
             &.selected {background:var(--theme);color:black;}
         }
@@ -275,7 +283,7 @@ nav {
     }
 }
 @media (min-width:631px) {
-    nav {grid-template-columns:2.5em min-content 1fr auto auto;}
+    nav {grid-template-columns:3.2em min-content 1fr auto auto;}
     nav .part-mag {width:auto;grid-area:1/5/3/6;}
     nav .part-result {grid-area:1/4/2/5;}
 }

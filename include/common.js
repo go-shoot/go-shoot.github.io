@@ -25,8 +25,9 @@ navigator.serviceWorker?.register('/worker.js').then(() => {
 addEventListener('DOMContentLoaded', () => {
     let menu = Q('nav menu');
     if (menu) {
-        menu.prepend(E('li', {classList: 'global', dataset: {href: '/'}, innerHTML: '&#xe000;'}));
+        menu.append(E('li', [E('a', {href: '/', innerHTML: '&#xe000;'})]));
         new Dragging(menu, {
+            what: 'nav menu',
             translate: {x: {max: menu.offsetLeft*-1}, y: false},
             move: drag => drag.to.select(0),
             lift: (drop, dragged) => {

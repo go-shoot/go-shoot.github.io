@@ -294,8 +294,8 @@ a div {
         z-index:1;
         transition:height .5s,opacity .5s;
 
-        &::before {content:'\e00d'; line-height:.6;}
-        &::after {content:'\e00e'; line-height:.6;}
+        &::before {content:'\e00d'; line-height:.6; color:var(--theme-alt);}
+        &::after  {content:'\e00e'; line-height:.6; color:var(--theme-alt);}
     }
     &:not(.showing) summary::before,&.showing summary::after {opacity:0;}
     article {
