@@ -72,7 +72,7 @@ Object.assign(Magnifier, {
 const Filter = function(type) {
     return this instanceof Filter ? 
         this.create(type).events().dl :
-        Q('nav a').after(...['group', ...Parts.meta.filters ?? []].map(f => new Filter(f)), Sorter());
+        Q('nav menu').after(...['group', ...Parts.meta.filters ?? []].map(f => new Filter(f)), Sorter());
 };
 Object.assign(Filter.prototype, {
     create (type) {

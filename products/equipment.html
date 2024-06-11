@@ -6,7 +6,6 @@
 <style>
     main {
         max-width:1000px;
-        margin:auto;
         --size:150%;
     }
     section:not(:target),h1 {
@@ -14,7 +13,13 @@
     }
 </style>
 
-<nav><script>nav(['/','/products/'])</script></nav>
+<nav>
+    <menu>
+        <li data-href='/products/'>陀螺</li>
+        <li data-href='#launchers'>發射器</li>
+        <li data-href='#others'>其他</li>
+    </menu>
+</nav>
 <!--db-status></db-status-->
 <main class=groups>
     <section id=launchers>
@@ -66,11 +71,10 @@ const List = {
         others: eng => eng.includes('Stadium') ? 2 : 1
     }
 };
-(async () => {
+(onhashchange = async () => {
     let target = location.hash.substring(1);
-    //await DB.open();
-    let /*launchers = await DB.get('html', 'prod-launcher');
-    launchers || DB.put('html', ['prod-launcher',*/ products = await (await fetch(`/db/prod-${target}.json`)).json();//]);
+    if (Q(`#${target} details`)) return;
+    let products = await (await fetch(`/db/prod-${target}.json`)).json();
     List.headers(Q(`#${target}`), products, List.determinant[target]);
 })();
 </script>

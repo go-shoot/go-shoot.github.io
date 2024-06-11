@@ -106,10 +106,10 @@ Object.assign(Part.prototype.catalog.html, {
         ];
     },
     buttons () {
-        let menu = E('menu', Parts.types.map(t => E('li', [E('svg', [E('use')])], {classList: t})))
-        menu.Q('svg', svg => svg.setAttribute('viewBox', '-10 -10 20 10'));
-        menu.Q('use', use => use.setAttribute('href', '#triangle'));
-        return menu;
+        let div = E('div', Parts.types.map(t => E('svg', [E('use')], {classList: t})))
+        div.Q('svg', svg => svg.setAttribute('viewBox', '-10 -10 20 10'));
+        div.Q('use', use => use.setAttribute('href', '#triangle'));
+        return div;
     }
 });
 Part.chi = (group, chi, reverse) => E('h5', {

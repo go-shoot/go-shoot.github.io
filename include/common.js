@@ -7,7 +7,7 @@ Node.prototype.sQ = function(el) {return this.shadowRoot.Q(el);}
 Q('head').insertAdjacentHTML('beforeend', `<style id=unsupported>
     html::before {
         content:'請重新整理\\A如問題持續，需更新／換瀏覽器';
-        opacity:1; transition:opacity .5s;
+        opacity:1; transition:opacity .5s,1s;
         z-index:1;
         background:black; color:white; font-size:3em;
         white-space:pre-wrap;
@@ -20,11 +20,17 @@ navigator.serviceWorker?.register('/worker.js').then(() => {
     if (!Q('link[href$="common.css"]')) return Promise.reject();
     document.title += ' ■ 戰鬥陀螺 X⬧爆旋陀螺 X⬧ベイブレード X⬧Beyblade X';
     Q('#unsupported')?.remove();
-    addEventListener('DOMContentLoaded', () => 
-        Q('[popover]')?.addEventListener('click', ev => ev.target.closest('[popover]').hidePopover())
-    );
 }).catch(() => location.reload());
 
+addEventListener('DOMContentLoaded', () => {
+    Q('nav menu')?.prepend(E('li', {classList: 'global', dataset: {href: '/'}, innerHTML: '&#xe000;'}));
+    new Dragging(Q('nav menu'), {
+        translate: {x: {max: Q('nav menu').offsetLeft*-1}, y: false},
+        move: drag => drag.to.select(0),
+        lift: (drop, dragged) => (dragged.Q('.selected') && (location.href = dragged.Q('.selected').dataset.href), drop.to.return())
+    });
+    Q('[popover]')?.addEventListener('click', ev => ev.target.closest('[popover]').hidePopover());
+});
 const E = (el, ...stuff) => {
     let [text, attr, children] = ['String', 'Object', 'Array'].map(t => stuff.find(s => Object.prototype.toString.call(s).includes(t)));
     text && (attr = {textContent: text, ...attr ?? {}});
@@ -40,11 +46,6 @@ const Cookie = {
     parse: v => { try { return JSON.parse(v); } catch (e) { return console.error(v) ?? null; } }
 };
 Object.assign(Cookie, Object.fromEntries(document.cookie.split(/;\s?/).map(c => c.split('=')).map(([k, v]) => [k, v?.includes('{') ? Cookie.parse(v) : v])));
-
-const nav = links => {
-    let icons = {'/': '&#xe000;', '/products/': '&#xe001;', '/prize/': '&#xe002;', '/parts/' : '&#xe003;'};
-    Q('nav').replaceChildren(...links.map(l => l ? E('a', {href: l, innerHTML: icons[l] ?? ''}) : ''));
-}
 
 class Mapping {
     constructor(...map) {

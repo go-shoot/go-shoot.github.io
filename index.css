@@ -170,6 +170,9 @@ section h3 {
     p:nth-of-type(4) {order:9;}
     figure:nth-of-type(n+6) {order:10;}
 }
+.animating i {
+    transition:transform .5s;
+}
 #reboot {
     user-select:none;-webkit-user-select:none;
     text-align:right;
@@ -190,9 +193,6 @@ section h3 {
             margin-top:.5em;
         }
     }
-    .animating i {
-        transition:transform .5s;
-    }
     i {
         width:2em;height:2em;
         border-radius:9em;
@@ -205,7 +205,7 @@ section h3 {
         &:last-child::before {
             content:'・';
         }
-        &[style*=translate]:first-of-type {
+        &.reached {
             background:var(--theme);
         }
     }

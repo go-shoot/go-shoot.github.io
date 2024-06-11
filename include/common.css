@@ -132,13 +132,10 @@ body:has(db-status[title=更新中]) {
     pointer-events:none;
 }
 main {
-    margin:5em 0 1em 0;
+    margin:5em auto 1em auto;
 }
 :is(db-status[progress],db-status[status])~main {
     margin-top:1em;
-}
-body>db-status {
-    margin:5em 0 0 0;
 }
 a[href],nav,form summary,caption label,:is(caption,#filter) button,#filter summary {
     color:var(--theme);
@@ -147,33 +144,45 @@ a[href],nav,form summary,caption label,:is(caption,#filter) button,#filter summa
     color:var(--theme-alt);
 }
 
+.animating menu {
+    transition:transform .5s;
+}
 nav {
     width:100%; height:4.15rem;
     border-bottom:0.15rem solid;
-    display:grid; grid-template:1.7rem 1.7rem / auto auto 1fr auto;
+    display:grid; grid-template:1.7rem 1.7rem / 1.5em auto 1fr auto;
     gap:.2rem var(--gap); --gap:.3rem;
     padding:.2rem .3rem;
     background:var(--overlay1);
     position:fixed; top:0; z-index:5; 
+    user-select:none;
 
-    a {
-        grid-area:1/1/3/2;
-        font-size:2em;
-        margin-top:.1em;
+    menu {
+        grid-area:1/1/3/2; justify-self:end;
+        display:flex;
+        margin:.1em 0;
+        background:var(--overlay2);
+        clip-path:polygon(calc(100% - 1em) 0%,100% 50%,calc(100% - 1em) 100%,0% 100%,0 0);
+        z-index:1;
+        touch-action:none;
 
-        &:nth-of-type(2) {
-            grid-area:1/2/3/3;
-            margin-left:.1em;
-            justify-content:flex-start;
+        &::after {
+            content:'';
+            width:1.3em; height:100%;
+            background:var(--theme);
+            clip-path:polygon(0 0,calc(100% - .3em) 50%,0 100%,100% 100%,100% 0);
+            margin-left:1em;
         }
-        &:nth-of-type(1)::before,&:nth-of-type(2)::after {
-            margin-top:.1em;
-            scale:1 1.7;
+        li {
+            height:100%; aspect-ratio:1/1;
+            display:flex; justify-content:center; align-items:center;
+            &.global {font-size:2em;color:black;}
+            &:not(.global) {border-radius:9em;}
+            &:not(:empty).selected {color:black;}
+            &.selected {background:var(--theme);}
         }
-        &:nth-of-type(1)::before {content:'\e00f';}
-        &:nth-of-type(2)::after {content:'\e010';}
     }
-    a,div {
+    div {
         display:flex; place-items:center;
     }
 
@@ -261,7 +270,7 @@ nav {
     }
 }
 @media (min-width:631px) {
-    nav {grid-template-columns:auto min-content 1fr auto auto;}
+    nav {grid-template-columns:1.5em min-content 1fr auto auto;}
     nav .part-mag {width:auto;grid-area:1/5/3/6;}
     nav .part-result {grid-area:1/4/2/5;}
 }

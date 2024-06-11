@@ -1,7 +1,8 @@
 class Dragging {
-    constructor (el, {what, scroll, drop, hold, click, ...custom}) {
+    constructor (el, {what, translate, scroll, drop, hold, click, ...custom}) {
         if (!el) return;
-        this.what = what, this.scroll = scroll, this.drop = drop, this.hold = hold;
+        this.what = what, this.translate = translate;
+        this.scroll = scroll, this.drop = drop, this.hold = hold;
         this.fixedPostioned = Q('aside');
         click === false && el.addEventListener('click', ev => ev.preventDefault());
         el.addEventListener('pointerdown', ev => this.press(ev, custom ?? {}));
@@ -37,16 +38,20 @@ class Dragging {
         if (!this.dragged || Math.hypot(this.deltaX, this.deltaY) < 5) return;
         this.timer &&= clearTimeout(this.timer);
         this.dragged.classList.add('dragged');
+        this.translate !== false && this._move.move(ev);
         this._move?.[this.mode]?.(ev);
-        move && (typeof move == 'object' ? move[this.mode] : move)?.(this, this.dragged);
+        move && (typeof move == 'object' ? move[this.mode] : move)?.(this, this.dragged, this.targeted);
     }
     _move = {
         scroll: () => this.dragged.scrollTo(this.scrollInitX - this.deltaX, 0),
-        drop: (ev) => {
+        move: (ev) => {
             ev || this.fixedPostioned?.contains(this.dragged) || (this.scrollY = scrollY - this.scrollInitY); //update value only when
-            let translate = [this.drop.x === false ? 0 : this.deltaX, this.drop.y === false ? 0 : this.deltaY + (this.scrollY ?? 0)];
-            this.drop.x == 'min' && (translate[0] = Math.max(0, translate[0]));
-            this.dragged.style.transform = `translate(${translate[0]}px,${translate[1]}px)`;
+            let x = this.translate?.x === false ? 0 : this.deltaX;
+            let y = this.translate?.y === false ? 0 : this.deltaY + (this.scrollY ?? 0)
+            x = Math.max(this.translate?.x?.min ?? -Infinity, Math.min(x, this.translate?.x?.max ?? Infinity));
+            this.dragged.style.transform = `translate(${x}px,${y}px)`;
+        },
+        drop: () => {
             (this.drop.autoScroll || this.drop.autoScroll == null) && this.autoScroll();
             this.findTarget();
         }
@@ -100,6 +105,11 @@ class Dragging {
     )(el.getBoundingClientRect())
 
     to = {
+        select: (boundary) => {
+            this.dragged.Q('.selected')?.classList.remove('selected');
+            [...this.dragged.children].find(li => (({x, width}) => Math.round(x) <= boundary && x+width >= boundary)(li.getBoundingClientRect()))
+            ?.classList.add('selected');
+        },
         swap: () => {
             if (!this.targeted) return;
             let {x, y} = Dragging.getBoundingPageRect(this.targeted);
@@ -164,6 +174,7 @@ class Knob extends HTMLElement {
         setTimeout(() => this.afterChildren());
 
         new Dragging(this, {
+            translate: false,
             press: (drag) => drag.pressθ = this.θ(),
             move: (drag) => {
                 let delta = Math.abs(drag.deltaY);

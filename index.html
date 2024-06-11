@@ -84,9 +84,7 @@
 
 <section id=reboot>
     <div>
-        <p><i id=flush>&#xe010;</i><span>更新檔案（～250 KB）</span><i></i></p>
-        &#xe00d; 如在本網遇上問題 &#xe00e;
-        <p><i id=reset>&#xe010;</i><span>重設儲存（～30 MB）</span><i></i></p>
+        如在本網遇上問題<p><i id=reset>&#xe010;</i><span>重設儲存（～30 MB）</span><i></i></p>
     </div>
 </section>
 
@@ -135,24 +133,20 @@ new Dragging(Q('#products'), {scroll: {what: '.scroller', when: () => true}});
         document.cookie.split(/;\s?/).forEach(c => document.cookie = c.replace(/=.*/, `=; max-age=0; path=/`))
     ]);
     new Dragging(Q('#reboot'), {
+        translate: {x: {min: 0, max: Q('#reboot p').clientWidth - Q('#reset').clientWidth}, y: false},
         drop: {
             when: ev => ev.target.matches('i:first-child'),
             targets: 'i:last-child',
-            x: 'min', y: false,
             autoScroll: false
         },
-        move: {
-            drop: (self, dragged, targeted) => dragged.classList.toggle('reached', targeted)
-        },
-        lift: {
-            drop: (self, dragged, targeted) => {
-                dragged.classList.remove('reached');
-                let action = dragged.id == 'flush' ? flush : reset;
-                targeted && action(dragged.nextElementSibling).then(() => {
-                    onbeforeunload = () => scrollTo(0, 0);
-                    location.reload();
-                }).catch(er => console.error(er));
-            }
+        move: (self, dragged, targeted) => dragged.classList.toggle('reached', targeted ? true : false),
+        lift: (self, dragged, targeted) => {
+            dragged.classList.remove('reached');
+            let action = dragged.id == 'flush' ? flush : reset;
+            targeted && action(dragged.nextElementSibling).then(() => {
+                onbeforeunload = () => scrollTo(0, 0);
+                location.reload();
+            }).catch(er => console.error(er));
         }
     });
 })();

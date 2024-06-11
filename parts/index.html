@@ -3,9 +3,14 @@
 <script defer src=catalog.js></script>
 <script defer src=parts.js></script>
 <link rel=stylesheet href=catalog.css>
+<script>!location.search && !location.hash && (location.href = '?blade=一體')</script>
 
 <nav>
-    <script>nav(location.hash || location.search ? ['/parts/'] : ['/', '/prize/'])</script>
+    <menu>
+        <li data-href="?blade=一體">
+        <li data-href="?ratchet=一體">
+        <li data-href="?bit=軸心">
+    </menu>
     <data class=part-result></data>
 </nav>
 <db-status callback="location.search && Parts.catalog() || location.hash && Parts.list()"></db-status>
@@ -18,52 +23,3 @@
     </details>
     <section class=catalog></section>
 </main>
-<main id=menu>
-    <div class=blade>
-        <a href=?blade=一體><h4 title=BLADE>刃擊環⬧鋼鐵戰刃</h4></a>
-    </div>
-    <div class=ratchet>
-        <a href=?ratchet=一體><h4 title=RATCHET>核輪⬧固鎖輪盤</h4></a>
-    </div>
-    <div class=bit>
-        <a href=?bit=軸心><h4 title=BIT>軸心</h4></a>
-    </div>
-
-    <!--a id=TopTier onclick='setTimeout(() => location.reload())'>Top tier 最強級部件舉例</a-->
-    <style>
-    #catalog:has(+#menu:not([hidden])) {
-        display:none;
-    }
-    #menu {
-        padding-top:.5em;
-
-        h4 {
-            font-size:.8em;
-            display:flex; flex-direction:column; place-content:center;
-            width:7rem; height:7rem;
-            border-radius:9em;
-            box-shadow:0 0 1em .1em hsl(var(--c),calc(65% + var(--s-adj,0%)),calc(50% + var(--b-adj)));
-            position:relative;
-            margin:2em auto;
-            color:hsl(var(--c),65%,50%);
-
-            &::before {
-                content:attr(title); font-size:2em;
-                display:block;
-            }
-            &::after {
-                content:'';
-                position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-                width:80%; height:80%;
-                z-index:-1;
-                background:url(/img/blade/CbDr.png) center / contain no-repeat;
-                filter:contrast(0) brightness(20);
-            }
-        }
-        .ratchet h4::after {background-image:url(/img/ratchet/3-60.png);}
-        .bit h4::after {background-image:url(/img/bit/B.png);}
-    }
-    </style>
-</main>
-<script>(location.search || location.hash) && (Q('#menu').hidden = true)</script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin=anonymous referrerpolicy=no-referrer></script>

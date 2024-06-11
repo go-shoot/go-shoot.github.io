@@ -116,10 +116,6 @@ Object.assign(App, {
     },
     switch () {
         Q('main', main => main.hidden = !main.matches(location.hash ||= '#deck'));
-        Object.assign(Q('nav a:nth-of-type(2)'), {
-            href: location.hash == '#deck' ? '#tier' : '#deck',
-            innerHTML: `<span>${location.hash == '#deck' ? 'TIER' : 'DECK'}</span>`
-        });
         Q('.deck,.tier', el => el.style.display = el.classList.contains(location.hash.substring(1)) ? 'block' : 'none');
 
         if (location.hash == '#tier')

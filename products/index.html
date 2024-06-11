@@ -10,7 +10,14 @@
 <link rel=stylesheet href=/parts/catalog.css>
 
 <nav>
-    <script>nav(['/', '/parts/'])</script>
+    <menu>
+        <li data-href='/products/'>陀螺</li>
+        <li data-href='equipment.html#launchers'>發射器</li>
+        <li data-href='equipment.html#others'>其他</li>
+    </menu>
+    <a href="https://kyoganken.web.fc2.com/beyx/index.htm#parts1" target=_blank>競</a>
+    <a href="http://obakeblader.com/?s=入手法" target=_blank>お</a>
+
     <span class=free-search>部件檢索</span>
     <div class=prod-search>
         <label for=free>&#xe00a;</label>
@@ -24,18 +31,7 @@
 <input type=radio name=system id=GT data-part='[[Chip,blade5c],[Base,blade5b],[Weight,blade5w]]'>
 <db-status callback="Table(); Filter(); Finder()"></db-status>
 <main>
-    <form>
-        <div>
-            <a href="https://kyoganken.web.fc2.com/beyx/index.htm#parts1" target=_blank>競</a>
-            <a href="http://obakeblader.com/?s=入手法" target=_blank>お</a>
-        </div>
-        <details>
-        </details>
-        <div>
-            <a href=equipment.html#launchers></a>
-            <a href=equipment.html#others></a>
-        </div>
-    </form>
+    <form></form>
 
     <details id=filter>
         <summary>&#xe027; 分類<i></i></summary>
