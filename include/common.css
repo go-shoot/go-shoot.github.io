@@ -174,18 +174,17 @@ nav {
             margin-left:1em;
         }
         li {
-            height:100%; aspect-ratio:1/1;
+            margin:.3rem; aspect-ratio:1/1;
             display:flex; justify-content:center; align-items:center;
-            &.global {font-size:2em;color:black;}
+            white-space:nowrap;
+            color:var(--theme);
+
+            &.global {font-size:2em;}
+            &:not(:is(:empty,.global)) {font-size:.9em;}
             &:not(.global) {border-radius:9em;}
-            &:not(:empty).selected {color:black;}
-            &.selected {background:var(--theme);}
+            &.selected {background:var(--theme);color:black;}
         }
     }
-    div {
-        display:flex; place-items:center;
-    }
-
     :is(.part-result,.prod-result)[value]::before {
         content:attr(value);
     }

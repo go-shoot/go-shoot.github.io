@@ -10,9 +10,6 @@ nav {
         margin-bottom:.2em;
     }
     div {
-        place-self:center end;
-        gap:.2em;
-
         &:first-of-type {
             grid-area:1/4/2/5;
             align-self:end;

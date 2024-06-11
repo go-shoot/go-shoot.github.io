@@ -116,7 +116,7 @@ Object.assign(App, {
     },
     switch () {
         Q('main', main => main.hidden = !main.matches(location.hash ||= '#deck'));
-        Q('.deck,.tier', el => el.style.display = el.classList.contains(location.hash.substring(1)) ? 'block' : 'none');
+        Q('.deck,.tier', el => el.hidden = !el.classList.contains(location.hash.substring(1)));
 
         if (location.hash == '#tier')
             return [Q('#tier bey-x')].flat().forEach(({abbr: [[p, c]]}) => Q(`aside bey-x[${p}='${c}']`).used = true);
