@@ -197,6 +197,7 @@ section h3 {
         width:2em;height:2em;
         border-radius:9em;
         text-align:center; line-height:2.2em;
+        touch-action:none;
 
         &:first-child {
             background:var(--overlay2);

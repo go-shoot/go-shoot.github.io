@@ -108,8 +108,9 @@ class Dragging {
     to = {
         select: (boundary) => {
             this.dragged.Q('.selected')?.classList.remove('selected');
-            [...this.dragged.children].find(li => (({x, width}) => Math.round(x) <= boundary && x+width >= boundary)(li.getBoundingClientRect()))
-            ?.classList.add('selected');
+            [...this.dragged.children].find(li => 
+                (({x, width}) => Math.round(x) <= boundary && x+width >= boundary)(li.getBoundingClientRect())
+            )?.classList.add('selected');
         },
         swap: () => {
             if (!this.targeted) return;

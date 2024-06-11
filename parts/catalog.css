@@ -1,12 +1,12 @@
 @media (max-width:630px) and (orientation:portrait) {
-    html:has(#mag1:checked) .catalog {zoom:0.54;}
-    html:has(#mag2:checked) .catalog {zoom:0.81;}
-    html:has(#mag3:checked) .catalog {zoom:1.60;} 
+    html:has(#mag1:checked) .catalog {font-size:0.54em;}
+    html:has(#mag2:checked) .catalog {font-size:0.81em;}
+    html:has(#mag3:checked) .catalog {font-size:1.60em;} 
 }
 @media (max-width:630px) and (orientation:landscape) {
-    html:has(#mag1:checked) .catalog {zoom:0.53;}
-    html:has(#mag2:checked) .catalog {zoom:0.70;}
-    html:has(#mag3:checked) .catalog {zoom:1.07;}
+    html:has(#mag1:checked) .catalog {font-size:0.53em;}
+    html:has(#mag2:checked) .catalog {font-size:0.70em;}
+    html:has(#mag3:checked) .catalog {font-size:1.07em;}
 }
 @media (max-width:630px){
     html:has(#mag1:checked) .part-mag::before,
@@ -21,8 +21,9 @@
     html:has(#mag3:checked) label:has(#mag2) {
         display:inline-block;--h:220;--s:60%;}
     html:has(#mag1:checked) label:has(#mag2),
-    html:has(#mag2:checked) label:has(#mag3) {
-        display:inline-block;--h:40;--s:60%;}
+    html:has(#mag2:checked) label:has(#mag3),
+    .part-mag::after {
+        display:inline-block;--h:40;--s:60%;margin-left:.2em;}
     spin-knob {display:none;}
 }
 html,body {

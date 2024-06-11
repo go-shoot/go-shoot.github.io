@@ -163,7 +163,7 @@ nav {
     menu {
         grid-area:1/1/3/2; justify-self:end;
         display:flex;
-        margin:.1em 0;
+        margin:.1em -.2em .1em 0;
         background:var(--overlay2);
         clip-path:polygon(calc(100% - 1em) 0%,100% 50%,calc(100% - 1em) 100%,0% 100%,0 0);
         z-index:1;
@@ -174,7 +174,7 @@ nav {
             width:1.3em; height:100%;
             background:var(--theme);
             clip-path:polygon(0 0,calc(100% - .3em) 50%,0 100%,100% 100%,100% 0);
-            margin-left:1.5em;
+            margin-left:2em;
         }
         li {
             margin:.3rem; aspect-ratio:1/1;
@@ -189,7 +189,7 @@ nav {
                 background:url() center / contain no-repeat;
                 filter:contrast(0) brightness(0);        
             }
-            &:first-child {margin-left:-.05em;}
+            &:first-child {margin-left:-.01em;}
             &:not(:is(:empty,.global)) {font-size:.9em;}
             &:not(.global) {border-radius:9em;}
             &.selected {background:var(--theme);color:black;}
@@ -265,7 +265,6 @@ nav {
     .part-mag label,.part-mag::before,.part-mag::after {
         background:hsl(var(--h),var(--s),80%);
         color:hsl(var(--h),var(--s),50%);
-        margin-left:.2em;
     }
     .part-mag {
         grid-area:2/4/3/5; justify-self:flex-end;
