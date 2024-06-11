@@ -11,6 +11,7 @@ let Parts = {
         Filter();
         new Dragging(Q('summary'), {
             click: false,
+            translate: false,
             move: (drag, dragged) => Math.abs(drag.deltaY) > 50 && 
                 dragged.parentElement.classList[drag.deltaY > 0 ? 'add' : 'remove']('showing')
         });
