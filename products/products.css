@@ -30,14 +30,6 @@ nav {
         }
     }
 }
-form {
-    a[href$='#launchers'] {
-        background:url(https://beyblade.takaratomy.co.jp/beyblade-x/lineup/_image/BX18@1.png) center / 150%;
-    }
-    a[href$='#others'] {
-        background:url(https://beyblade.takaratomy.co.jp/beyblade-x/lineup/_image/BX11@1.png) center / 120%;
-    }
-}
 caption>* {
     vertical-align:middle;
 }

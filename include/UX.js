@@ -37,8 +37,9 @@ class Dragging {
         ev && ([this.moveX, this.moveY, this.deltaX, this.deltaY] = [ev.x, ev.y, ev.x-this.pressX, ev.y-this.pressY]) && ev.preventDefault();
         if (!this.dragged || Math.hypot(this.deltaX, this.deltaY) < 5) return;
         this.timer &&= clearTimeout(this.timer);
+        if (!this.mode) return;
         this.dragged.classList.add('dragged');
-        this.translate !== false && this._move.move(ev);
+        this.translate !== false && this.mode != 'scroll' && this._move.move(ev);
         this._move?.[this.mode]?.(ev);
         move && (typeof move == 'object' ? move[this.mode] : move)?.(this, this.dragged, this.targeted);
     }

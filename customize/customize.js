@@ -143,7 +143,7 @@ Object.assign(App, {
                 targets: 'main bey-x',
                 when: ev => ev.target.classList.contains('selected')
             },
-            lift: {drop: drop => drop.to.swap()}
+            lift: drop => drop.to.swap()
         });
         new Dragging(Q('#tier'), {
             hold: {

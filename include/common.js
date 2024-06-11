@@ -23,12 +23,18 @@ navigator.serviceWorker?.register('/worker.js').then(() => {
 }).catch(() => location.reload());
 
 addEventListener('DOMContentLoaded', () => {
-    Q('nav menu')?.prepend(E('li', {classList: 'global', dataset: {href: '/'}, innerHTML: '&#xe000;'}));
-    new Dragging(Q('nav menu'), {
-        translate: {x: {max: Q('nav menu').offsetLeft*-1}, y: false},
-        move: drag => drag.to.select(0),
-        lift: (drop, dragged) => (dragged.Q('.selected') && (location.href = dragged.Q('.selected').dataset.href), drop.to.return())
-    });
+    let menu = Q('nav menu');
+    if (menu) {
+        menu.prepend(E('li', {classList: 'global', dataset: {href: '/'}, innerHTML: '&#xe000;'}));
+        new Dragging(menu, {
+            translate: {x: {max: menu.offsetLeft*-1}, y: false},
+            move: drag => drag.to.select(0),
+            lift: (drop, dragged) => {
+                dragged.Q('.selected') && (location.href = dragged.Q('.selected').dataset.href);
+                drop.to.return();
+            }
+        });
+    }
     Q('[popover]')?.addEventListener('click', ev => ev.target.closest('[popover]').hidePopover());
 });
 const E = (el, ...stuff) => {

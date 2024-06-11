@@ -133,7 +133,10 @@ new Dragging(Q('#products'), {scroll: {what: '.scroller', when: () => true}});
         document.cookie.split(/;\s?/).forEach(c => document.cookie = c.replace(/=.*/, `=; max-age=0; path=/`))
     ]);
     new Dragging(Q('#reboot'), {
-        translate: {x: {min: 0, max: Q('#reboot p').clientWidth - Q('#reset').clientWidth}, y: false},
+        translate: {
+            x: {min: 0, max: Q('#reboot p').clientWidth - Q('#reset').clientWidth}, 
+            y: false
+        },
         drop: {
             when: ev => ev.target.matches('i:first-child'),
             targets: 'i:last-child',

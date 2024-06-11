@@ -415,12 +415,7 @@ a div {
 }
 
 menu {
-    li[data-href^='?']::after {
-        content:'';
-        display:inline-block; height:90%; aspect-ratio:1/1;
-        background:url(/img/blade/CbDr.png) center / contain no-repeat;
-        filter:contrast(0) brightness(0);
-    }
+    li:nth-child(1 of [data-href^='?'])::after {background-image:url(/img/blade/CbDr.png);}
     li:nth-child(2 of [data-href^='?'])::after {background-image:url(/img/ratchet/3-60.png);}
     li:nth-child(3 of [data-href^='?'])::after {background-image:url(/img/bit/B.png);}
 }
