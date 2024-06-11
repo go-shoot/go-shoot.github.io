@@ -19,10 +19,10 @@
         content:'\e00b';--h:0;--s:0%;}
     html:has(#mag2:checked) label:has(#mag1),
     html:has(#mag3:checked) label:has(#mag2) {
-        display:initial;--h:220;--s:60%;}
+        display:inline-block;--h:220;--s:60%;}
     html:has(#mag1:checked) label:has(#mag2),
     html:has(#mag2:checked) label:has(#mag3) {
-        display:initial;--h:40;--s:60%;}
+        display:inline-block;--h:40;--s:60%;}
     spin-knob {display:none;}
 }
 html,body {

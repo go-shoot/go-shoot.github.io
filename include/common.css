@@ -74,6 +74,9 @@ label:has(input:not(:checked):not([name=mag])) {
     font-size:2rem; line-height:.4rem;
     color:var(--theme); text-shadow:0 0 .1em var(--theme);
 }
+.led {
+    display:flex; align-items:center;
+}
 .led label::before {
     line-height:.7rem;
 }
@@ -220,7 +223,7 @@ nav {
         width:2em;
     }
     .prod-search {
-        grid-area:1/5/2/6; 
+        grid-area:1/5/2/6; align-self:center; 
         position:relative;
 
         label {
@@ -228,8 +231,8 @@ nav {
         }
         input {
             padding:0 .3em 0 1.7em;
-            background:none;
-            font-size:1em;color:var(--on);
+            background:none; outline:none;
+            font-size:1em; color:var(--on);
         }
     }
     .prod-search input,.prod-reset {
@@ -249,18 +252,17 @@ nav {
     }
     .prod-search label,
     .part-mag label,.part-mag::before,.part-mag::after {
-        width:1.7rem;height:1.7rem;
+        display:inline-block; width:1.7rem;height:1.7rem;
         line-height:1.65;font-size:1.1rem;
         border-radius:5em;
     }
     .part-mag label,.part-mag::before,.part-mag::after {
         background:hsl(var(--h),var(--s),80%);
         color:hsl(var(--h),var(--s),50%);
+        margin-left:.2em;
     }
     .part-mag {
         grid-area:2/4/3/5; justify-self:flex-end;
-        display:flex; justify-content:space-between;
-        width:calc(3.4rem + var(--gap));
 
         label {display:none;}
         spin-knob {font-size:1.7em;}
