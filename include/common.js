@@ -62,7 +62,7 @@ class Mapping {
     find = (...keys) => {
         let found, evaluate = typeof keys.at(-1) == 'boolean' && keys.pop();
         let key = keys.find(key => (found = 
-            this.map.entries().find(([k]) =>
+            [...this.map.entries()].find(([k]) =>
                 k instanceof RegExp && k.test(key) || k instanceof Array && k.find(item => item == key) ||
                 k instanceof Function && k(key) || k == key
             )?.[1] ?? this.default
