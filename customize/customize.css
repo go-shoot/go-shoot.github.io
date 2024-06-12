@@ -26,7 +26,7 @@ nav {
 
         &.selected {background:var(--theme-alt);}
     }
-    &:has(.selected) button:not(.selected) {
+    &:has(button.selected) button:not(.selected) {
         pointer-events:none;
     }
     #tier-list {
