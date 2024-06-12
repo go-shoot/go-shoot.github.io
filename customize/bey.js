@@ -138,10 +138,9 @@ class Bey extends HTMLElement {
         width:100%;
         padding:.3em; box-sizing:border-box;
 
+        &:empty,img:not([src]) {display:none;}
         img {
             height:1.5em; width:1.5em;
-
-            &:not([src]) {display:none;}
         }
         &::after {
             content:'';
