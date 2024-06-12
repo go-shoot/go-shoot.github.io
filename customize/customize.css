@@ -165,6 +165,7 @@ aside {
         line-height:.9; text-align:center;
         white-space:pre;
         display:flex; place-content:center; place-items:center;
+        pointer-events:none;
     }
 
     :is(ul,li):has(bey-x[style]),bey-x[style] {
@@ -194,7 +195,7 @@ aside {
         display:block;
     }
     bey-x,&:has(>bey-x.pressed) bey-x {
-        touch-action:none;
+        touch-action:pan-x;
     }
 }
 

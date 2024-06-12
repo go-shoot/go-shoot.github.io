@@ -109,7 +109,7 @@ class Bey extends HTMLElement {
     }
     static style = `
     :host {
-        display:inline-grid; grid-template:var(--headfoot) auto var(--headfoot) / min(calc((100vw - 2rem)/3),8em);
+        display:grid; grid-template:var(--headfoot) auto var(--headfoot) / min(calc((100vw - 2rem)/3),8em);
         --headfoot:1.5em;
         border-radius:.5em;
         outline-offset:-.1em; outline:.2em solid transparent;

@@ -3,13 +3,17 @@ class Dragging {
         if (!el) return;
         this.what = what, this.translate = translate;
         this.scroll = scroll, this.drop = drop, this.hold = hold;
+        this.scroll && (el.onwheel = ev => {
+            let scrolled = ev.target.closest(this.scroll.what);
+            scrolled && (scrolled.scrollLeft += ev.deltaY > 0 ? 100 : -100) && ev.preventDefault();
+        });
         this.fixedPostioned = Q('aside');
         click === false && el.addEventListener('click', ev => ev.preventDefault());
         el.addEventListener('pointerdown', ev => this.press(ev, custom ?? {}));
     }
     events = new Proxy(
         Object.defineProperty({}, 'remove', {value() {Object.entries(this).forEach(p => removeEventListener(...p))}, enumerable: false}),
-        {set: (target, ...p) => addEventListener(...p) ?? Reflect.set(target, ...p)}
+        {set: (target, ...p) => addEventListener(...p) ?? Reflect.set(target, ...p)} //window
     )
     press (ev, {press, move, lift}) {
         this.mode = 
@@ -44,7 +48,7 @@ class Dragging {
         move && (typeof move == 'object' ? move[this.mode] : move)?.(this, this.dragged, this.targeted);
     }
     _move = {
-        scroll: () => this.dragged.scrollTo(this.scrollInitX - this.deltaX, 0),
+        scroll: (ev) => ev.pointerType == 'mouse' && this.dragged.scrollTo(this.scrollInitX - this.deltaX, 0),
         move: (ev) => {
             ev || this.fixedPostioned?.contains(this.dragged) || (this.scrollY = scrollY - this.scrollInitY); //update value only when
             let x = this.translate?.x === false ? 0 : this.deltaX;
