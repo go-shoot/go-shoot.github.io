@@ -50,7 +50,7 @@ class Bey extends HTMLElement {
             } 
             if (this.hasAttribute('collapse') && attr == 'blade' || attr == 'bit') {
                 let type = this.type || this[attr] && (this.refer.from.aside(attr)?.type || (await this.refer.from.DB(attr)).attr?.[0]) || '';
-                this.sQ('i img').src = `/img/types.svg#${type}`;
+                this.sQ('i img').src = `/img/types.svg?${type}#${type}`;
             }
         }
     }
@@ -153,7 +153,7 @@ class Bey extends HTMLElement {
         overflow:hidden;
 
         li {
-            aspect-ratio:1/1; height:90%; /*safari*/
+            aspect-ratio:1/1; width:90%;
             margin:5%;
             display:flex; place-content:center; place-items:center;
         }
