@@ -17,7 +17,7 @@ nav {
         outline:.15em solid var(--theme); border-radius:8em;
         font-size:1.25em; line-height:2.15em; color:white !important;
         position: relative;
-        margin-left:.2em;
+        margin-left:.3em;
 
         &[href$='#toc2'] {outline-color:var(--theme-alt);}
         &::before {

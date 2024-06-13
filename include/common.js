@@ -28,7 +28,7 @@ addEventListener('DOMContentLoaded', () => {
         menu.append(E('li', [E('a', {href: '/', innerHTML: '&#xe000;'})]));
         new Dragging(menu, {
             what: 'nav menu',
-            translate: {x: {max: menu.offsetLeft*-1 - 9}, y: false},
+            translate: {x: {max: menu.offsetLeft*-1 - 6}, y: false},
             move: drag => drag.to.select(0),
             lift: (drop, dragged) => {
                 dragged.Q('.selected') && (location.href = dragged.Q('.selected').dataset.href);
