@@ -4,7 +4,7 @@ customElements.define('db-status', class extends HTMLElement {
         [this.progress, this.total] = [0, Cookie.count || 100];
         this.attachShadow({mode: 'open'}).innerHTML = `
         <style>
-        :host(:not([progress]):not([status])) {display:none;}
+        :host(:not([progress]):not([status]))::before {color:white;}
         :host {
             position:relative;
             background:radial-gradient(circle at center var(--p),hsla(0,0%,100%,.2) 70%, var(--on) 70%);
@@ -38,7 +38,7 @@ customElements.define('db-status', class extends HTMLElement {
         if (value == 'success') {
             this.style.setProperty('--p', 40 - 225 + '%');
             this.progress > (Cookie.count ?? 0) && Cookie.set('count', this.progress);
-            setTimeout(() => this.remove(), 2000);
+            setTimeout(() => this.hidden = true, 2000);
         }
         this.style.setProperty('--c', value == 'success' ? 'lime' : 'deeppink');
         this.title = value == 'success' ? '更新成功' : value == 'offline' ? '離線' : '';
@@ -99,7 +99,7 @@ const DB = {
         });
     },
     cache (outdated) {
-        if (outdated && !outdated.length) return DB.indicator.remove();
+        if (outdated && !outdated.length) return DB.indicator.hidden = true;
         DB.indicator.init(outdated);
         return Promise.all(Object.keys(DB.action).map(f => (outdated?.some(p => p.includes(f)) ?? true) && DB.fetch(f)))
         .then(() => DB.indicator.update(true));

@@ -16,10 +16,6 @@
 
 <db-status callback="Q('header,section,time,.scroller', content => observer.observe(content));"></db-status>
 
-<section id=products>
-    <h3>最新商品</h3>
-</section>
-
 <section id="gate" style="overflow:visible">
     <p>&#xe00d; &#xe00e; &#xe00f; &#xe010; 圖案表示依照所示的方向拉動，即能操作。立即嘗試：</p>
     <div class="gate">
@@ -42,13 +38,15 @@
 
 <section id=links>
     <h3>外部連結</h3>
-    <spin-knob title=商品陣容 alt="//www.amazon.co.jp/s?i=toys&bbn=2189319051&rh=n%3A2189319051%2Cp_n_date%3A2320554051"><a href="//beyblade.takaratomy.co.jp/beyblade-x/lineup/"><i>🛍️</i></a></spin-knob>
+    <spin-knob title=商品陣容 alt="//www.amazon.co.jp/s?rh=n%3A2189319051%2Cp_n_date%3A2320554051"><a href="//beyblade.takaratomy.co.jp/beyblade-x/lineup/"><i>🛍️</i></a></spin-knob>
     <spin-knob title=YouTube><a href="//m.youtube.com/@BEYBLADEOfficialYouTube/videos"><i>🎞️</i></a></spin-knob>
     <spin-knob title=漫畫閲覽 alt="//drive.google.com/drive/folders/1vSOCv8UNyiJ76KCDhUbexuS7E7Hs-Isr"><a href="//www.corocoro.jp/episode/4856001361379685850"><i>🖍️</i></a></spin-knob>
-    <spin-knob title=動畫資訊><a href="//beyblade.takaratomy.co.jp/anime/character/"><i>📺</i></a></spin-knob>
+    <spin-knob title=動畫資訊 alt="//drive.google.com/drive/folders/11K6rxKid9m0_90otiRxQlJRJhRTJWRSN"><a href="//beyblade.takaratomy.co.jp/anime/character/"><i>📺</i></a></spin-knob>
     <spin-knob title=App 下載><a href=_><i>📥</i></a></spin-knob>
     <spin-knob title=𝕏><a href="//twitter.com/tbh_pr"><i>🛠️</i></a></spin-knob>
 </section>
+
+<section id=products><h3>最新商品</h3></section>
 
 <details>
     <summary>初心者資訊</summary>
@@ -111,6 +109,7 @@ const observer = new IntersectionObserver(entries => entries.forEach(entry => en
     
 const announce = news => Object.entries(news).forEach(([date, beys]) => {
     let base = `https://beyblade.takaratomy.co.jp/beyblade-x/lineup/_image/`;
+    let types = {att: '攻擊型', bal: '平衡型', sta: '持久型', def: '防禦型'};
     Q('#products').append(E('time', {title: date}));
     beys.forEach(bey => {
         let {code, name, imgs, desc, type, color, class: cl} = bey;
@@ -121,7 +120,7 @@ const announce = news => Object.entries(news).forEach(([date, beys]) => {
             imgs.push(...[2,3,4,5,6,7,8].map(n => base + `${c}${color ? `_${color}` : ''}_0${n}@1.png`));
         }
         let div = E('div', [
-            E('h5', code, {classList: type ?? ''}),
+            E('h5', type? [E('ruby', {classList: `below ${type}`}, [E('img', {src: `/img/types.svg#${type}`}), E('rt', types[type])]), code] : code),
             E('h4', name?.replaceAll('-', '‑').replaceAll('<br>', String.fromCharCode(10))), 
             ...imgs.map(src => E('figure', [E('a', '🖼️', {href: src}), E('img', {src})])), 
             ...([desc ?? []].flat()).map(d => E('p', {innerHTML: d.replaceAll('-', '‑')}))
@@ -155,7 +154,7 @@ announce.colors = new Mapping(
         move (drag, dragged) {
             drag.other ??= Q(`#gate-${dragged.id == 'gate-left' ? 'right' : 'left'}`);
             drag.other.style.transform = `translateX(${parseFloat(dragged.style.transform.match(/[-\d.]+/)[0])*-1}px)`;
-            let distance = drag.other.getBoundingClientRect().x - dragged.getBoundingClientRect().x - dragged.getBoundingClientRect().width;
+            let distance = Math.abs(drag.other.getBoundingClientRect().x - dragged.getBoundingClientRect().x) - dragged.getBoundingClientRect().width;
             i.style.opacity = Math.max(0, 5-distance/100);
             distance < narrowest && distance <= i.clientWidth && distance > 0
             && (i.style.transform = `scaleX(${distance/i.clientWidth})`) && (narrowest = distance);

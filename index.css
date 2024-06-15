@@ -22,6 +22,7 @@ header {
 h2,h3 {
     color:transparent; -webkit-text-stroke:.02em white;
 }
+#down {font-size:2em;}
 
 section,article {
     margin:4rem auto 0 auto;  
@@ -33,7 +34,7 @@ section,article {
     background:rgb(1, 20, 0);
     box-shadow:inset 0 0 .5em black, 0 0 .5em .5em black;
     border-radius:1em; outline:.5em solid var(--overlay1); border:.1em solid black; 
-    padding:1em; margin:3rem 1em;
+    padding:1em; margin:3rem 1em 0 1em;
     vertical-align:top;
     --bg:rgb(1, 20, 0);
 }
@@ -131,25 +132,25 @@ section h3 {
         display:flex; place-items:center; place-content:center;
         text-transform:capitalize;
         white-space:pre-wrap;
+        padding:.5em;
     }
     div>:has(*) {
         flex-direction:column;
     }
     h5 {
         background:var(--light,#333) !important;
-        flex-direction:column;
 
-        &:not([class=''])::before {
-            display:inline-block; width:2.5rem; height:2.5rem;
-            font-size:.7em; line-height:6rem;
-            margin-bottom:1.1rem;
-            color:var(--type);
+        img {
+            width:3em;
+        }
+        ruby {
+            margin-bottom:.5em;
+        }
+        rt {
+            text-align:center;
+            color:var(--type); font-size:.7em;
         }
     }
-    .bal::before {content:'平衡型';background:url(/img/types.svg#bal) center / contain no-repeat;}
-    .att::before {content:'攻擊型';background:url(/img/types.svg#att) center / contain no-repeat;}
-    .def::before {content:'防禦型';background:url(/img/types.svg#def) center / contain no-repeat;}
-    .sta::before {content:'持久型';background:url(/img/types.svg#sta) center / contain no-repeat;}
     p {
         margin:0;
     }
@@ -224,10 +225,8 @@ footer {
 #rule rb {color:black;}
 
 article {padding:0 .5em;}
-details {font-size:.8em;}
-details h4 {
-    font-size:1.4em;
-}
+details {font-size:.8em;margin-top:3em;}
+details h4 {font-size:1.4em;}
 article>:not(img) {
     margin:1rem .1rem;
 }
@@ -302,8 +301,9 @@ time,i,i::before
     height:3em;
 }
 #gate {
+    margin-top:1em;
     p {
-        padding:0 .5em;
+        padding:0 .5em; margin-bottom:0;
     }
     .gate {
         display:grid; grid-template-columns:3em 1fr 3em;
@@ -316,11 +316,11 @@ time,i,i::before
             opacity:0;
         }
         span {
-            background:var(--theme-dark);
+            background:linear-gradient(to right,hsla(0,80%,80%,.5),hsla(60,80%,80%,.5),hsla(120,80%,80%,.5),hsla(180,80%,80%,.5),hsla(240,80%,80%,.5));
             width:50vw;
             color:var(--theme-alt);
-            font-size:2em;
-            padding:.3em .2em .2em .2em;
+            font-size:2em; line-height:1;
+            padding:.15em .2em 0 .2em;
             touch-action:none;
             position:relative;
             z-index:1;

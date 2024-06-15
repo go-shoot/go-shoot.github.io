@@ -12,7 +12,7 @@ const App = () => {
 };
 App.load = {
     saved () {
-        return DB.get('user', 'pref').then(re => re && (Q('#lang').value = re.lang))
+        return DB.get('user', 'pref').then(re => Q('#lang').value = re?.lang ?? 'tw')
         .then(() => Promise.all([
             DB.get('user', '#deck').then(re => re?.forEach((deck, i) => 
                 Q(`#deck article:nth-of-type(${i+1}) bey-x`, (bey, j) => bey.init(deck[j]))
@@ -132,7 +132,10 @@ Object.assign(App, {
     events () {
         document.onpointerdown = ev => (App.interacted = true) && ev.target.closest('aside')?.classList.remove('first');
         onhashchange = App.switch;
-        Q('#lang').onchange = ev => Bey.lang(ev?.target.value) ?? App.save();
+        Q('#lang').onchange = ev => {
+            ev && Bey.lang(ev.target.value);
+            App.save();
+        }
         this.events.observe = () => (observer => 
             Q('article,section', el => observer.observe(el, { subtree: true, childList: true, attributeFilter: Bey.observedAttributes }))
         )(new MutationObserver(() => App.save(location.hash)));

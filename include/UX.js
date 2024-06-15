@@ -5,7 +5,8 @@ class Dragging {
         this.scroll = scroll, this.drop = drop, this.hold = hold;
         this.scroll && (el.onwheel = ev => {
             let scrolled = ev.target.closest(this.scroll.what);
-            scrolled && (scrolled.scrollLeft += ev.deltaY > 0 ? 100 : -100) && ev.preventDefault();
+            scrolled && (ev.deltaY < 0 && scrolled.scrollLeft != 0 || ev.deltaY > 0 && scrolled.scrollLeft != scrolled.scrollWidth - scrolled.clientWidth)
+                && (scrolled.scrollLeft += ev.deltaY > 0 ? 100 : -100) && ev.preventDefault();
         });
         this.fixedPostioned = Q('aside');
         click === false && el.addEventListener('click', ev => ev.preventDefault());
@@ -186,8 +187,8 @@ class Knob extends HTMLElement {
             move: (drag) => {
                 let delta = Math.abs(drag.deltaY);
                 if (this.type == 'continuous' && delta < 2 || this.type == 'discrete' && delta < 50) return;
-                location.pathname == '/' && this.hasAttribute('alt') && 
-                    (this.Q('a').href = this.getAttribute('alt')) && this.shadowRoot.Q('div').classList.add('dragged');
+                location.pathname == '/' && this.hasAttribute('alt') && this.θ() <= 180
+                    && (this.Q('a').href = this.getAttribute('alt')) && this.shadowRoot.Q('div').classList.add('dragged');
                 location.pathname == '/' && this.hover('remove');
                 this[this.type].getΔY(drag);
                 this[this.type].adjustValue();

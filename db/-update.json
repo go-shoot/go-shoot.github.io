@@ -5,15 +5,6 @@
   "/db/part-blade.json":    "2024/06/01 23:55:00",
   "/db/part-meta.json":     "2024/05/22 00:55:00",
   "news": {
-    "2024-06-14":[
-      {"code":"コロコロ雜誌七月號贈品","name":"ドランソード<br>メタルコート：ブルー<br>DranSword<br>Metal Coat: Blue","type":"att",
-      "imgs":["https://corocoro.jp/wp-content/uploads/2024/05/745531bfaf43d87bc17ea9b9d5588099.jpg"]}
-    ],
-    "2024-06-15":[
-      {"code":"BX-33 booster","name":"ヴァイスタイガー3-60U<br>WeissTiger 3-60U","type":"bal",
-      "imgs":["https://takaratomymall.jp/img/goods/C/4904810914556_4892cae5406341e5b5d4d2b3b1af663d.jpg"],
-      "desc":["WeissTiger：有攻擊、防禦、持久三種能力","Unite bit：有衝刺、反擊、迴避三種動態","四聖獸白虎之 X 代轉生版"]}
-    ],
     "2024-07-13":[
       {"code":"BX-32 Stadium","name":"ワイドエクストリームスタジアム<br>Wide Xtreme Stadium","imgs":["https://takaratomymall.jp/img/goods/5/4904810926719_f3a0a36d7e3d48309680198f5f481a28.jpg"],
       "desc":["三人對戰盤","留意：「兩頰」旁是三分 Xtreme Zone，「貓耳」間是兩分 Over Zone"]},
