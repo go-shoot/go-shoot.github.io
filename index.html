@@ -199,6 +199,7 @@ announce.colors = new Mapping(
 <script>
 Q('input').onkeypress = ev => {
     if ((ev.keyCode || ev.which) != 13) return;
+    ev.target.value = ev.target.value.trim();
     if (/^i#.+$/i.test(ev.target.value))
         return location.href = `https://instagram.com/explore/tags/${/(?<=#).+/.exec(ev.target.value)}`;
     if (/^i@.+$/i.test(ev.target.value))

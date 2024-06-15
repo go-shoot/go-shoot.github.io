@@ -8,9 +8,9 @@ input {
 }
 header {
     padding:4em 0 1em 0;
+
     img {
         width:min(30em,90%);
-        margin:auto;
     }
     h2 {
         letter-spacing:1em; text-indent:1em;
@@ -22,10 +22,9 @@ header {
 h2,h3 {
     color:transparent; -webkit-text-stroke:.02em white;
 }
-#down {font-size:2em;}
 
 section,article {
-    margin:4rem auto 0 auto;  
+    margin:3rem auto 0 auto;  
     max-width:40rem;
     overflow:hidden;
 }
@@ -42,19 +41,18 @@ h3 {
     font-size:2.5rem;
     display:block;
     --spacing:.3em; letter-spacing:var(--spacing);
-}
-section h3 {
-    margin:1em calc(-1*var(--spacing)) 1em 0;
-}
-:is(#contents,#links) h3 {
-    writing-mode:vertical-lr;
-    margin:0 0 calc(-1*var(--spacing)) 0; padding:0 .25em;
-    text-shadow:0 0 .5em gray;
+
+    section & {
+        margin:1em calc(-1*var(--spacing)) 1em 0;
+    }
+    :is(#contents,#links) & {
+        writing-mode:vertical-lr;
+        margin:0 0 calc(-1*var(--spacing)) 0; padding:0 .25em;
+        text-shadow:0 0 .5em gray;
+    }
 }
 
 #links {
-    grid-template:repeat(2,1fr)/repeat(4,min-content);
-
     h3 {
         grid-area:1/4/3/5;
     }
@@ -78,41 +76,33 @@ section h3 {
         grid-area:1/1/4/2;
     }
     a {
-        align-self:center;
         width:9.35em;
         clip-path:polygon(0% 0%,90% 0%,100% 50%,90% 100%,0% 100%,10% 50%);
         font-size:1.5em;
-        height:2.5em;
         text-align:left; line-height:2.5em;
         padding-left:1.7em;
         background:linear-gradient(to right,yellowgreen,orange,turquoise,yellowgreen) top left / 200%;
         position:relative;
         transition:color .5s,background-position .5s;
+
+        &::before {
+            position:absolute; inset:.05em;
+            clip-path:polygon(1% 0%,90.5% 0%,100% 50%,90.5% 100%,1% 100%,10.5% 50%);
+            z-index:-1;
+            background:linear-gradient(to right,var(--theme-dark) var(--stop),black var(--stop));
+            font-size:2em;
+            text-align:right; line-height:1.9;
+            padding-right:.5em;
+            transition:--stop .5s;
+        }
+        &:nth-of-type(1)::before {content:'\e001';}
+        &:nth-of-type(2)::before {content:'\e003';}
+        &:nth-of-type(3)::before {content:'\e002';}
     }
-    a::before {
-        content:'';
-        position:absolute; inset:.05em;
-        clip-path:polygon(1% 0%,90.5% 0%,100% 50%,90.5% 100%,1% 100%,10.5% 50%);
-        z-index:-1;
-        text-align:right;
-        background:linear-gradient(to right,var(--theme-dark) var(--stop),black var(--stop));
-        font-size:2em;
-        line-height:1.9;
-        padding-right:.5em;
-        transition:--stop .5s;
-    }
-    a:hover::before {
-        --stop:100%;
-    }
-    a:nth-of-type(1)::before {content:'\e001';}
-    a:nth-of-type(2)::before {content:'\e003';}
-    a:nth-of-type(3)::before {content:'\e002';}
     a:hover {
         color:white;
         background-position:bottom right;
-    }
-    a:hover span {
-        width:calc(100% - .2em);
+        &::before {--stop:100%;}
     }
 }
 @property --stop {
@@ -120,11 +110,11 @@ section h3 {
     initial-value:0%;
 }
 #products {
-    h3 {
-        margin-right:calc(-1*var(--spacing));
-    }
-    :is(time,h4)::after {
+    font-size:.8em;
+
+    time::after {
         content:attr(title);
+        font-size:1.5em;
         mix-blend-mode:difference;
     }
     div>:not(figure) {
@@ -166,30 +156,28 @@ section h3 {
     p:nth-of-type(4) {order:9;}
     figure:nth-of-type(n+6) {order:10;}
 }
-.animating i {
-    transition:transform .5s;
-}
+
 #reboot {
-    user-select:none;-webkit-user-select:none;
+    user-select:none; -webkit-user-select:none;
     padding:0 .5em; margin-bottom:2em;
     display:flex; justify-content:space-between; align-items:end;
-    text-align:left;
+    text-align:left; font-size:.8em;
 
     p {
-        display:flex;justify-content:space-between;align-items:center;
+        display:flex; justify-content:space-between; align-items:center;
         margin:.2em 0 .2em auto;
         border-radius:9em;
         width:15em;
         background:var(--overlay1);
     }
     span {
-        text-align:center;
-        line-height:1.1;
+        text-align:center; line-height:1.1;
     }
     i {
         width:2em;height:2em;
         border-radius:9em;
         text-align:center; line-height:2.2em;
+        font-size:1.5em;
         touch-action:none;
 
         &:first-child {
@@ -203,6 +191,9 @@ section h3 {
         &.reached {
             background:var(--theme);
         }
+        .animaing & {
+            transition:transform .5s;
+        }
     }
     img {
         width:7em;
@@ -213,72 +204,68 @@ section h3 {
 footer {
     background-color:grey;
     padding:.5em;
-    color:white;
-    border:none;
+    font-size:.6em;
 }
 
-#rule p {font-size:.8em;}
-#rule p:first-of-type {margin-top:3em;}
-#rule p:has(dfn) {text-indent:1em;}
-#rule dfn {margin-right:1em;}
-#rule ruby {display:revert;}
-#rule rb {color:black;}
+details {
+    font-size:.8em;
+    margin-top:3em;
+    
+    h4 {font-size:1.4em;}
+    summary {
+        background:rgba(100,100,100,.75);
+        padding:.5em 0;
 
-article {padding:0 .5em;}
-details {font-size:.8em;margin-top:3em;}
-details h4 {font-size:1.4em;}
-article>:not(img) {
-    margin:1rem .1rem;
+        &::before {content:'▶';}
+        &::after  {content:'◀';}
+        details[open]&::before,details[open]&::after {content:'▼';}
+    }
+    #rule p:first-of-type {margin-top:3em;}
+    #rule p:has(dfn) {text-indent:1em;}
+    #rule dfn {margin-right:1em;}
+    #rule rb {mix-blend-mode:difference;}
 }
-article img:not([src$=ico]) {
-    width:min(100%,30em);
-    margin:.5em auto 0 auto;
-    display:block;
-}
-article img[src$=ico] {
-    width:1.5em;
-    vertical-align:-.35em;
-    margin-right:.25em;
-}
-article img+:not(img) {
-    margin-top:.5rem; margin-bottom:1rem;
-}
-summary {
-    background:rgba(100,100,100,.75); padding:.5em 0;
-}
-summary::before {content:'▶';}
-summary::after  {content:'◀';}
-details[open]>summary::before,details[open]>summary::after {content:'▼';}
+article {
+    padding:0 .5em;
 
-/*font-size*/
-footer
-{font-size:0.6em;}
-#products,#reboot
-{font-size:0.8em;}
-span
-{font-size:1.05em;}
-time,i,i::before
-{font-size:1.5em;}
+    >:not(img) {
+        margin:1rem .1rem;
+    }
+    img:not([src$=ico]) {
+        width:min(100%,30em);
+        margin:.5em auto 0 auto;
+        display:block;
+    }
+    img[src$=ico] {
+        width:1.5em;
+        vertical-align:-.35em;
+        margin-right:.25em;
+    }
+    img+:not(img) {
+        margin-top:.5rem; margin-bottom:1rem;
+    }
+}
 
 /*entry animation*/
 :is(time,details h4,dfn) {
     position:relative;
     z-index:0;
     transition:color .5s;
-}
-:is(time,details h4,dfn)::before {
-    content:''; position:absolute;
-    width:120%; height:.8rem;
-    left:50%; top:50%; transform:translate(-50%,-50%) skew(-20deg);
-    background:linear-gradient(var(--theme) 10%,transparent 10% 90%,var(--theme) 90%),
-    linear-gradient(to right,var(--theme-alt) var(--stop),transparent var(--stop));
-    transition:--stop .5s;
-    z-index:-1;
+    
+    &::before {
+        content:''; position:absolute;
+        width:120%; height:.8rem;
+        left:50%; top:50%; transform:translate(-50%,-50%) skew(-20deg);
+        background:linear-gradient(var(--theme) 10%,transparent 10% 90%,var(--theme) 90%),
+        linear-gradient(to right,var(--theme-alt) var(--stop),transparent var(--stop));
+        transition:--stop .5s;
+        z-index:-1;
+    }
 }
 :is(time.seeing,h4,dfn)::before {
     --stop:100%;
 }
-.scroller,section{
+.scroller,section {
     transition:transform .4s;
 }
 .scroller:nth-of-type(odd):not(.seeing) {
@@ -343,11 +330,11 @@ time,i,i::before
 
                 &::after {right:100%;}
             }
+            .animating & {
+                transition:transform .5s;
+            }
         }
     }
-}
-.animating .gate span {
-    transition:transform .5s;
 }
 a[href^=customize] {
     position:relative;
