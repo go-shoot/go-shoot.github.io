@@ -15,8 +15,24 @@
 </header>
 
 <db-status callback="Q('header,section,time,.scroller', content => observer.observe(content));"></db-status>
-&#xe00d; &#xe00e; &#xe00f; &#xe010; 圖案表示依照所示的方向拉動，即能操作
-<a href="customize/" style="display:block;">我的陀螺盒</a>
+
+<section id=products>
+    <h3>最新商品</h3>
+</section>
+
+<section id="gate" style="overflow:visible">
+    <p>&#xe00d; &#xe00e; &#xe00f; &#xe010; 圖案表示依照所示的方向拉動，即能操作。立即嘗試：</p>
+    <div class="gate">
+        <span id="gate-left">&#xe010;</span>
+        <i>夾</i>
+        <span id="gate-right">&#xe00f;</span>
+    </div>
+</section>
+
+<section>
+    <a href="customize/" style="display:block;"><img src=/img/deck.png alt="我的陀螺盒"><span>我的<br>陀螺盒</span></a>
+</section>
+
 <section id=contents>
     <h3>本站内容</h3>
     <a href=products/ >商品</a>
@@ -26,27 +42,13 @@
 
 <section id=links>
     <h3>外部連結</h3>
-    <spin-knob title=商品陣容><a href="//beyblade.takaratomy.co.jp/beyblade-x/lineup/"><i>🛍️</i></a></spin-knob>
+    <spin-knob title=商品陣容 alt="//www.amazon.co.jp/s?i=toys&bbn=2189319051&rh=n%3A2189319051%2Cp_n_date%3A2320554051"><a href="//beyblade.takaratomy.co.jp/beyblade-x/lineup/"><i>🛍️</i></a></spin-knob>
     <spin-knob title=YouTube><a href="//m.youtube.com/@BEYBLADEOfficialYouTube/videos"><i>🎞️</i></a></spin-knob>
     <spin-knob title=漫畫閲覽 alt="//drive.google.com/drive/folders/1vSOCv8UNyiJ76KCDhUbexuS7E7Hs-Isr"><a href="//www.corocoro.jp/episode/4856001361379685850"><i>🖍️</i></a></spin-knob>
     <spin-knob title=動畫資訊><a href="//beyblade.takaratomy.co.jp/anime/character/"><i>📺</i></a></spin-knob>
     <spin-knob title=App 下載><a href=_><i>📥</i></a></spin-knob>
     <spin-knob title=𝕏><a href="//twitter.com/tbh_pr"><i>🛠️</i></a></spin-knob>
 </section>
-
-<section id=products>
-    <h3>最新商品</h3>
-</section>
-
-<article id=rule>
-    <h3>新增規則</h3>
-    <p><dfn><ruby><rb>Limited Rule</rb><rt>リミテッドルール</rt></ruby></dfn>：適用於單陀螺賽制，即以同一配置對戰直到四分。<br>
-        若你的陀螺有以下的 Limited 部件（下稱 L），對方會依你使用的數量先得分。例如你的配置有 2L，對手的配置有 1L，分數由己 1:2 彼開始對戰，直至達 4 分。
-    <img src="https://beyblade.takaratomy.co.jp/beyblade-x/event/_image/g2_tobuzoocup2024_limited.png">
-    <p><dfn><ruby><rb>Own Finish Rule</rb><rt>オウンフィニッシュルール</rt></ruby></dfn>：適用於單或三陀螺賽制。
-        若發射後雙方的陀螺未曾觸碰而發生 Over / X Finish，只會獲得一分，並使用同一陀螺再對戰。
-    <p>以上 Rules 未必在每個比賽實施，請留意大會宣告。
-</article>
 
 <details>
     <summary>初心者資訊</summary>
@@ -56,7 +58,6 @@
         <a href="https://www.facebook.com/Beyblade2016/"><img src=https://www.facebook.com/favicon.ico>台灣消息</a>
         <img src="https://beyblade.takaratomy.co.jp/beyblade-x/lineup/_image/BX12_01@1.png" style="max-width:30em;">
         <p>參加比賽要準備三個陀螺，當中的共九個部件型號都不能重複。
-        <p>官方之後會為每個部件宣告一個 RANK（評級），每個 RANK 參賽者能使用的部件數量會有上限。此賽制會於日本 7 月 G2 賽起推行。</p>
         <figure>
             <img src="https://beyblade.takaratomy.co.jp/news/_image/newsP240321_7.png">
             <figcaption> 齊來 GO SHOOT。</figcaption>
@@ -80,13 +81,28 @@
         <p>如何增加發射力度的數字？Beybattle Pass 測量發射器內黑白轉盤的黑白交替次數以判定發射速度，所以可以用黑紙白紙、黑筆白筆的，增加黑白交替。
         <p>不想這樣改裝的，亦可試試只把 Blade 裝上發射器。預備發射後，使勁把兩手同時向外甩～當然你的 Blade 會飛走，要確認周遭沒有易碎物品！
     </article>
+    <article id=rule>
+        <h3>新增規則</h3>
+        <p><dfn><ruby><rb>Limited Rule</rb><rt>リミテッドルール</rt></ruby></dfn>：適用於單陀螺賽制，即以同一配置對戰直到四分。<br>
+            若你的陀螺有以下的 Limited 部件（下稱 L），對方會依你使用的數量先得分。例如你的配置有 2L，對手的配置有 1L，分數由己 1:2 彼開始對戰，直至達 4 分。
+        <img src="https://beyblade.takaratomy.co.jp/beyblade-x/event/_image/g2_tobuzoocup2024_limited.png">
+        <p><dfn><ruby><rb>Own Finish Rule</rb><rt>オウンフィニッシュルール</rt></ruby></dfn>：適用於單或三陀螺賽制。
+            若發射後雙方的陀螺未曾觸碰而發生 Over / X Finish，只會獲得一分，並使用同一陀螺再對戰。
+        <p>以上 Rules 未必在每個比賽實施，請留意大會宣告。
+    </article>
 </details>
 
 <section id=reboot>
     <div>
-        如在本網遇上問題<p><i id=reset>&#xe010;</i><span>重設儲存（～30 MB）</span><i></i></p>
+        如在本網遇上問題<p><i id=reset>&#xe010;</i><span>重設儲存<br>（除陀螺盒外）</span><i></i></p>
     </div>
+    <a href="https://beyblade-burst.github.io/" id=bbb><img src="/img/system-BBB.png"></a>
 </section>
+
+<footer>
+    對於本網所載資料的準確性或完整性，製作者不會作任何保證或聲明，或因提供或使用此網資料而直接或間接引致的任何損失、損壞或傷害，負上任何責任。
+    <br>Developed and Designed by V Man (MKK). 2023–.
+</footer>
 
 <script>    
 Q('#links a[href=_]').href = navigator.appVersion.includes('Mac') ? 'https://apps.apple.com/tw/app/id1670801696':'https://play.google.com/store/apps/details?id=jp.co.takaratomy.beyblade&pli=1';
@@ -123,44 +139,63 @@ announce.colors = new Mapping(
     /[BU]XG?-/, 'others',
     'Lm'
 );
-new Dragging(Q('#products'), {scroll: {what: '.scroller', when: () => true}});
-
-(() => {
-    const flush = message => fetch('/sw/update').then(resp => message.innerText = resp.status == 200 ? '成功' : '失敗');
-    const reset = message => Promise.all([
-        DB.discard('V2', ev => message.innerText = ev.type == 'blocked' ? '請先關閉所有本網的分頁' : ev.type),
-        caches.delete('V2'), caches.delete('parts'),
-        document.cookie.split(/;\s?/).forEach(c => document.cookie = c.replace(/=.*/, `=; max-age=0; path=/`))
-    ]);
-    new Dragging(Q('#reboot'), {
-        translate: {
-            x: {min: 0, max: Q('#reboot p').clientWidth - Q('#reset').clientWidth}, 
-            y: false
-        },
-        drop: {
-            when: ev => ev.target.matches('i:first-child'),
-            targets: 'i:last-child',
-            autoScroll: false
-        },
-        move: (self, dragged, targeted) => dragged.classList.toggle('reached', targeted ? true : false),
-        lift: (self, dragged, targeted) => {
-            dragged.classList.remove('reached');
-            let action = dragged.id == 'flush' ? flush : reset;
-            targeted && action(dragged.nextElementSibling).then(() => {
-                onbeforeunload = () => scrollTo(0, 0);
-                location.reload();
-            }).catch(er => console.error(er));
-        }
-    });
-})();
 </script>
 
-<a href="https://beyblade-burst.github.io/" id=bbb><img src="/img/system-BBB.png"></a>
-
-<footer>
-    對於本網所載資料的準確性或完整性，製作者不會作任何保證或聲明，或因提供或使用此網資料而直接或間接引致的任何損失、損壞或傷害，負上任何責任。
-    <br>Developed and Designed by V Man (MKK). 2023–.
-</footer>
+<script>
+    let i = Q('.gate i'), narrowest = 100;
+    new Dragging(Q('#products'), {scroll: {what: '.scroller', when: () => true}});
+    new Dragging(Q('.gate'), {
+        translate: {
+            x: {
+                min: dragged => dragged.id == 'gate-left' ? 0 : Q('#gate-left').offsetLeft, 
+                max: dragged => dragged.id == 'gate-left' ? dragged.offsetLeft*-1 : 0
+            }, 
+            y: false
+        },
+        move (drag, dragged) {
+            drag.other ??= Q(`#gate-${dragged.id == 'gate-left' ? 'right' : 'left'}`);
+            drag.other.style.transform = `translateX(${parseFloat(dragged.style.transform.match(/[-\d.]+/)[0])*-1}px)`;
+            let distance = drag.other.getBoundingClientRect().x - dragged.getBoundingClientRect().x - dragged.getBoundingClientRect().width;
+            i.style.opacity = Math.max(0, 5-distance/100);
+            distance < narrowest && distance <= i.clientWidth && distance > 0
+            && (i.style.transform = `scaleX(${distance/i.clientWidth})`) && (narrowest = distance);
+        },
+        lift (drag) {
+            drag.other.style.transform = null;
+            drag.other = null;
+            drag.to.return(true);
+        }
+    });
+    
+    (() => {
+        const flush = message => fetch('/sw/update').then(resp => message.innerText = resp.status == 200 ? '成功' : '失敗');
+        const reset = message => Promise.all([
+            DB.discard('V2', ev => message.innerText = ev.type == 'blocked' ? '請先關閉所有本網的分頁' : ev.type),
+            caches.delete('V2'), caches.delete('parts'),
+            document.cookie.split(/;\s?/).forEach(c => document.cookie = c.replace(/=.*/, `=; max-age=0; path=/`))
+        ]);
+        new Dragging(Q('#reboot'), {
+            translate: {
+                x: {min: 0, max: Q('#reboot p').clientWidth - Q('#reset').clientWidth}, 
+                y: false
+            },
+            drop: {
+                when: ev => ev.target.matches('i:first-child'),
+                targets: 'i:last-child',
+                autoScroll: false
+            },
+            move: (self, dragged, targeted) => dragged.classList.toggle('reached', targeted ? true : false),
+            lift: (self, dragged, targeted) => {
+                dragged.classList.remove('reached');
+                let action = dragged.id == 'flush' ? flush : reset;
+                targeted && action(dragged.nextElementSibling).then(() => {
+                    onbeforeunload = () => scrollTo(0, 0);
+                    location.reload();
+                }).catch(er => console.error(er));
+            }
+        });
+    })();
+</script>    
 
 <script>
 Q('input').onkeypress = ev => {

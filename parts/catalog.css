@@ -26,9 +26,6 @@
         display:inline-block;--h:40;--s:60%;margin-left:.2em;}
     spin-knob {display:none;}
 }
-html,body {
-    scroll-padding-top:5em;
-}
 
 #catalog {
     padding-bottom:4em;

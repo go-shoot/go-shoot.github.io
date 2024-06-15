@@ -134,6 +134,9 @@ body {
 body:has(db-status[title=更新中]) {
     pointer-events:none;
 }
+html,body {
+    scroll-padding-top:5em;
+}
 main {
     margin:5em auto 1em auto;
 }
@@ -205,9 +208,9 @@ nav {
                 background:url() center / contain no-repeat;
                 filter:contrast(0) brightness(0);        
             }
-            &:not(:empty) {font-size:.9em;}
-            &[data-href] {border-radius:9em;}
-            &:not([data-href]) {margin-left:1em;}
+            &:not(:has(a)) {font-size:.8em;border-radius:9em;}
+            &:has(a) {margin-left:1em;}
+            &.current {border:.1rem dashed var(--theme);}
             &.selected {background:var(--theme);color:black;}
         }
     }

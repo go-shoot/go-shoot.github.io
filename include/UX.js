@@ -52,9 +52,10 @@ class Dragging {
         move: (ev) => {
             ev || this.fixedPostioned?.contains(this.dragged) || (this.scrollY = scrollY - this.scrollInitY); //update value only when
             let x = this.translate?.x === false ? 0 : this.deltaX;
-            let y = this.translate?.y === false ? 0 : this.deltaY + (this.scrollY ?? 0)
-            x = Math.max(this.translate?.x?.min ?? -Infinity, Math.min(x, this.translate?.x?.max ?? Infinity));
-            this.dragged.style.transform = `translate(${x}px,${y}px)`;
+            let y = this.translate?.y === false ? 0 : this.deltaY + (this.scrollY ?? 0);
+            let min = typeof this.translate?.x?.min == 'function' ? this.translate.x.min(this.dragged) : this.translate?.x?.min ?? -Infinity;
+            let max = typeof this.translate?.x?.max == 'function' ? this.translate.x.max(this.dragged) : this.translate?.x?.max ?? Infinity;
+            this.dragged.style.transform = `translate(${Math.max(min, Math.min(x, max))}px,${y}px)`;
         },
         drop: () => {
             (this.drop.autoScroll || this.drop.autoScroll == null) && this.autoScroll();
@@ -112,7 +113,7 @@ class Dragging {
     to = {
         select: (boundary) => {
             this.dragged.Q('.selected')?.classList.remove('selected');
-            [...this.dragged.children].find(li => 
+            [...this.dragged.children].find(li => !li.matches('.current') &&
                 (({x, width}) => li.dataset.href && Math.round(x) <= boundary && x+width >= boundary)(li.getBoundingClientRect())
             )?.classList.add('selected');
         },

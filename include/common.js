@@ -26,11 +26,17 @@ addEventListener('DOMContentLoaded', () => {
     let menu = Q('nav menu');
     if (menu) {
         menu.append(E('li', [E('a', {href: '/', innerHTML: '&#xe000;'})]));
+        let hashchange = () => {
+            Q('menu .current')?.classList.remove('current');
+            Q('menu li[data-href]').find(li => new URL(li.dataset.href, document.baseURI).href == location.href)?.classList.add('current');
+        };
+        addEventListener('hashchange', hashchange);
+        hashchange();
         new Dragging(menu, {
             what: 'nav menu',
-            translate: {x: {max: menu.offsetLeft*-1 - 6}, y: false},
+            translate: {x: {max: menu.offsetLeft*-1 - 10}, y: false},
             move: drag => drag.to.select(0),
-            lift: (drop, dragged) => {
+            lift (drop, dragged) {
                 dragged.Q('.selected') && (location.href = dragged.Q('.selected').dataset.href);
                 drop.to.return();
             }
