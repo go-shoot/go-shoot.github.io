@@ -7,7 +7,7 @@ self.addEventListener('activate', ev => ev.waitUntil(clients.claim()));
 self.addEventListener('fetch', ev => {
     if (/sw\/$/.test(new URL(ev.request.url).pathname)) {
         let query = Object.fromEntries(new URLSearchParams(new URL(ev.request.url).search));
-        query.delete ? respond(query.delete == 'parts' ? 
+        return query.delete ? respond(query.delete == 'parts' ? 
             caches.delete('parts') : 
             caches.open('V3').then(cache => cache.keys()
                 .then(reqs => reqs.forEach(req => new RegExp(`\\.${query.delete}$`).test(req.url) && cache.delete(req)))
