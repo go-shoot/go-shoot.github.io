@@ -52,7 +52,7 @@ Object.assign(App.act, {
             App.act.popup('image');
             let target = Q(n ? `#deck article:nth-of-type(${n})` : '#tier');
             target.style.background = 'black';
-            !n && (target.style.minWidth = '35rem') && (target.style.maxWidth = '40rem');
+            //!n && (target.style.minWidth = '35rem') && (target.style.maxWidth = '40rem');
             setTimeout(() => html2canvas(target, {scale: 2}).then(canvas => {
                 E('a', {
                     href: canvas.toDataURL("image/png"),
