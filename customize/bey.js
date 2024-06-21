@@ -153,7 +153,7 @@ class Bey extends HTMLElement {
         overflow:hidden;
 
         li {
-            aspect-ratio:1/1; width:90%;
+            height:90%; width:90%; /*safari*/
             margin:5%;
             display:flex; place-content:center; place-items:center;
         }
