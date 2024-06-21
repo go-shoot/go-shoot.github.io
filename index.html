@@ -16,7 +16,7 @@
 <db-status callback="Q('header,section,time,.scroller', content => observer.observe(content));"></db-status>
 
 <section id="gate" style="overflow:visible">
-    <p>&#xe00d; &#xe00e; &#xe00f; &#xe010; 圖案表示依照所示的方向拉動，即能操作。立即嘗試：</p>
+    <p><i style='color:var(--theme-alt)'>&#xe00d; &#xe00e; &#xe00f; &#xe010;</i> 圖案表示依照所示的方向拉動，即能操作。立即嘗試：</p>
     <div class="gate">
         <span id="gate-left">&#xe010;</span>
         <i>夾</i>
@@ -50,7 +50,7 @@
 <details>
     <summary>初心者資訊</summary>
     <article>
-        <h4 title="官方比賽"></h4><br>
+        <h4>官方比賽</h4>
         <a href="https://www.facebook.com/tclubfanshk/"> <img src=https://www.facebook.com/favicon.ico>香港消息</a>
         <a href="https://www.facebook.com/Beyblade2016/"><img src=https://www.facebook.com/favicon.ico>台灣消息</a>
         <img src="https://beyblade.takaratomy.co.jp/beyblade-x/lineup/_image/BX12_01@1.png" style="max-width:30em;">
@@ -60,6 +60,22 @@
             <figcaption> 齊來 GO SHOOT。</figcaption>
         </figure>
         <p>X 代首屆 Asia Championship 今年 12 月於日本舉行，預留名額給亞洲九地區參加者，設小學生限定的 REGULAR CLASS 及小學生以上、不限年齡的 OPEN CLASS。留意你所在地的甄選賽消息！
+
+        <h5>新增規則</h5><br>
+        <p><dfn><ruby><rb>Limited Rule</rb><rt>リミテッドルール</rt></ruby></dfn>：適用於單陀螺賽制，即以同一配置對戰直到四分。<br>
+            若你的陀螺有以下的 Limited 部件（下稱 L），對方會依你使用的數量先得分。例如你的配置有 2L，對手的配置有 1L，分數由己 1:2 彼開始對戰，直至達 4 分。
+        <img src="https://beyblade.takaratomy.co.jp/beyblade-x/event/_image/g2_tobuzoocup2024_limited.png">
+        <p><dfn><ruby><rb>Own Finish Rule</rb><rt>オウンフィニッシュルール</rt></ruby></dfn>：適用於單或三陀螺賽制。
+            若發射後雙方的陀螺未曾觸碰而發生 Over / X Finish，只會獲得一分，並使用同一陀螺再對戰。
+        <p>以上 Rules 未必在每個比賽實施，請留意大會宣告。</p>
+        
+        <h5>關於三人對戰用的 <ruby>Wide Xtreme Stadium<rt>ワイドエクストリームスタジアム</rt></ruby></h5>
+        <p>計分方法：只有最後生存的陀螺為勝，會依其餘兩顆陀螺如何落敗而得分。例如兩顆陀螺互相碰撞導致分別由 Xtreme Zone 及 Over Zone 離開，剩下的陀螺就能獲得五分。
+        <p>獲勝方法：視大會宣布，有五分制或二勝制。後者表示得分兩次——不論分數——的玩家為勝。</p>
+        <p>發射問題：同一 Battle 內，若有一選手發生 Shoot Miss、過早／遲發射合計兩次，其餘兩位選手皆得一分。如果兩位選手因同時得分而同時達至勝利條件，這兩位會再進行 Battle，先得分者——不論分數——為勝。<br>
+            若兩位選手同時發生這些情況、同時達兩次，其餘一位選手得一分。<br>
+            若三位選手同時發生這些情況、同時達兩次，全部選手的第二次情況不作計算，當作只有一次，再嘗試發射。<br>
+            每當有選手因這些情況獲得分數，全部選手的 Shoot Miss、過早／遲發射都會歸零，Battle 重新開始。<br>
     </article>
     <article>
         <h4 title=APP></h4>
@@ -77,15 +93,6 @@
         <img src="https://pbs.twimg.com/media/GK3ykUnbUAAGpzq?format=png">
         <p>如何增加發射力度的數字？Beybattle Pass 測量發射器內黑白轉盤的黑白交替次數以判定發射速度，所以可以用黑紙白紙、黑筆白筆的，增加黑白交替。
         <p>不想這樣改裝的，亦可試試只把 Blade 裝上發射器。預備發射後，使勁把兩手同時向外甩～當然你的 Blade 會飛走，要確認周遭沒有易碎物品！
-    </article>
-    <article id=rule>
-        <h3>新增規則</h3>
-        <p><dfn><ruby><rb>Limited Rule</rb><rt>リミテッドルール</rt></ruby></dfn>：適用於單陀螺賽制，即以同一配置對戰直到四分。<br>
-            若你的陀螺有以下的 Limited 部件（下稱 L），對方會依你使用的數量先得分。例如你的配置有 2L，對手的配置有 1L，分數由己 1:2 彼開始對戰，直至達 4 分。
-        <img src="https://beyblade.takaratomy.co.jp/beyblade-x/event/_image/g2_tobuzoocup2024_limited.png">
-        <p><dfn><ruby><rb>Own Finish Rule</rb><rt>オウンフィニッシュルール</rt></ruby></dfn>：適用於單或三陀螺賽制。
-            若發射後雙方的陀螺未曾觸碰而發生 Over / X Finish，只會獲得一分，並使用同一陀螺再對戰。
-        <p>以上 Rules 未必在每個比賽實施，請留意大會宣告。
     </article>
 </details>
 
@@ -108,7 +115,7 @@ const observer = new IntersectionObserver(entries => entries.forEach(entry => en
     
 const announce = news => Object.entries(news).forEach(([date, beys]) => {
     let base = `https://beyblade.takaratomy.co.jp/beyblade-x/lineup/_image/`;
-    let types = {att: '攻擊型', bal: '平衡型', sta: '持久型', def: '防禦型'};
+    let types = {att: 'ATTACK', bal: 'BALANCE', sta: 'STAMINA', def: 'DEFENSE'};
     Q('#products').append(E('time', {title: date}));
     beys.forEach(bey => {
         let {code, name, imgs, desc, type, color, class: cl} = bey;

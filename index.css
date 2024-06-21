@@ -222,44 +222,48 @@ footer {
 details {
     font-size:.8em;
     margin-top:3em;
+    background:rgba(100,100,100,.75);
     
-    h4 {font-size:1.4em;}
     summary {
-        background:rgba(100,100,100,.75);
         padding:.5em 0;
 
         &::before {content:'▶';}
         &::after  {content:'◀';}
         details[open]&::before,details[open]&::after {content:'▼';}
     }
-    #rule p:first-of-type {margin-top:3em;}
-    #rule p:has(dfn) {text-indent:1em;}
-    #rule dfn {margin-right:1em;}
-    #rule rb {mix-blend-mode:difference;}
-}
-article {
-    padding:0 .5em;
+    p:has(dfn) {text-indent:1em;}
+    dfn {margin-right:1em;}
+    rb {mix-blend-mode:difference;}
 
-    >:not(img) {
-        margin:1rem .1rem;
-    }
-    img:not([src$=ico]) {
-        width:min(100%,30em);
-        margin:.5em auto 0 auto;
-        display:block;
-    }
-    img[src$=ico] {
-        width:1.5em;
-        vertical-align:-.35em;
-        margin-right:.25em;
-    }
-    img+:not(img) {
-        margin-top:.5rem; margin-bottom:1rem;
+    article {
+        padding:0 .5em; margin-top:2em;
+    
+        >:not(img) {
+            margin:1rem .1rem;
+        }
+        h4 {
+            font-size:1.4em;
+            margin:1em auto;
+            display:block;
+        }
+        img:not([src$=ico]) {
+            width:min(100%,30em);
+            margin:.5em auto 0 auto;
+            display:block;
+        }
+        img[src$=ico] {
+            width:1.5em;
+            vertical-align:-.35em;
+            margin-right:.25em;
+        }
+        img+:not(img) {
+            margin-top:.5rem; margin-bottom:1rem;
+        }
     }
 }
 
 /*entry animation*/
-:is(time,details h4,dfn) {
+:is(time,dfn) {
     position:relative;
     z-index:0;
     transition:color .5s;
@@ -274,7 +278,7 @@ article {
         z-index:-1;
     }
 }
-:is(time.seeing,h4,dfn)::before {
+:is(time.seeing,dfn)::before {
     --stop:100%;
 }
 .scroller,section {
@@ -290,10 +294,10 @@ article {
     transform-origin:center -100%;
 }
 #contents:not(.seeing) {
-    transform:rotate(70deg);
+    transform:translateX(100%);
 }
 #links:not(.seeing) {
-    transform:rotate(-70deg);
+    transform:translateX(-100%);
 }
 
 #app img {

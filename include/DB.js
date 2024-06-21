@@ -30,7 +30,7 @@ customElements.define('db-status', class extends HTMLElement {
     }
     connectedCallback() {
         DB.indicator = this;
-        addEventListener('DOMContentLoaded', () => 
+        Q('link[href$="common.css"]') && addEventListener('DOMContentLoaded', () => 
             DB.open().then(Function('', this.getAttribute('callback'))).catch(er => (document.body.append(er), console.error(er)))
         );
     }

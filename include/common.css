@@ -190,29 +190,34 @@ nav {
             color:var(--theme-alt);
             margin-left:-.425em;
         }
-        li {
+        li a {
             margin:.3rem; height:calc(100% - .6rem); aspect-ratio:1/1;
             display:flex; justify-content:center; align-items:center;
             white-space:nowrap;
             color:var(--theme);
             border-radius:.1em;
+            transition:none !important;
+            -webkit-user-drag:none;
 
-            a {
+            &[data-icon]::after {
+                content:attr(data-icon);
                 font-size:2em;
-                -webkit-user-drag:none;
                 margin-top:.1em;
             }
-            &:empty::after {
+            &:not([data-icon]) {
+                font-size:.8em;
+                border-radius:9em;
+            }
+            &:not([data-icon]):empty::after {
                 content:'';
                 display:inline-block; height:90%; aspect-ratio:1/1;
                 background:url() center / contain no-repeat;
                 filter:contrast(0) brightness(0);        
             }
-            &:not(:has(a)) {font-size:.8em;border-radius:9em;}
-            &:has(a) {margin-left:1em;}
             &.current {border:.1rem dashed var(--theme);}
-            &.selected {background:var(--theme);color:black;}
         }
+        li:last-child {margin-left:1em;}
+        li.selected a {background:var(--theme);color:black;}
     }
     :is(.part-result,.prod-result)[value]::before {
         content:attr(value);

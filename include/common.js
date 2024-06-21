@@ -25,10 +25,10 @@ navigator.serviceWorker?.register('/worker.js').then(() => {
 addEventListener('DOMContentLoaded', () => {
     let menu = Q('nav menu');
     if (menu) {
-        menu.append(E('li', [E('a', {href: '/', innerHTML: '&#xe000;'})]));
+        menu.append(E('li', [E('a', {href: '/', dataset: {icon: ''}} )] ));
         let hashchange = () => {
             Q('menu .current')?.classList.remove('current');
-            Q('menu li[data-href]').find(li => new URL(li.dataset.href, document.baseURI).href == location.href)?.classList.add('current');
+            Q('menu li a')?.find(a => new URL(a.href, document.baseURI).href == location.href)?.classList.add('current');
         };
         addEventListener('hashchange', hashchange);
         hashchange();
@@ -37,7 +37,7 @@ addEventListener('DOMContentLoaded', () => {
             translate: {x: {max: menu => menu.offsetLeft*-1 - 6}, y: false},
             move: drag => drag.to.select(0),
             lift (drop, dragged) {
-                dragged.Q('.selected') && (location.href = dragged.Q('.selected').dataset.href);
+                dragged.Q('.selected') && (location.href = dragged.Q('.selected a').href);
                 drop.to.return();
             }
         });
