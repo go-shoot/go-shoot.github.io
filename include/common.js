@@ -17,8 +17,8 @@ Q('head').insertAdjacentHTML('beforeend', `<style id=unsupported>
     @starting-style {html::before {opacity:0;}}
     </style>`);
 navigator.serviceWorker?.register('/worker.js').then(() => {
-    if (!Q('link[href$="common.css"]')) return Promise.reject();
-    document.title += ' ■ 戰鬥陀螺 X⬧爆旋陀螺 X⬧ベイブレード X⬧Beyblade X';
+    if (!Q('link[href$="common.css"]')) return console.log(0)??Promise.reject();
+    document.title += ' ■ 戰鬥陀螺 X⬧爆旋陀螺 X⬧ベイブレード X⬧Beyblade X';console.log(1);
     Q('#unsupported')?.remove();
 }).catch(() => location.reload());
 
