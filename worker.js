@@ -12,7 +12,7 @@ self.addEventListener('fetch', ev => {
             caches.open('V3').then(cache => cache.keys()
                 .then(reqs => reqs.forEach(req => new RegExp(`\\.${query.delete}$`).test(req.url) && cache.delete(req)))
             )
-        , ev) : respond(Promise.resolve());
+        , ev) : respond(Promise.resolve(), ev);
     }
     ev.respondWith(
         (is.internal(ev.request.url) ? caches.match(ev.request, {ignoreSearch: true}) : Promise.resolve())
