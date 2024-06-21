@@ -4,24 +4,24 @@ Q = Node.prototype.Q = function(el, func) {
 }
 Node.prototype.sQ = function(el) {return this.shadowRoot.Q(el);}
 
-(() => {
-    const unsupport = () => Q('head').insertAdjacentHTML('beforeend', `
-    <style>
-        html::before {
-            content:'請重新整理\\A如問題持續，需更新／換瀏覽器';
-            opacity:1; transition:opacity .5s,1s;
-            z-index:1;
-            background:black; color:white; font-size:3em;
-            white-space:pre-wrap;
-            position:fixed; width:100%; height:100%;
-            display:flex; justify-content:center; align-items:center;
-        }
-        @starting-style {html::before {opacity:0;}}
+Q('head').insertAdjacentHTML('beforeend', `<style id=unsupported>
+    html::before {
+        content:'請重新整理\\A如問題持續，需更新／換瀏覽器';
+        opacity:1; transition:opacity .5s,1s;
+        z-index:1;
+        background:black; color:white; font-size:3em;
+        white-space:pre-wrap;
+        position:fixed; width:100%; height:100%;
+        display:flex; justify-content:center; align-items:center;
+    }
+    @starting-style {html::before {opacity:0;}}
     </style>`);
-    navigator.serviceWorker?.register('/worker.js').then(() =>
-        Q('link[href$="common.css"]') ? document.title += ' ■ 戰鬥陀螺 X⬧爆旋陀螺 X⬧ベイブレード X⬧Beyblade X' : Promise.reject()
-    ).catch(unsupport) ?? unsupport();
-})();
+navigator.serviceWorker?.register('/worker.js').then(() => {
+    if (!Q('link[href$="common.css"]')) return console.log(0)??Promise.reject();
+    document.title += ' ■ 戰鬥陀螺 X⬧爆旋陀螺 X⬧ベイブレード X⬧Beyblade X';console.log(1);
+    Q('#unsupported')?.remove();
+}).catch(() => location.reload());
+
 addEventListener('DOMContentLoaded', () => {
     let menu = Q('nav menu');
     if (menu) {
