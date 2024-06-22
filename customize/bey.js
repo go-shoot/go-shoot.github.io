@@ -125,11 +125,6 @@ class Bey extends HTMLElement {
     :host(.targeted) {
         outline-color:var(--theme-alt) !important;
     }
-    ol {
-        list-style:none; padding:0; margin:0;
-        height:100%; /*safari*/
-        aspect-ratio:1/1; transition:aspect-ratio .5s;
-    }
 
     i {
         grid-area:1/1/2/2;
@@ -150,12 +145,13 @@ class Bey extends HTMLElement {
     :host([spin=left]) i::after {content:'\ue01d';}
     :host([spin=dual]) i::after {content:'\ue01d \ue01e';}
     .part {
+        list-style:none; padding:0; margin:5%;
         overflow:hidden;
+        aspect-ratio:1/1; transition:aspect-ratio .5s;
 
         li {
-            height:90%; width:90%; /*safari*/
-            margin:5%;
             display:flex; place-content:center; place-items:center;
+            aspect-ratio:1/1;
         }
         img {
             max-width:100%; max-height:100%;
