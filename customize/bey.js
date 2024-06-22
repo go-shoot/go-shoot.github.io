@@ -35,7 +35,7 @@ class Bey extends HTMLElement {
     static observedAttributes = ['blade', 'ratchet', 'bit']
     attributeChangedCallback(attr, _, after) {
         this[attr] = after;
-        this.sQ(`.part .${attr} img`).src = after ? `/img/${attr}/${after}.png` : '';
+        after ? this.sQ(`.part .${attr} img`).src = `/img/${attr}/${after}.png` : this.sQ(`.part .${attr} img`).removeAttribute('src');
         after && this.change[attr] ? this.change[attr]() : (this.sQ(`h4 .${attr}`).title = after) || this.sQ(`h4 .${attr}`).removeAttribute('title');
         this.change.class(attr);
         this.dock?.tagName == 'MAIN' && this.main();
