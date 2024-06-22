@@ -114,8 +114,9 @@ Object.assign(Part.prototype.catalog.html, {
 });
 Part.chi = (group, chi, reverse) => E('h5', {
     innerHTML: ['BSB','MFB','BBB'].includes(group) ? chi.replace(' ', ' ') : 
-        chi.replace(...chi.includes('/') ? [/(.+)\/(.+)/, '<span>$1</span>$2'] : 
-            reverse ? [/(..)$/, '<span>$1</span>'] : [/^(..)/, '<span>$1</span>']
+        chi.replace(...chi.includes('/') ? 
+            [/(.+)\/(.+)/, reverse ? '$1<span>$2</span>' : '<span>$1</span>$2'] : 
+            [reverse ? /(..)$/ : /^(..)/, '<span>$1</span>']
         ), 
     classList: 'chi'
 });
