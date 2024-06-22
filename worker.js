@@ -6,15 +6,11 @@ self.addEventListener('install', ev => {
 self.addEventListener('activate', ev => ev.waitUntil(clients.claim()));
 self.addEventListener('fetch', ev => ev.respondWith((() => {
     if (/sw\/$/.test(new URL(ev.request.url).pathname)) {
-        let query = Object.fromEntries(new URLSearchParams(new URL(ev.request.url).search));
-        if (!query.delete) return new Response('', {status: 404});
-        return (query.delete == 'parts' ? 
-            caches.delete('parts') : 
-            caches.open('V3').then(cache => cache.keys()
-                .then(reqs => reqs.forEach(req => new RegExp(`\\.${query.delete}$`).test(req.url) && cache.delete(req)))
-            ))
-            .then(() => new Response('', {status: 200}))
-            .catch(er => console.error(er) ?? new Response('', {status: 400}));
+        let [[field, value]] = new URLSearchParams(new URL(ev.request.url).search);
+        return (actions[field]?.[value] ?? actions[field]?._)?.(value)
+                .then(() => new Response('', {status: 200}))
+                .catch(er => console.error(er) ?? new Response('', {status: 400}))
+            ?? new Response('', {status: 404});
     }
     return (is.internal(ev.request.url) ? caches.match(ev.request, {ignoreSearch: true}) : Promise.resolve())
         .then(cached => {
@@ -24,6 +20,15 @@ self.addEventListener('fetch', ev => ev.respondWith((() => {
             return cached ? is.html(ev.request.url) ? Head.add(cached) : cached : fetching;
         }).catch(console.error);
 })()));
+
+const actions = {
+    delete: {
+        parts: () => fetch('/db/-update.json').then(() => caches.delete('parts')),
+        _: extension => fetch('/db/-update.json')
+            .then(() => caches.open('V3'))
+            .then(cache => cache.keys().then(reqs => reqs.forEach(req => new RegExp(`\\.${extension}$`).test(req.url) && cache.delete(req))))
+    }
+}
 
 const is = {
     internal: url => new URL(location.href).host == new URL(url).host,

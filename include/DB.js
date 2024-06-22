@@ -55,7 +55,7 @@ customElements.define('db-status', class extends HTMLElement {
     }
     error(er) {
         this.setAttribute('status', 'error');
-        this.title = `${er}`;
+        //this.title = `${er}`;
     }
     static observedAttributes = ['status'];
 });
