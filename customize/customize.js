@@ -90,7 +90,7 @@ Object.assign(App.act, {
     },
     reset (button = true) {
         App.popup.Q('p:not([hidden])')?.setAttribute('hidden', '');
-        Q('#deck bey-x,bey-x.selected', el => el.classList.remove('selected'));
+        Q('bey-x:is(.deletable,.selected)', el => el.classList.remove('selected', 'deletable'));
         button && Q('button.selected')?.classList.remove('selected');
         Q('.actioning')?.classList.remove('actioning');
     },
@@ -120,8 +120,8 @@ Object.assign(App, {
         Q('.deck,.tier', el => el.hidden = !el.classList.contains(location.hash.substring(1)));
 
         if (location.hash == '#tier')
-            return [Q('#tier bey-x')].flat().forEach(({abbr: [[p, c]]}) => Q(`aside bey-x[${p}='${c}']`).used = true);
-        [Q('bey-x.used')].flat().forEach(bey => bey && (bey.used = false));
+            return Q('#tier bey-x', ({abbr: [[p, c]]}) => Q(`aside bey-x[${p}='${c}']`).used = true);
+        Q('bey-x.used', bey => bey && (bey.used = false));
         App.interacted && Q('aside ul', App.aside.sort);
     },
     aside: {
