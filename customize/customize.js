@@ -1,15 +1,16 @@
 let NAMES;
 const App = () => {
-    let create = (where, title) => {
-        let deck = Q(`${where} template`).content.cloneNode(true);
-        deck.Q('h2').title = title;
-        Q(where).append(deck);
-    }
-    [1,2,3,4,5].forEach(t => (create('#deck', t), create('#tier', t)));
+    [1,2,3,4,5].forEach(t => (App.create('#deck', t), App.create('#tier', t)));
     App.popup = Q('[popover]');
     App.events();
     App.act.events();
+    Cookie.set('cache', new Date().getTime());
 };
+App.create = (where, title) => {
+    let deck = Q(`${where} template`).content.cloneNode(true);
+    deck.Q('h2').title = title;
+    Q(where).append(deck);
+}
 App.load = {
     saved () {
         return DB.get('user', 'pref').then(re => Q('#lang').value = re?.lang ?? 'tw')

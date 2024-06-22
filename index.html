@@ -144,6 +144,7 @@ announce.colors = new Mapping(
     /[BU]XG?-/, 'others',
     'Lm'
 );
+Cookie.cache && (new Date - Cookie.cache)/1000/60/60/24 > 30 && fetch('/sw?delete=parts');
 </script>
 
 <script>
@@ -173,7 +174,6 @@ announce.colors = new Mapping(
     });
     
     (() => {
-        const flush = message => fetch('/sw/update').then(resp => message.innerText = resp.status == 200 ? '成功' : '失敗');
         const reset = message => Promise.all([
             DB.discard('V2', ev => message.innerText = ev.type == 'blocked' ? '請先關閉所有本網的分頁' : ev.type),
             caches.delete('V2'), caches.delete('parts'),
@@ -192,8 +192,7 @@ announce.colors = new Mapping(
             move: (self, dragged, targeted) => dragged.classList.toggle('reached', targeted ? true : false),
             lift: (self, dragged, targeted) => {
                 dragged.classList.remove('reached');
-                let action = dragged.id == 'flush' ? flush : reset;
-                targeted && action(dragged.nextElementSibling).then(() => {
+                targeted && reset(dragged.nextElementSibling).then(() => {
                     onbeforeunload = () => scrollTo(0, 0);
                     location.reload();
                 }).catch(er => console.error(er));

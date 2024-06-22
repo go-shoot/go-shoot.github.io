@@ -27,7 +27,7 @@ let Parts = {
         let hash = decodeURI(location.hash.substring(1));
         let target = hash && Q(`a#${hash}`);
         Parts.switch([target?.classList?.[1] || hash || Parts.meta.default].flat(), target);
-        Q(`#${Cookie.sort || 'name'}`).click();
+        Q(`#${Cookie.pref?.sort || 'name'}`).click();
     },
     finally () {
         Q('.loading').classList.remove('loading');
@@ -121,7 +121,7 @@ const Sorter = () => {
     );
     dl.onchange = ({target: input}) => {
         Q('.catalog').append(...Parts.all.sort(Sorter.sort[input.id]).map(p => p.a));
-        input.checked && Cookie.set('sort', input.id);
+        input.checked && Cookie.set('pref', {sort: input.id});
     };
     Sorter.release(Parts.comp);
     return dl;

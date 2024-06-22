@@ -4,32 +4,29 @@ self.addEventListener('install', ev => {
     ev.waitUntil(Head.cache());
 });
 self.addEventListener('activate', ev => ev.waitUntil(clients.claim()));
-self.addEventListener('fetch', ev => {
+self.addEventListener('fetch', ev => ev.respondWith((() => {
     if (/sw\/$/.test(new URL(ev.request.url).pathname)) {
         let query = Object.fromEntries(new URLSearchParams(new URL(ev.request.url).search));
-        return query.delete ? respond(query.delete == 'parts' ? 
+        if (!query.delete) return new Response('', {status: 404});
+        return (query.delete == 'parts' ? 
             caches.delete('parts') : 
             caches.open('V3').then(cache => cache.keys()
                 .then(reqs => reqs.forEach(req => new RegExp(`\\.${query.delete}$`).test(req.url) && cache.delete(req)))
-            )
-        , ev) : respond(Promise.resolve(), ev);
+            ))
+            .then(() => new Response('', {status: 200}))
+            .catch(er => console.error(er) ?? new Response('', {status: 400}));
     }
-    ev.respondWith(
-        (is.internal(ev.request.url) ? caches.match(ev.request, {ignoreSearch: true}) : Promise.resolve())
+    return (is.internal(ev.request.url) ? caches.match(ev.request, {ignoreSearch: true}) : Promise.resolve())
         .then(cached => {
             if (cached && is.image(ev.request.url))
                 return cached;
             let fetching = fetch.net(ev.request);
             return cached ? is.html(ev.request.url) ? Head.add(cached) : cached : fetching;
-        }).catch(console.error)
-    );
-});
-const respond = (action, ev) => action
-    .then(() => ev.respondWith(new Response('', {status: 200})))
-    .catch(er => console.error(er) ?? ev.respondWith(new Response('', {status: 400})));
+        }).catch(console.error);
+})()));
 
 const is = {
-    internal: url => 'go-shoot.github.io' == new URL(url).host,
+    internal: url => new URL(location.href).host == new URL(url).host,
     cacheable: url => is.internal(url) && !/\.json$/.test(new URL(url).pathname),
     volatile: url => /\.(?:css|js|json)$/.test(new URL(url).pathname),
     image: url => /\.(?:ico|svg|jpeg|jpg|png)$/.test(new URL(url).pathname),
@@ -37,7 +34,7 @@ const is = {
     html: url => /(?:\/|\.html)$/.test(new URL(url).pathname)
 }
 fetch.net = req => {
-    is.volatile(req.url) && (req.url += `?${Math.random()}`);
+    is.internal(req.url) && is.volatile(req.url) && (req = new Request(`${req.url}?${Math.random()}`, req));
     return fetch(req).then(res => 
         (res.status < 400 && is.cacheable(req.url) ? fetch.cache(res) : Promise.resolve(res))
         .then(res => is.html(req.url) ? Head.add(res) : res)
