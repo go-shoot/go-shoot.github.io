@@ -118,7 +118,7 @@ class Bey extends HTMLElement {
     :host(.used) {
         filter:brightness(.4);
     }
-    :host(.selected) {
+    :host(.selected,.deletable) {
         outline-color:var(--theme) !important;
         z-index:2;
     }

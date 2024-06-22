@@ -73,10 +73,10 @@ Object.assign(App.act, {
         },
     },
     delete () {
-        Q('#deck bey-x:is([blade],[ratchet],[bit])', bey => bey.classList.add('selected'));
+        Q('#deck bey-x:is([blade],[ratchet],[bit])', bey => bey.classList.add('deletable'));
         Q('#deck').addEventListener('click', ev => {
             ev.target.tagName == 'BEY-X' && ev.target.delete();
-            Q('#deck bey-x', bey => bey.classList.remove('selected'));
+            Q('#deck bey-x', bey => bey.classList.remove('deletable'));
             App.act.reset();
         }, {once: true})
     },
