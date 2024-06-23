@@ -217,7 +217,10 @@ nav {
             }
             &.current {border:.1rem dashed var(--theme);}
         }
-        li:last-child {margin-left:1em;}
+        li:last-child {
+            margin-left:1em;
+            height:100%; aspect-ratio:1/1; /*safari*/
+        }
         li.selected a {background:var(--theme);color:black;}
     }
     :is(.part-result,.prod-result)[value]::before {
