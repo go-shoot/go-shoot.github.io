@@ -261,7 +261,7 @@ class Knob extends HTMLElement {
         position:relative;
         font-size:2em;
         display:inline-block; width:2em; height:2em;
-        touch-action:none; user-select:none;
+        touch-action:none; user-select:none; -webkit-user-select:none;
     }
     div,div::before,slot {
         width:100%; height:100%;

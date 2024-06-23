@@ -277,7 +277,7 @@ a div {
 }
 #catalog details {
     position:relative;
-    user-select:none;
+    user-select:none; -webkit-user-select:none;
     transform:translateY(calc(-100% - 1em)); transition:transform .5s,opacity .5s;
     
     summary {
