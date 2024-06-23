@@ -7,7 +7,7 @@ Node.prototype.sQ = function(el) {return this.shadowRoot.Q(el);}
 Q('head').insertAdjacentHTML('beforeend', `<style id=unsupported>
     html::before {
         content:'請重新整理\\A如問題持續，需更新／換瀏覽器';
-        opacity:1; transition:opacity .5s,1s;
+        opacity:1; transition:opacity .5s 2s;
         z-index:1;
         background:black; color:white; font-size:3em;
         white-space:pre-wrap;
