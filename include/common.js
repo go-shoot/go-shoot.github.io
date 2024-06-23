@@ -41,7 +41,7 @@ addEventListener('DOMContentLoaded', () => {
                 drop.to.return();
             }
         });
-        setTimeout(() => Q('nav').classList.add('safari'), 500);
+        setTimeout(() => Q('nav').classList.add('safari'), 200);
     }
     Q('[popover]')?.addEventListener('click', ev => ev.target.closest('[popover]').hidePopover());
 });
