@@ -152,10 +152,12 @@ class Bey extends HTMLElement {
         li {
             display:flex; place-content:center; place-items:center;
             aspect-ratio:1/1;
-        }
-        img {
-            max-width:100%; max-height:100%;
-            pointer-events:none;
+
+            img {
+                max-width:100%; max-height:100%;
+                pointer-events:none;
+            }
+            &.bit img {height:100%; /*safari*/}
         }
         li:not(:has(img[src])) {display:none;}
     }
