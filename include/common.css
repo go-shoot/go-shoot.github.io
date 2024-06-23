@@ -194,7 +194,7 @@ nav {
             margin-left:-.425em;
         }
         li {
-            height:100%; /*safari*/
+            height:100%; aspect-ratio:1/1; /*safari*/
             &:last-child {margin-left:1em;}
         }
         li a {
