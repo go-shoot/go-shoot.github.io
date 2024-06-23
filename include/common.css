@@ -193,9 +193,6 @@ nav {
             color:var(--theme-alt);
             margin-left:-.425em;
         }
-        li {
-            height:100%; aspect-ratio:1/1; /*safari*/
-        }
         li a {
             margin:.3rem; height:calc(100% - .6rem); aspect-ratio:1/1;
             display:flex; justify-content:center; align-items:center;
@@ -222,7 +219,10 @@ nav {
             }
             &.current {border:.1rem dashed var(--theme);}
         }
-        li:last-child {margin-left:1em;}
+        li:last-child {
+            margin-left:1em;
+            height:100%; aspect-ratio:1/1; /*safari*/
+        }
         li.selected a {background:var(--theme);color:black;}
     }
     :is(.part-result,.prod-result)[value]::before {

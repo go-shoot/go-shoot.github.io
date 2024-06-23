@@ -35,13 +35,13 @@ addEventListener('DOMContentLoaded', () => {
         new Dragging(menu, {
             what: 'nav menu',
             translate: {x: {max: menu => menu.offsetLeft*-1 - 6}, y: false},
-            press: () => Q('nav').classList.add('safari'),
             move: drag => drag.to.select(0),
             lift (drop, dragged) {
                 dragged.Q('.selected') && (location.href = dragged.Q('.selected a').href);
                 drop.to.return();
             }
         });
+        setTimeout(() => Q('nav').classList.add('safari'), 500);
     }
     Q('[popover]')?.addEventListener('click', ev => ev.target.closest('[popover]').hidePopover());
 });
