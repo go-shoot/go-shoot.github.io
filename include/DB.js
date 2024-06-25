@@ -101,8 +101,8 @@ const DB = {
     cache (outdated) {
         if (outdated && !outdated.length) return DB.indicator.hidden = true;
         DB.indicator.init(outdated);
-        return Promise.all(Object.keys(DB.action).map(f => (outdated?.some(p => p.includes(f)) ?? true) && DB.fetch(f)))
-        .then(() => DB.indicator.update(true));
+        outdated = Object.keys(DB.action).filter(f => outdated?.some(p => p.includes(f)) ?? true);
+        return DB.fetch(outdated).then(() => DB.indicator.update(true)).catch(() => DB.indicator.error());
         //update(['layer7', 'layer6', 'layer5'],       json => Promise.all(Object.entries(json).map(([comp, parts]) => DB.put.parts(parts, comp)))),
     },
     action: {
@@ -110,11 +110,15 @@ const DB = {
         'part-ratchet': (...args) => DB.put.parts(...args),
         'part-bit': (...args) => DB.put.parts(...args),
         'part-meta': (json) => DB.put('meta', {part: json}),
+        'prod-launchers': (json) => DB.put('product', {launchers: json}),
+        'prod-others': (json) => DB.put('product', {others: json}),
         'prod-beys': (beys) => DB.put('product', [{beys}, {schedule: beys.map(bey => bey[2].split(' '))}]),
     },
-    fetch: file => fetch(`/db/${file}.json`).then(resp => resp.json())
-        .then(json => DB.action[file](json, file))
-        .then(() => Storage('DB', {[file]: Math.round(new Date() / 1000)})),
+    fetch: files => Promise.all(files.map(file => 
+            fetch(`/db/${file}.json`).then(resp => Promise.all([file, resp.json()]))
+        )).then(ar => ar.map(([file, json]) => 
+            DB.action[file](json, file).then(() => Storage('DB', {[file]: Math.round(new Date() / 1000)} ))
+        )).catch(er => (console.error(file), console.error(er))),
 
     trans: (store, complete) => DB.tr?.objectStoreNames.contains(store) ? DB.tr : 
         DB.tr = Object.assign(DB.db.transaction(store, complete ? 'readwrite' : 'readonly'), {oncomplete: () => (DB.tr = null) || complete?.()}),
