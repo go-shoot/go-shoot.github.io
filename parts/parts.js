@@ -9,7 +9,7 @@ let Parts = {
     },
     before () {
         Filter();
-        new Dragging(Q('summary'), {
+        new Dragging('summary', {
             click: false,
             translate: false,
             move: (drag, dragged) => Math.abs(drag.deltaY) > 50 && dragged.parentElement.classList[drag.deltaY > 0 ? 'add' : 'remove']('showing')
@@ -27,7 +27,7 @@ let Parts = {
         let hash = decodeURI(location.hash.substring(1));
         let target = hash && Q(`a#${hash}`);
         Parts.switch([target?.classList?.[1] || hash || Parts.meta.default].flat(), target);
-        Q(`#${Cookie.pref?.sort || 'name'}`).click();
+        Q(`#${Storage('pref')?.sort || 'name'}`).click();
     },
     finally () {
         Q('.loading').classList.remove('loading');
@@ -52,7 +52,7 @@ onhashchange = () => Parts.after();
 
 const Magnifier = () => {
     Q('nav data').before(Magnifier.create());
-    Q(`#${Cookie.pref?.button || 'mag2'}`).checked = true;
+    Q(`#${Storage('pref')?.button || 'mag2'}`).checked = true;
     Magnifier.knob = Q('spin-knob');
     Magnifier.events();
 };
@@ -62,11 +62,11 @@ Object.assign(Magnifier, {
         ...[1,2,3].map(n => E('label', [E('input', {id: `mag${n}`, type: 'radio', name: 'mag'})]))
     ]),
     events () {
-        Q('.part-mag').onchange = ({target: input}) => input.checked && Cookie.set('pref', {button: input.id});
-        Magnifier.knob.onchange = ev => ev && (Q('.catalog').style.fontSize = `${ev.target.value}em`) && Cookie.set('pref', {knob: ev.target.value});
+        Q('.part-mag').onchange = ({target: input}) => input.checked && Storage('pref', {button: input.id});
+        Magnifier.knob.onchange = ev => ev && (Q('.catalog').style.fontSize = `${ev.target.value}em`) && Storage('pref', {knob: ev.target.value});
         setTimeout((onresize = Magnifier.switch));
     },
-    switch: () => Q('.catalog').style.fontSize = innerWidth > 630 ? (Magnifier.knob.value = Cookie.pref?.knob || '1') + 'em' : ''
+    switch: () => Q('.catalog').style.fontSize = innerWidth > 630 ? (Magnifier.knob.value = Storage('pref')?.knob || '1') + 'em' : ''
 });
 
 const Filter = function(type) {
@@ -121,7 +121,7 @@ const Sorter = () => {
     );
     dl.onchange = ({target: input}) => {
         Q('.catalog').append(...Parts.all.sort(Sorter.sort[input.id]).map(p => p.a));
-        input.checked && Cookie.set('pref', {sort: input.id});
+        input.checked && Storage('pref', {sort: input.id});
     };
     Sorter.release(Parts.comp);
     return dl;

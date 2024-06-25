@@ -144,13 +144,13 @@ announce.colors = new Mapping(
     /[BU]XG?-/, 'others',
     'Lm'
 );
-Cookie.cache && (new Date - Cookie.cache)/1000/60/60/24 > 30 && fetch('/sw?delete=parts');
+(new Date - Storage('cached'))/1000/60/60/24 > 30 && fetch('/sw/?delete=parts');
 </script>
 
 <script>
+    new Dragging('#products', {scroll: {what: '.scroller', when: () => true}});
     let i = Q('.gate i'), narrowest = 100;
-    new Dragging(Q('#products'), {scroll: {what: '.scroller', when: () => true}});
-    new Dragging(Q('.gate'), {
+    new Dragging('.gate', {
         translate: {
             x: {
                 min: dragged => dragged.id == 'gate-left' ? 0 : Q('#gate-left').offsetLeft, 
@@ -162,7 +162,7 @@ Cookie.cache && (new Date - Cookie.cache)/1000/60/60/24 > 30 && fetch('/sw?delet
             drag.other ??= Q(`#gate-${dragged.id == 'gate-left' ? 'right' : 'left'}`);
             drag.other.style.transform = `translateX(${parseFloat(dragged.style.transform.match(/[-\d.]+/)[0])*-1}px)`;
             let distance = Math.abs(drag.other.getBoundingClientRect().x - dragged.getBoundingClientRect().x) - dragged.getBoundingClientRect().width;
-            i.style.opacity = Math.max(0, 5-distance/100);
+            i.style.opacity = Math.max(0, 4-distance/100);
             distance < narrowest && distance <= i.clientWidth && distance > 0
             && (i.style.transform = `scaleX(${distance/i.clientWidth})`) && (narrowest = distance);
         },
@@ -177,9 +177,9 @@ Cookie.cache && (new Date - Cookie.cache)/1000/60/60/24 > 30 && fetch('/sw?delet
         const reset = message => Promise.all([
             DB.discard('V2', ev => message.innerText = ev.type == 'blocked' ? '請先關閉所有本網的分頁' : ev.type),
             caches.delete('V2'), caches.delete('parts'),
-            document.cookie.split(/;\s?/).forEach(c => document.cookie = c.replace(/=.*/, `=; max-age=0; path=/`))
+            localStorage.clear(),
         ]);
-        new Dragging(Q('#reboot'), {
+        new Dragging('#reboot', {
             translate: {
                 x: {min: 0, max: Q('#reboot p').clientWidth - Q('#reset').clientWidth}, 
                 y: false

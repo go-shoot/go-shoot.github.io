@@ -4,7 +4,7 @@ const App = () => {
     App.popup = Q('[popover]');
     App.events();
     App.act.events();
-    Cookie.set('cache', new Date().getTime());
+    Storage('cached', new Date().getTime());
 };
 App.create = (where, title) => {
     let deck = Q(`${where} template`).content.cloneNode(true);
@@ -141,7 +141,7 @@ Object.assign(App, {
             Q('article,section', el => observer.observe(el, { subtree: true, childList: true, attributeFilter: Bey.observedAttributes }))
         )(new MutationObserver(() => App.save(location.hash)));
 
-        new Dragging(Q('#deck'), {
+        new Dragging('#deck', {
             hold: {to: bey => bey.abbr.length && (location.href = `/parts/#${bey.abbr.map(([comp, abbr]) => `${abbr}.${comp}`)}`)},
             drop: {
                 targets: 'main bey-x',
@@ -149,7 +149,7 @@ Object.assign(App, {
             },
             lift: drop => drop.to.swap()
         });
-        new Dragging(Q('#tier'), {
+        new Dragging('#tier', {
             hold: {
                 to: pressed => pressed.select(),
                 redispatch: true
@@ -172,7 +172,7 @@ Object.assign(App, {
                 ]
             }
         });
-        new Dragging(Q('aside'), {
+        new Dragging('aside', {
             hold: {
                 to: pressed => pressed.select(),
                 redispatch: true

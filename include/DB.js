@@ -1,7 +1,7 @@
 customElements.define('db-status', class extends HTMLElement {
     constructor() {
         super();
-        [this.progress, this.total] = [0, Cookie.DB?.count || 100];
+        [this.progress, this.total] = [0, Storage('DB')?.count || 100];
         this.attachShadow({mode: 'open'}).innerHTML = `
         <style>
         :host(:not([progress]):not([status]))::before {color:white;}
@@ -37,7 +37,7 @@ customElements.define('db-status', class extends HTMLElement {
     attributeChangedCallback(_, __, value) {
         if (value == 'success') {
             this.style.setProperty('--p', 40 - 225 + '%');
-            this.progress > (Cookie.DB?.count ?? 0) && Cookie.set('DB', {count: this.progress});
+            this.progress > (Storage('DB')?.count ?? 0) && Storage('DB', {count: this.progress});
             setTimeout(() => this.hidden = true, 2000);
         }
         this.style.setProperty('--c', value == 'success' ? 'lime' : 'deeppink');
@@ -91,7 +91,7 @@ const DB = {
     },
     updates (fresh) {
         if (location.pathname != '/' && fresh) return null;
-        let compare = files => Object.entries(files).filter(([file, time]) => new Date(time) / 1000 > (localStorage.getItem(file) || 0)).map(([file]) => file);
+        let compare = files => Object.entries(files).filter(([file, time]) => new Date(time) / 1000 > (Storage('DB')?.[file] || 0)).map(([file]) => file);
         return fetch(`/db/-update.json`).catch(() => DB.indicator.setAttribute('status', 'offline'))
         .then(resp => resp.json()).then(({news, ...files}) => {
             location.pathname == '/' && announce(news);
@@ -114,7 +114,7 @@ const DB = {
     },
     fetch: file => fetch(`/db/${file}.json`).then(resp => resp.json())
         .then(json => DB.action[file](json, file))
-        .then(() => localStorage.setItem(`/db/${file}.json`, Math.round(new Date() / 1000))),
+        .then(() => Storage('DB', {[file]: Math.round(new Date() / 1000)})),
 
     trans: (store, complete) => DB.tr?.objectStoreNames.contains(store) ? DB.tr : 
         DB.tr = Object.assign(DB.db.transaction(store, complete ? 'readwrite' : 'readonly'), {oncomplete: () => (DB.tr = null) || complete?.()}),

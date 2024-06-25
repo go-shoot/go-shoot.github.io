@@ -1,6 +1,7 @@
 self.addEventListener('install', ev => {
     self.skipWaiting();
     caches.delete('BBX');
+    caches.delete('json');
     ev.waitUntil(Head.cache());
 });
 self.addEventListener('activate', ev => ev.waitUntil(clients.claim()));

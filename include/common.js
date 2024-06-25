@@ -55,11 +55,10 @@ const E = (el, ...stuff) => {
     Object.assign(el.dataset, attr?.dataset ?? {});
     return Object.assign(el, (({style, dataset, ...attr}) => attr)(attr ?? {}));
 }
-const Cookie = {
-    set: (k, v) => document.cookie = `${k}=${typeof v == 'object' ? JSON.stringify(Cookie[k] = {...Cookie[k] ?? {}, ...v}) : Cookie[k] = v}; max-age=99999999; path=/`,
-    parse: v => { try { return JSON.parse(v); } catch (e) { return console.error(v) ?? null; } }
-};
-Object.assign(Cookie, Object.fromEntries(document.cookie.split(/;\s?/).map(c => c.split('=')).map(([k, v]) => [k, v?.includes('{') ? Cookie.parse(v) : v])));
+
+const Storage = (key, obj) => !obj ? 
+    JSON.parse(localStorage[key] ?? 'null') : 
+    localStorage[key] = typeof obj == 'object' ? JSON.stringify({...Storage(key), ...obj}) : obj;
 
 class Mapping {
     constructor(...map) {

@@ -1,5 +1,6 @@
 class Dragging {
     constructor (el, {what, translate, scroll, drop, hold, click, ...custom}) {
+        typeof el == 'string' && (el = Q(el));
         if (!el) return;
         this.what = what, this.translate = translate;
         this.scroll = scroll, this.drop = drop, this.hold = hold;
