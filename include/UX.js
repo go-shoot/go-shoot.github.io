@@ -321,7 +321,7 @@ class Knob extends HTMLElement {
     slot {
         z-index:1;
         position:absolute; 
-        user-select:none; -webkit-user-select:none; pointer-events:none;
+        pointer-events:none;
         display:flex; justify-content:center; align-items:center;
         transform:scale(-1);
     }

@@ -34,7 +34,6 @@
     padding-top:2rem;
     display:flex; flex-wrap:wrap; justify-content:center;
     gap:.2rem;
-    user-select:none; -webkit-user-select:none;
 }
 
 .catalog a[id] {
@@ -46,6 +45,7 @@
     display:grid; grid-template:2em auto 1em 1em / var(--icon) calc(50% - var(--icon)) auto var(--icon) var(--icon);
     padding:.3em .4em;
     overflow:hidden;
+    -webkit-user-drag:none;
 }
 a img {filter:drop-shadow(0 0 .1rem var(--on));}
 a img[alt^=type] {filter:drop-shadow(0 0 .1rem var(--type));}
