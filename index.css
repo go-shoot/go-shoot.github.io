@@ -369,7 +369,7 @@ a[href^=customize] {
         letter-spacing:.1em;
 
         &::first-line {
-            font-size:.6em; font-family:'IBM Plex Sans JP',COND,sans-serif
+            font-size:.6em; font-family:'IBM Plex Sans JP',COND,sans-serif;
         }
     }
 }

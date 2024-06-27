@@ -210,7 +210,6 @@ strong {
         font-size:.3em;
         display:block;
         margin-bottom:.05em;
-        font-family:'IBM Plex Sans JP';
     }
     &::after {
         content:'';
