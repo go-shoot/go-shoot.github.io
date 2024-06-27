@@ -77,7 +77,6 @@ class Bey extends HTMLElement {
         this.dock.tagName == 'MAIN' && !this.parentElement && this.main();
     }
     select() {
-        if (this.classList.contains('used')) return;
         if (!this.classList.contains('selected'))
             this.dock.Q('.selected')?.classList.remove('selected');
         this.classList.toggle('selected');
@@ -102,11 +101,8 @@ class Bey extends HTMLElement {
         this.shadowRoot.querySelectorAll('.duplicated').forEach(span => span.classList.remove('duplicated'));
         duplicated?.forEach(([c, p]) => this.getAttribute(c) === p && this.sQ(`span.${c}`).classList.add('duplicated'));
     }
+    set used(used) {used > 0 ? this.setAttribute('used', used) : this.removeAttribute('used');}
 
-    set used(used) {
-        this.classList[used ? 'add' : 'remove']('used');
-        used && this.closest('ul').append(this.parentElement);
-    }
     static style = `
     :host {
         display:grid; grid-template:var(--headfoot) auto var(--headfoot) / min(calc((100vw - 2rem)/3),8em);
@@ -114,9 +110,7 @@ class Bey extends HTMLElement {
         border-radius:.5em;
         outline-offset:-.1em; outline:.2em solid transparent;
         background:var(--overlay2);
-    }
-    :host(.used) {
-        filter:brightness(.4);
+        position:relative;
     }
     :host(.selected),:host(.deletable) {
         outline-color:var(--theme) !important;
@@ -124,6 +118,13 @@ class Bey extends HTMLElement {
     }
     :host(.targeted) {
         outline-color:var(--theme-alt) !important;
+    }
+    :host::after {
+        position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+        z-index:1;
+        background:#00000099;
+        font-size:2em;
+        padding:0 .2em; display:inline-block;
     }
 
     i {

@@ -197,6 +197,9 @@ aside {
     bey-x,&:has(>bey-x.pressed) bey-x {
         touch-action:pan-x;
     }
+    #tier:not([hidden])+& bey-x[used]::after {
+        content:'−'attr(used);
+    }
 }
 
 [popover] {

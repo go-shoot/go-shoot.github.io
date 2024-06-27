@@ -119,16 +119,14 @@ Object.assign(App, {
         Q('main', main => main.hidden = !main.matches(location.hash ||= '#deck'));
         Q('.deck,.tier', el => el.hidden = !el.classList.contains(location.hash.substring(1)));
 
-        if (location.hash == '#tier')
-            return Q('#tier bey-x', ({abbr: [[p, c]]}) => Q(`aside bey-x[${p}='${c}']`).used = true);
-        Q('bey-x.used', bey => bey && (bey.used = false));
-        App.interacted && Q('aside ul', App.aside.sort);
+        location.hash == '#tier' && App.count();
     },
-    aside: {
-        sort: ul => ul.append(...ul.Q('bey-x')
-            .sort((b, c) => (b.classList.contains('used') - c.classList.contains('used')) || (b.order - c.order))
-            .map(b => b.parentElement)
-        )
+    count (part) {
+        (part ? [part] : Q('aside bey-x')).map(bey => {
+            let [[p, c]] = bey.abbr;
+            let tiered = Q(`#tier bey-x[${p}='${c}']`);
+            Q(`aside bey-x[${p}='${c}']`).used = tiered ? tiered.length ?? 1 : 0;
+        });
     },
     events () {
         document.onpointerdown = ev => (App.interacted = true) && ev.target.closest('aside')?.classList.remove('first');
@@ -163,12 +161,9 @@ Object.assign(App, {
                     drop => drop.to.swap(), 
                     drop => drop.to.transfer(), 
                     (_, dragged) => {
-                        let [c, p] = dragged.abbr[0];
                         dragged.remove();
-                        let recovered = Q(`aside bey-x[${c}='${p}']`);
-                        recovered.used = false;
-                        App.aside.sort(recovered.closest('ul'));
-                    },
+                        App.count(dragged);
+                    }
                 ]
             }
         });
@@ -217,7 +212,7 @@ Object.assign(App, {
                     },
                     (drop, dragged) => {
                         drop.to.clone();
-                        dragged.used = true;
+                        App.count(dragged);
                     },
                 ], {all: () => setTimeout(() => Q('.customizing')?.classList.remove('customizing'), 500)})
             }

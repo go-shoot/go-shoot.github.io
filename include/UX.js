@@ -115,7 +115,7 @@ class Dragging {
     to = {
         select: (boundary) => {
             this.dragged.Q('.selected')?.classList.remove('selected');
-            [...this.dragged.children].find(li => !li.matches('.current,:last-child') &&
+            [...this.dragged.children].find(li => !li.matches(':has(.current),:last-child') &&
                 (({x, width}) => Math.round(x) <= boundary && x+width >= boundary)(li.getBoundingClientRect())
             )?.classList.add('selected');
         },
@@ -134,7 +134,7 @@ class Dragging {
         },
         clone: () => {
             this.dragged.classList.remove('dragged', 'selected');
-            this.to.return(false);
+            this.to.return();
             this.targeted.append(this.dragged.cloneNode(true), '');
         },
         return: (animate = true) => {
