@@ -7,14 +7,14 @@ Node.prototype.sQ = function(el) {return this.shadowRoot.Q(el);}
 Q('head').insertAdjacentHTML('beforeend', `<style id=unsupported>
     html::before {
         content:'請重新整理\\A如問題持續，需更新／換瀏覽器';
-        opacity:1; transition:opacity .5s,color .5s,2s;
+        opacity:1; transition:color .5s,2s;
         z-index:1;
         background:black; color:white; font-size:3em;
         white-space:pre-wrap;
         position:fixed; width:100%; height:100%;
         display:flex; justify-content:center; align-items:center;
     }
-    @starting-style {html::before {opacity:0; color:black;}}
+    @starting-style {html::before {color:black;}}
     </style>`);
 navigator.serviceWorker?.register('/worker.js').then(() => {
     if (!Q('link[href$="common.css"]')) return Promise.reject();
