@@ -120,8 +120,8 @@ const DB = {
             DB.action[file](json, file).then(() => Storage('DB', {[file]: Math.round(new Date() / 1000)} ))
         )).catch(er => (console.error(file), console.error(er))),
 
-    trans: (store, complete) => DB.tr?.objectStoreNames.contains(store) ? DB.tr : 
-        DB.tr = Object.assign(DB.db.transaction(store, complete ? 'readwrite' : 'readonly'), {oncomplete: () => (DB.tr = null) || complete?.()}),
+    trans: (store) => DB.tr?.objectStoreNames.contains(store) ? DB.tr : 
+        DB.tr = Object.assign(DB.db.transaction(store, 'readwrite'), {oncomplete: () => DB.tr = null}),
 
     store: (...args) => DB.trans(...args).objectStore(args[0]),
 
@@ -133,9 +133,9 @@ const DB = {
     },
     put: (store, items, success) => items && new Promise(res => {
         if (!Array.isArray(items))
-            return DB.store(store, res).put(...items.abbr ? [items] : Object.entries(items)[0].reverse()).onsuccess = success;
-        DB.trans(store, res);
-        items.forEach(item => DB.put(store, item, success));
+            return DB.store(store).put(...items.abbr ? [items] : Object.entries(items)[0].reverse()).onsuccess = () => res(success?.());
+        DB.trans(store);
+        Promise.all(items.map(item => DB.put(store, item, success))).then(res);
     }),
 }
 Object.assign(DB.put, {

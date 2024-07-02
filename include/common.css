@@ -141,7 +141,7 @@ html,body {
 main {
     margin:5em auto 1em auto;
 }
-:is(db-status[progress],db-status[status])~main {
+db-status:not([hidden])~main {
     margin-top:1em;
 }
 a[href],nav,form summary,caption label,:is(caption,#filter) button,#filter summary {
