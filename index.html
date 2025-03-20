@@ -1,6 +1,73 @@
 <!DOCTYPE html>
-<title>DIVERT</title>
-<style>a {font-size:3em;}</style>
-2102
-<a href=/X/>X</a>
-<a href=/burst/>BURST</a>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="description" content="最新日本陀螺情報、所有零件圖鑑、限量產品，都一應俱全。">
+<title>非官方資訊站 ￭ Beyblade unofficial site ￨ 戰鬥陀螺 ￭ 爆旋陀螺 ￭ ベイブレード</title>
+<link rel="stylesheet" href="./main.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rampart+One&Josefin+Sans:wght@300;600&amp;display=swap" rel="stylesheet">
+
+<style>
+    html {
+        font-family:"Rampart One", sans-serif;
+    }
+    h1 {
+        margin:0 auto; padding:.5em 0;
+        letter-spacing:.25em;
+        text-align:center;
+        background:linear-gradient(to right,#b5fb5c 25%,hsl(45,90%,48%) 25% 50%,dodgerblue 50% 75%,coral 75%);
+        transition:width .5s; width:100%;
+        overflow:hidden; white-space:nowrap;
+    }
+    @starting-style {h1 {width:0em;}}
+
+    h1::after {
+        color:white; mix-blend-mode:difference;
+        content:attr(title);
+    }
+    a {
+        width:min(30em,calc(100% - .5em));
+        margin:2em auto; 
+        display:flex; flex-direction:column;
+        font-family:'Josefin Sans', sans-serif;
+
+        img {
+            width:calc(100% - .2em);
+            border:.2em solid; border-radius:1em;
+        }
+        time {
+            font-size:1em; font-weight:bold;
+            text-align:right;
+        }
+        h2 {
+            font-size:.6em; font-weight:normal;
+            margin-bottom:.5em;
+            text-align:right;
+        }
+    }
+</style>
+<h1 title="非官方資訊站"></h1>
+<a href="/BBX/" style="color:#b5fb5c">
+    <h2>BEYBLADE X</h2>
+    <img src="https://beyblade.takaratomy.co.jp/history/assets/img/lead_gen4.jpg">
+    <time>2023～</time>
+</a>
+<a href="/BBB/" style="color:hsl(45,90%,48%)">
+    <h2>爆烈世代⬧擊爆戰魂⬧ベイブレードバースト⬧BEYBLADE BURST</h2>
+    <img src="https://beyblade.takaratomy.co.jp/history/assets/img/lead_gen3.jpg">
+    <time>2015～2022</time>
+</a>
+<a href="/MFB/" style="color:dodgerblue">
+    <h2>鋼鐵奇兵⬧鋼鐵戰魂⬧メタルファイト ベイブレード⬧METAL FIGHT BEYBLADE</h2>
+    <img src="https://beyblade.takaratomy.co.jp/history/assets/img/lead_gen2.jpg">
+    <time>2008～2012</time>
+</a>
+<a href="/BSB/" style="color:coral">
+    <h2>爆転シュート ベイブレード⬧BAKUTEN SHOOT BEYBLADE</h2>
+    <img src="https://beyblade.takaratomy.co.jp/history/assets/img/lead_gen1.jpg">
+    <time>1999～2005</time>
+</a>
+<script type="module">
+    import {A,E,O,Q} from 'https://aeoq.github.io/AEOQ.mjs';
+</script>

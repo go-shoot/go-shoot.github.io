@@ -1,0 +1,59 @@
+*,::before,::after {
+    box-sizing:border-box !important;
+}
+html {
+    background:black; color:white;
+    text-align:center;
+    font-family:'IBM Plex Sans JP',sans-serif;
+}
+body {
+    margin:0;
+}
+a {
+    text-decoration:none;
+    color:inherit;
+}
+figure {
+    margin:0 auto;
+    display:inline-block;
+    max-width:100%;
+
+    figcaption {position:relative;}
+}
+div {
+    display:flex; gap:0 .5em;
+    overflow-x:scroll;
+}
+section {
+    position:relative;
+    overflow:hidden;
+    margin:1em 0;
+
+    h2 {
+        position:absolute; left:50%; transform:translate(-50%);
+        line-height:1.3;
+        font-size:6em; font-weight:normal;
+        color:transparent; -webkit-text-stroke:.03rem white;
+        margin:0;
+        z-index:-1;
+        white-space:nowrap;
+    }
+    nav {
+        min-height:7em;
+        display:flex; flex-direction:column; justify-content:center;
+    }
+    p,a:not(:has(img)) {
+        width:13em;
+        margin:.25em auto; padding:0 1em;
+        background:#66666677;
+        border-radius:9em;
+        transition:opacity 1s .5s;
+        @starting-style {opacity:0;}
+    }
+    p {
+        text-align:left;
+    }
+    a:not(:has(img)) {
+        border-left:.2em solid; border-right:.2em solid;
+    }
+}
