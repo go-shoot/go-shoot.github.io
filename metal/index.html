@@ -144,7 +144,7 @@ figure {
         if (which.Q('div img')) return;
         if (which.id == 'catalog') {
             [9,9,7,9].forEach((pages, s) => [...which.children].at(-2).after(
-                E('figure', [E('div'), ...[...Array(pages)].map((_, p) => E('img', {src: `catalog/S${s+1}-${p}.jpg`}))])
+                E('figure', [E('div'), ...[...Array(pages+1)].map((_, p) => E('img', {src: `catalog/S${s+1}-${p}.jpg`}))])
             ));
         } else if (which.id == 'package') {
             [...which.children].at(-2).after(
