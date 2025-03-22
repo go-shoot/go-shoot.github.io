@@ -4,7 +4,7 @@
 <title>非官方資訊站 ￭ Beyblade unofficial site ￨ 戰鬥陀螺 ￭ 爆旋陀螺 ￭ ベイブレード</title>
 <script defer src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js></script>
 <script defer src=https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js></script>
-
+<script src=https://aeoq.github.io/diamond-grid/script.js type=module></script>
 <link rel="stylesheet" href="../main.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -90,6 +90,8 @@ figure {
 }
 </style>
 
+<diamond-grid></diamond-grid>
+
 <section>
     <h2>圖片</h2>
     <nav>
@@ -114,15 +116,13 @@ figure {
 </section>
 
 <dialog id="catalog">
-    <form method="dialog"><button>關閉</button></form>
-    <form method="dialog"><button>關閉</button></form>
+    <form method="dialog"><button></button></form>
 </dialog>
 <dialog id="package">
-    <form method="dialog"><button>關閉</button></form>
-    <form method="dialog"><button>關閉</button></form>
+    <form method="dialog"><button></button></form>
 </dialog>
 <dialog id="table">
-    <form method="dialog"><button>關閉</button></form>
+    <form method="dialog"><button></button></form>
     <table>
         <thead>
             <tr><th>No<th>Wheel<span>15 款</span><br>Metal Wheel<span>49 款</span><th>Clear Wheel<span>61 款</span><th>Track<span>41 款</span><th>Bottom<span>51 款</span>
@@ -132,7 +132,6 @@ figure {
             <tr><th><th>Crystal Wheel<span>10 款</span><th>Chrome Wheel<span>17 款</span><th><th>
         </tfoot>
     </table>
-    <form method="dialog"><button>關閉</button></form>
 </dialog>
 
 <script type="module">
@@ -143,11 +142,11 @@ figure {
         which.showModal();
         if (which.Q('div img,tbody td')) return;
         if (which.id == 'catalog') {
-            [9,9,7,9].forEach((pages, s) => [...which.children].at(-2).after(
+            [9,9,7,9].forEach((pages, s) => which.append(
                 E('figure', [E('div'), ...[...Array(pages+1)].map((_, p) => E('img', {src: `catalog/S${s+1}-${p}.jpg`}))])
             ));
         } else if (which.id == 'package') {
-            [...which.children].at(-2).after(
+            which.append(
                 E('figure', [E('div'), ...[...Array(7)].map((_, p) => E('img', {src: `package/RB${p+3}.jpg`}))]),
                 E('figure', [E('div'), ...[...Array(3)].map((_, p) => E('img', {src: `package/RBL${p+1}.jpg`}))]),
                 E('figure', [E('div'), ...[86,97,98,117,121].map(p => E('img', {src: `package/Set-${p}.jpg`}))])
@@ -167,8 +166,16 @@ figure {
 
     import PointerInteraction from 'https://aeoq.github.io/pointer-interaction/script.js';
     PointerInteraction.events({
-        'figure div': {
+        'figure div': { 
             drag: PI => PI.drag.to.scroll({x: true, y: false}),
         }
     })
+
+    const images = ["pict1_1.jpg","pict1_2.jpg","pict1_3.jpg","pict1_4.jpg","pict3_3.jpg","pict5.jpg","pict6_2.jpg","pict6_1.jpg","pict6_3.jpg","pict6_4.jpg","pict7_2.jpg","pict7_3.jpg","pict7_1.jpg","pict8_1.jpg","pict8_3.jpg","pict8_2.jpg","pict12.jpg","pict13_1.jpg","pict13_2.jpg","pict13_3.jpg","pict14_3.jpg","pict14_2.jpg","pict14_1.jpg","pict15_1.jpg","pict15_2.jpg","pict15_3.jpg","pict16_1.jpg","pict16_2.jpg","pict18_1.jpg","pict18_2.jpg","pict18_3.jpg","pict18_4.jpg"];
+    Q('diamond-grid').style.height = `calc(max(100vh,${document.body.scrollHeight}px) + 5em)`;
+    Q('diamond-grid').append(
+        ...images.map(src => E('img', {src: `https://beyblade.takaratomy.co.jp/history/assets/img/_gen2_${src}`})),
+        ...images.map(src => E('img', {src: `https://beyblade.takaratomy.co.jp/history/assets/img/_gen2_${src}`})),
+        ...images.map(src => E('img', {src: `https://beyblade.takaratomy.co.jp/history/assets/img/_gen2_${src}`})),
+    )
 </script>

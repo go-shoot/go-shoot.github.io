@@ -2,6 +2,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>非官方資訊站 ￭ Beyblade unofficial site ￨ 戰鬥陀螺 ￭ 爆旋陀螺 ￭ ベイブレード</title>
+<script src=https://aeoq.github.io/diamond-grid/script.js type=module></script>
 <link rel="stylesheet" href="../main.css">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -9,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@500&display=swap" rel="stylesheet">
 
 <style>
-    img {width:min(20em, 80vw)}
+    section img {width:min(20em, 80vw)}
     figcaption::after {
         content:'2016 年製作';
         position:absolute; bottom:0; right:.5em;
@@ -17,6 +18,8 @@
         font-size:.6em;
     }    
 </style>
+
+<diamond-grid></diamond-grid>
 
 <section>
     <h2>族譜</h2>
@@ -43,13 +46,18 @@
         <a href="http://www.kcn.ne.jp/~kids/bb/bey/special-hms.htm" target="_blank">爆転小僧：異色</a>
     </nav>
 </section>
-    <a href="https://kyoganken.web.fc2.com/beymf/lineup.htm"></a>
-    <a href="http://www.kcn.ne.jp/~kids/bb/bey2/bb023.htm"></a>
 
 <script type="module">
     import {A,E,O,Q} from 'https://aeoq.github.io/AEOQ.mjs';
     Q('img', img => {
         img.alt = img.src.match(/([^./]+)\.[^.]+$/)[1];
         img.parentElement.Q('div').append(E('a', {href: img.src}, [img]));
-    })
+    });
+    const images = ["pict1.jpg","pict2.jpg","pict3_1.jpg","pict3_2.jpg","pict3_3.jpg","pict3_4.jpg","pict4.jpg","pict5_3.jpg","pict5_2.jpg","pict5_1.jpg","pict6_3.jpg","pict6_1.jpg","pict6_2.jpg","pict6_4.jpg","pict7.jpg","pict8_1.jpg","pict8_2.jpg","pict8_3.jpg","pict8_4.jpg","pict9.jpg","pict10_1.jpg","pict10_3.jpg","pict10_2.jpg","pict10_4.jpg","pict11.jpg","pict12_1.jpg","pict12_3.jpg","pict12_2.jpg","pict12_4.jpg","pict13.jpg","pict14_1.jpg","pict14_2.jpg","pict15_1.jpg","pict15_4.jpg","pict15_2.jpg","pict15_3.jpg"];
+    Q('diamond-grid').style.maxHeight = `calc(${document.body.scrollHeight}px + 5em)`;
+    Q('diamond-grid').append(
+        ...images.map(src => E('img', {src: `https://beyblade.takaratomy.co.jp/history/assets/img/_gen1_${src}`})),
+        ...images.map(src => E('img', {src: `https://beyblade.takaratomy.co.jp/history/assets/img/_gen1_${src}`})),
+        ...images.map(src => E('img', {src: `https://beyblade.takaratomy.co.jp/history/assets/img/_gen1_${src}`})),
+    )
 </script>
