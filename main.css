@@ -75,7 +75,7 @@ section {
     p,a:not(:has(img)) {
         width:13em;
         margin:.25em auto; padding:0 1em;
-        background:#666666aa;
+        background:#99999966;
         border-radius:9em;
         transition:opacity 1s .5s;
         @starting-style {opacity:0;}
