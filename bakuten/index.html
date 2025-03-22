@@ -53,8 +53,8 @@
         img.alt = img.src.match(/([^./]+)\.[^.]+$/)[1];
         img.parentElement.Q('div').append(E('a', {href: img.src}, [img]));
     });
-    const images = ["pict1.jpg","pict2.jpg","pict3_1.jpg","pict3_2.jpg","pict3_3.jpg","pict3_4.jpg","pict4.jpg","pict5_3.jpg","pict5_2.jpg","pict5_1.jpg","pict6_3.jpg","pict6_1.jpg","pict6_2.jpg","pict6_4.jpg","pict7.jpg","pict8_1.jpg","pict8_2.jpg","pict8_3.jpg","pict8_4.jpg","pict9.jpg","pict10_1.jpg","pict10_3.jpg","pict10_2.jpg","pict10_4.jpg","pict11.jpg","pict12_1.jpg","pict12_3.jpg","pict12_2.jpg","pict12_4.jpg","pict13.jpg","pict14_1.jpg","pict14_2.jpg","pict15_1.jpg","pict15_4.jpg","pict15_2.jpg","pict15_3.jpg"];
-    Q('diamond-grid').style.maxHeight = `calc(${document.body.scrollHeight}px + 5em)`;
+    const images = ["pict1.jpg","pict3_1.jpg","pict3_2.jpg","pict3_3.jpg","pict3_4.jpg","pict5_3.jpg","pict5_2.jpg","pict5_1.jpg","pict6_3.jpg","pict6_1.jpg","pict6_2.jpg","pict6_4.jpg","pict8_1.jpg","pict8_2.jpg","pict8_3.jpg","pict8_4.jpg","pict10_1.jpg","pict10_3.jpg","pict10_2.jpg","pict10_4.jpg","pict12_1.jpg","pict12_3.jpg","pict12_2.jpg","pict12_4.jpg","pict14_1.jpg","pict14_2.jpg","pict15_1.jpg","pict15_4.jpg","pict15_2.jpg","pict15_3.jpg"];
+    Q('diamond-grid').style.height = `calc(max(100vh,${document.body.scrollHeight}px) + 5em)`;
     Q('diamond-grid').append(
         ...images.map(src => E('img', {src: `https://beyblade.takaratomy.co.jp/history/assets/img/_gen1_${src}`})),
         ...images.map(src => E('img', {src: `https://beyblade.takaratomy.co.jp/history/assets/img/_gen1_${src}`})),
