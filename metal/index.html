@@ -136,12 +136,12 @@ figure {
 </dialog>
 
 <script type="module">
-    import {A,E,O,Q} from 'https://aeoq.github.io/AEOQ.mjs';
+    import {A,E,O,Q} from 'https://aeoq.github.io/AEOQ.mjs'
     import {Row} from './table.js'
     const show = which => {
         which = Q(which);
         which.showModal();
-        if (which.Q('div img')) return;
+        if (which.Q('div img,tbody td')) return;
         if (which.id == 'catalog') {
             [9,9,7,9].forEach((pages, s) => [...which.children].at(-2).after(
                 E('figure', [E('div'), ...[...Array(pages+1)].map((_, p) => E('img', {src: `catalog/S${s+1}-${p}.jpg`}))])
