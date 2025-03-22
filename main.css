@@ -9,6 +9,9 @@ html {
 body {
     margin:0;
 }
+button {
+    all:unset;
+}
 a {
     text-decoration:none;
     color:inherit;
@@ -20,9 +23,19 @@ figure {
 
     figcaption {position:relative;}
 }
-div {
+figure div {
     display:flex; gap:0 .5em;
     overflow-x:scroll;
+
+    * {-webkit-user-drag:none;}
+    &::-webkit-scrollbar {
+        background:transparent;
+        height:.5em;
+    }
+    &::-webkit-scrollbar-thumb {
+        background:#ffffff66;
+    }
+
 }
 section {
     position:relative;
@@ -55,5 +68,22 @@ section {
     }
     a:not(:has(img)) {
         border-left:.2em solid; border-right:.2em solid;
+    }
+}
+
+dialog {
+    all:unset;
+    width:100%; min-height:100%;
+    background:#000000aa;
+    
+    &:not([open]) {display:none;}
+    form {
+        button {
+            width:100%;
+            background:#88888888;
+            color:white;
+            padding:.5em 0;
+            cursor:pointer;
+        }
     }
 }
