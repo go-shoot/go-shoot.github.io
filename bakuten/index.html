@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>非官方資訊站 ￭ Beyblade unofficial site ￨ 戰鬥陀螺 ￭ 爆旋陀螺 ￭ ベイブレード</title>
+<script src=https://aeoq.github.io/diamond-grid/script.js type=module></script>
+<link rel="stylesheet" href="../main.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@500&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WBDCLEGSRW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-WBDCLEGSRW');
+</script>
+
+<style>
+    section img {width:min(20em, 80vw)}
+    figcaption::after {
+        content:'2016 年製作';
+        position:absolute; bottom:0; right:.5em;
+        color:silver;
+        font-size:.6em;
+    }    
+</style>
+
+<aside><diamond-grid></diamond-grid></aside>
+
+<section>
+    <h2>族譜</h2>
+    <figure>
+        <figcaption><p>→：進化<p>−：相關／動漫中同隊伍<p>＝：Attack Ring 相同<p>≡：全部件相同</figcaption>
+        <div></div>
+        <img src="beasts.jpg">
+        <img src="others.jpg">
+    </figure>
+</section>
+
+<section>
+    <h2>動畫</h2>
+    <nav>
+        <a href="https://www.bilibili.com/video/BV1Ss411b7Q9/" target="_blank">S1—粤</a>
+        <a href="https://www.bilibili.com/video/BV1gs411U7Tj/" target="_blank">S1—國</a>
+        <a href="https://www.bilibili.com/video/BV1ks41187tK/" target="_blank">S2—粤</a>
+        <a href="https://www.bilibili.com/video/BV1os41117pS/" target="_blank">S2—國</a>
+        <a href="https://www.bilibili.com/video/BV1rs411Q7G7/" target="_blank" style="grid-column:1/-1; width:100%">劇場—國</a>
+        <a href="https://www.bilibili.com/video/BV1xx411s7Ey/" target="_blank">S3—粤</a>
+        <a href="https://www.bilibili.com/video/BV19x411S77o/" target="_blank">S3—國</a>
+    </nav>
+</section>
+
+<section>
+    <h2>部件表</h2>
+    <nav>
+        <a href="BSB.pdf" target="_blank">査看</a>
+    </nav>
+</section>
+
+<section>
+    <h2>回憶更多</h2>
+    <nav>
+        <a href="http://obakeblader.com/2020/01/02/post-10288/#toc1" target="_blank">おばけブレーダー</a>
+        <a href="http://www.kcn.ne.jp/~kids/bb/bey/special-bey.htm" target="_blank">爆転小僧：一覽</a>
+        <a href="http://www.kcn.ne.jp/~kids/bb/bey/special-hms.htm" target="_blank">爆転小僧：異色</a>
+    </nav>
+</section>
+
+<script type="module">
+    import {A,E,O,Q} from 'https://aeoq.github.io/AEOQ.mjs';
+    Q('img', img => {
+        img.alt = img.src.match(/([^./]+)\.[^.]+$/)[1];
+        img.parentElement.Q('div').append(E('a', {href: img.src}, [img]));
+    });
+
+    const base = `https://beyblade.takaratomy.co.jp/history/assets/img/_gen1_pict`;
+    const images = ["1","3_1","3_2","3_3","3_4","5_3","5_2","5_1","6_3","6_1","6_2","6_4","8_1","8_2","8_3","8_4","10_1","10_3","10_2","10_4","12_1","12_3","12_2","12_4","14_1","14_2","15_1","15_4","15_2","15_3"];
+    Promise.all([...document.images].map(img => new Promise(res => img.complete ? res() : img.onload = res)))
+    .then(() => {
+        E(Q('aside')).set({
+            style: {height: `calc(max(100vh,${document.body.scrollHeight}px) + 5em)`},
+        });
+        Q('diamond-grid').append(...[...images, ...images, ...images, ...images].map(src => E('img', {src: `${base}${src}.jpg`})));
+    });
+</script>
