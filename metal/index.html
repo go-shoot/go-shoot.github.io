@@ -161,21 +161,19 @@ drag-gallery {
 <script type="module">
     import {A,E,O,Q} from 'https://aeoq.github.io/AEOQ.mjs'
     import {Row} from './table.js'
+    Q('#catalog').append(...[9,9,7,9].map((pages, s) => 
+        E('figure', [...Array(pages+1)].map((_, p) => E('img', {src: `catalog/S${s+1}-${p}.jpg`})))
+    ));
+    Q('#package').append(
+        E('figure', [...Array(7)].map((_, p) => E('img', {src: `package/RB${p+3}.jpg`}))),
+        E('figure', [...Array(3)].map((_, p) => E('img', {src: `package/RBL${p+1}.jpg`}))),
+        E('figure', [86,97,98,117,121].map(p => E('img', {src: `package/Set-${p}.jpg`})))
+    );
     const show = which => {
         which = Q(which);
         which.showModal?.();
-        if (which.Q('img,tbody td')) return;
-        if (which.id == 'catalog') {
-            [9,9,7,9].forEach((pages, s) => which.append(
-                E('figure', [...Array(pages+1)].map((_, p) => E('img', {src: `catalog/S${s+1}-${p}.jpg`})))
-            ));
-        } else if (which.id == 'package') {
-            which.append(
-                E('figure', [...Array(7)].map((_, p) => E('img', {src: `package/RB${p+3}.jpg`}))),
-                E('figure', [...Array(3)].map((_, p) => E('img', {src: `package/RBL${p+1}.jpg`}))),
-                E('figure', [86,97,98,117,121].map(p => E('img', {src: `package/Set-${p}.jpg`})))
-            );
-        } else if (which.id == 'table') {
+        if (which.Q('tbody td')) return;
+        if (which.id == 'table') {
             fetch('./products.json').then(resp => resp.json()).then(beys => {
                 beys.forEach(b => new Row().create(b));
                 $('table').tablesorter();
@@ -183,7 +181,7 @@ drag-gallery {
             });
         }
     }
-    Q('a[href^="#"]', a => a.onclick = ev => show(ev.target.getAttribute('href')) || false);
+    Q('a[href^="#table"]').onclick = ev => show(ev.target.getAttribute('href')) || false;
 
 try {
     const base = `https://beyblade.takaratomy.co.jp/history/assets/img/_gen2_pict`;
