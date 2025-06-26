@@ -3,6 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>非官方資訊站 ￭ Beyblade unofficial site ￨ 戰鬥陀螺 ￭ 爆旋陀螺 ￭ ベイブレード</title>
 <script src=https://aeoq.github.io/diamond-grid/script.js type=module></script>
+<script src=https://aeoq.github.io/drag-gallery/script.js type=module></script>
 <link rel="stylesheet" href="../main.css">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -145,20 +146,8 @@ dialog figure {
     </nav>
 </section>
 
-<dialog id="catalog">
-    <div>
-        <button class="small">➖🔍</button>
-        <button class="large">🔍➕</button>
-    </div>
-    <form method="dialog"><button></button></form>
-</dialog>
-<dialog id="package">
-    <div>
-        <button class="small">➖🔍</button>
-        <button class="large">🔍➕</button>
-    </div>
-    <form method="dialog"><button></button></form>
-</dialog>
+<drag-dialog id="catalog"></drag-dialog>
+<drag-dialog id="package"></drag-dialog>
 <dialog id="table">
     <form method="dialog"><button></button></form>
     <table>
@@ -177,17 +166,17 @@ dialog figure {
     import {Row} from './table.js'
     const show = which => {
         which = Q(which);
-        which.showModal();
-        if (which.Q('div img,tbody td')) return;
+        which.showModal?.();
+        if (which.Q('img,tbody td')) return;
         if (which.id == 'catalog') {
             [9,9,7,9].forEach((pages, s) => which.append(
-                E('figure', [E('div'), ...[...Array(pages+1)].map((_, p) => E('img', {src: `catalog/S${s+1}-${p}.jpg`}))])
+                E('figure', [...Array(pages+1)].map((_, p) => E('img', {src: `catalog/S${s+1}-${p}.jpg`})))
             ));
         } else if (which.id == 'package') {
             which.append(
-                E('figure', [E('div'), ...[...Array(7)].map((_, p) => E('img', {src: `package/RB${p+3}.jpg`}))]),
-                E('figure', [E('div'), ...[...Array(3)].map((_, p) => E('img', {src: `package/RBL${p+1}.jpg`}))]),
-                E('figure', [E('div'), ...[86,97,98,117,121].map(p => E('img', {src: `package/Set-${p}.jpg`}))])
+                E('figure', [...Array(7)].map((_, p) => E('img', {src: `package/RB${p+3}.jpg`}))),
+                E('figure', [...Array(3)].map((_, p) => E('img', {src: `package/RBL${p+1}.jpg`}))),
+                E('figure', [86,97,98,117,121].map(p => E('img', {src: `package/Set-${p}.jpg`})))
             );
         } else if (which.id == 'table') {
             fetch('./products.json').then(resp => resp.json()).then(beys => {
@@ -196,23 +185,9 @@ dialog figure {
                 setTimeout(() => Q('table').style.display = 'table');
             });
         }
-        Q('figure>img', img => {
-            img.alt = img.src.match(/([^./]+)\.[^.]+$/)[1];
-            img.parentElement.Q('div').append(E('a', {href: img.src}, [img]));
-        });
     }
     Q('a[href^="#"]', a => a.onclick = ev => show(ev.target.getAttribute('href')) || false);
 
-    import PointerInteraction from 'https://aeoq.github.io/pointer-interaction/script.js';
-    PointerInteraction.events({
-        'figure div': { 
-            drag: PI => PI.drag.to.scroll({x: true, y: false}),
-        }
-    });
-    Q('img', img => {
-        img.alt = img.src.match(/([^./]+)\.[^.]+$/)[1];
-        img.parentElement.Q('div').append(E('a', {href: img.src}, [img]));
-    });
 try {
     const base = `https://beyblade.takaratomy.co.jp/history/assets/img/_gen2_pict`;
     const images = ["1_1","1_2","1_3","1_4","3_3","5","6_2","6_1","6_3","6_4","7_2","7_3","7_1","8_1","8_3","8_2","12","13_1","13_2","13_3","14_3","14_2","14_1","15_1","15_2","15_3","16_1","16_2","18_1","18_2","18_3","18_4"];
