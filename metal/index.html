@@ -90,13 +90,10 @@ sub {font-size:.7em;}
     font-size:.9em; 
     sub {letter-spacing:-.05em;}
 }
-dialog figure {
+drag-gallery {
     img {min-width:30em; max-width:100%;}
-    #package &:nth-of-type(2) img {min-width:20em;}
-    #package &:nth-of-type(3) img {min-width:40em;}
-}
-.PI-dragged {
-    pointer-events:none;
+    &#package img[slot=slot-1] {min-width:20em;}
+    &#package img[slot=slot-2] {min-width:40em;}
 }
 </style>
 
