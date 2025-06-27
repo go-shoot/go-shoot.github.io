@@ -145,8 +145,7 @@ drag-gallery {
 
 <drag-gallery id="catalog"></drag-gallery>
 <drag-gallery id="package"></drag-gallery>
-<dialog id="table">
-    <form method="dialog"><button></button></form>
+<drag-gallery id="table">
     <table>
         <thead>
             <tr><th>No<th>Wheel<span>15 款</span><br>Metal Wheel<span>49 款</span><th>Clear Wheel<span>61 款</span><th>Track<span>41 款</span><th>Bottom<span>51 款</span>
@@ -156,7 +155,7 @@ drag-gallery {
             <tr><th><th>Crystal Wheel<span>10 款</span><th>Chrome Wheel<span>17 款</span><th><th>
         </tfoot>
     </table>
-</dialog>
+</drag-gallery>
 
 <script type="module">
     import {A,E,O,Q} from 'https://aeoq.github.io/AEOQ.mjs'
@@ -169,19 +168,11 @@ drag-gallery {
         E('figure', [...Array(3)].map((_, p) => E('img', {src: `package/RBL${p+1}.jpg`}))),
         E('figure', [86,97,98,117,121].map(p => E('img', {src: `package/Set-${p}.jpg`})))
     );
-    const show = which => {
-        which = Q(which);
-        which.showModal?.();
-        if (which.Q('tbody td')) return;
-        if (which.id == 'table') {
-            fetch('./products.json').then(resp => resp.json()).then(beys => {
-                beys.forEach(b => new Row().create(b));
-                $('table').tablesorter();
-                setTimeout(() => Q('table').style.display = 'table');
-            });
-        }
-    }
-    Q('a[href^="#table"]').onclick = ev => show(ev.target.getAttribute('href')) || false;
+    fetch('./products.json').then(resp => resp.json()).then(beys => {
+        beys.forEach(b => new Row().create(b));
+        $('table').tablesorter();
+        //setTimeout(() => Q('table').style.display = 'table');
+    });
 
 try {
     const base = `https://beyblade.takaratomy.co.jp/history/assets/img/_gen2_pict`;
@@ -192,11 +183,6 @@ try {
             style: {height: `calc(max(100vh,${document.body.scrollHeight}px) + 5em)`},
         });
         Q('diamond-grid').append(...[...images, ...images, ...images, ...images, ...images].map(src => E('img', {src: `${base}${src}.jpg`})));
-    });
-
-    Q('.small,.large', button => button.onclick = () => {
-        let dialog = E(button.closest('dialog'));
-        dialog.set({'--f': (dialog.get('--f') || 1) + .1 * (button.classList[0] == 'large' ? 1 : -1)})  
     });
 } catch(er) {document.body.append(er)}
 </script>
