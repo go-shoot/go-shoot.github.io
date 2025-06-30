@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="description" content="最新日本陀螺情報、所有零件圖鑑、限量產品，都一應俱全。">
+<title>非官方資訊站 ￭ Beyblade unofficial site ￨ 戰鬥陀螺 ￭ 爆旋陀螺 ￭ ベイブレード</title>
+<link rel="stylesheet" href="./main.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@500&family=Rampart+One&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WBDCLEGSRW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-WBDCLEGSRW');
+</script>
+
+<style>
+    @starting-style {h1 {width:0em;}}
+    h1 {
+        font-size:3em; font-family:Rampart One;
+        letter-spacing:-.1em;
+        margin-bottom:0;
+
+        img {
+            width:3em;
+            transition:transform .5s,opacity .5s;
+            vertical-align:middle;
+        }
+        &:not(.seeing) img {
+            transform:rotate(720deg) scale(2);
+            opacity:0;
+        }
+    }
+    @starting-style {h1 img {transform:rotate(720deg)}}
+
+    h1+p {
+        margin-top:0;
+        color:silver;
+    }
+
+    h1~a {
+        width:min(30em,100%);
+        margin:2em auto; 
+        display:flex; flex-direction:column;
+        position:relative;
+        &.seeing {animation: 0.4s linear forwards normal running txtblinking;}
+
+        h2,b {
+            position:absolute;
+        }
+        b {
+            left:100%; bottom:1.5em;
+            transform:rotate(-90deg); transform-origin:0 100%;
+            width:8em; text-align:left;
+            font-size:1.5em; font-weight:normal;
+        }
+        h2 {
+            right:.5em; bottom:8.9%;
+            font-size:.7em; font-weight:normal;
+            margin:0; line-height:0;
+        }
+        &::before {
+            content:'';
+            position:absolute; left:50%; transform:translateX(-50%);
+            width:100vw; height:100%;
+            z-index:-1;
+        }
+        &:nth-of-type(1)::before {
+            background:url(https://beyblade.takaratomy.co.jp/history/assets/img/bg_lead4.jpg) center / contain repeat-x;
+        }
+        &:nth-of-type(2)::before {
+            background:url(https://beyblade.takaratomy.co.jp/history/assets/img/bg_lead3.jpg) center / contain repeat-x;
+        }
+        &:nth-of-type(3)::before {
+            background:url(https://beyblade.takaratomy.co.jp/history/assets/img/bg_lead2.jpg) center / contain repeat-x;
+        }
+        &:nth-of-type(4)::before {
+            background:url(https://beyblade.takaratomy.co.jp/history/assets/img/bg_lead1.jpg) center / contain repeat-x;
+        }
+    }
+    @keyframes txtblinking {
+        0% {opacity: 0;}
+        5% {opacity: 0.4;}
+        10% {opacity: 0;}
+        15% {opacity: 0.55;}
+        20% {opacity: 0.55;}
+        25% {opacity: 0;}
+        30% {opacity: 0.7;}
+        40% {opacity: 0.7;}
+        45% {opacity: 0;}
+        50% {opacity: 0.85;}
+        65% {opacity: 0.85;}
+        70% {opacity: 0;}
+        75% {opacity: 1;}
+        to {opacity: 1;}
+    }
+</style>
+
+<h1>
+    <span style="color:#bf3426">重</span>
+    <span style="color:#0184c0">拾</span>
+    <a href="https://beyblade.takaratomy.co.jp/history/" target="_blank"><img src="25th.png"></a>
+    <span style="color:#fbe74c">回</span>
+    <span style="color:#86bc42">憶</span>
+</h1>
+<p>爆旋陀螺　／　非官方資訊站　／　戰鬥陀螺</p>
+
+<a href="https://beyblade-ex.github.io" style="color:#86bc42">
+    <h2>BEYBLADE X</h2>
+    <img src="https://beyblade.takaratomy.co.jp/history/assets/img/lead_gen4.jpg">
+    <b>2023～</b>
+</a>
+<a href="/burst/" style="color:#fbe74c">
+    <h2>擊爆戰魂 ⬧ 爆烈世代 ⬧ ベイブレードバースト ⬧ BEYBLADE BURST</h2>
+    <img src="https://beyblade.takaratomy.co.jp/history/assets/img/lead_gen3.jpg">
+    <b>2015～2022</b>
+</a>
+<a href="/metal/" style="color:#0184c0">
+    <h2>鋼鐵戰魂 ⬧ 鋼鐵奇兵 ⬧ メタルファイト ベイブレード ⬧ METAL FIGHT BEYBLADE</h2>
+    <img src="https://beyblade.takaratomy.co.jp/history/assets/img/lead_gen2.jpg">
+    <b>2008～2012</b>
+</a>
+<a href="/bakuten/" style="color:#bf3426">
+    <h2>爆転シュート ベイブレード ⬧ BAKUTEN SHOOT BEYBLADE</h2>
+    <img src="https://beyblade.takaratomy.co.jp/history/assets/img/lead_gen1.jpg">
+    <b>1999～2005</b>
+</a>
+<script type="module">
+    import {A,E,O,Q} from 'https://aeoq.github.io/AEOQ.mjs';
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => entry.target.classList.toggle('seeing', entry.isIntersecting)));
+    Q('h1,h1~a', el => observer.observe(el));
+</script>

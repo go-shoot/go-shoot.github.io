@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>非官方資訊站 ￭ Beyblade unofficial site ￨ 戰鬥陀螺 ￭ 爆旋陀螺 ￭ ベイブレード</title>
+<script src=https://aeoq.github.io/diamond-grid/script.js type=module></script>
+<script src=https://aeoq.github.io/dialog-gallery/script.js type=module></script>
+<link rel="stylesheet" href="../main.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@500&display=swap" rel="stylesheet">
+<script defer src=https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js></script>
+<script defer src=https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WBDCLEGSRW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-WBDCLEGSRW');
+</script>
+
+<style>
+section img {width:min(20em, 80vw)}
+table {
+    border-spacing:0;
+    white-space:nowrap;
+    margin:auto;
+    --on:white;
+    font-size:.8em; text-align:left;
+
+    &:has(tbody:empty) {display:none;}
+}
+.RB {--row-s:0%;--b-adj:5%;}
+.B  {--row-c:10;}
+.SS {--row-c:235;--b-adj:5%;}
+.St {--row-c:290;}
+.S  {--row-c:200;}
+.Lm  {--row-c:45;}
+.RB,.B,.S,.St,.SS,.Lm {
+    --light:hsl(var(--row-c,0),var(--row-s,60%),calc(var(--row-b,35%) + var(--b-adj,0%)));
+    --dark:hsl(var(--row-c,0),var(--row-s,50%),calc(var(--row-b,25%) + var(--b-adj,0%)));
+}
+th {
+    text-align:center; line-height:1.2;
+    font-weight:normal;
+    padding-top:.3em;
+
+    span {
+        display:block; font-size:.8em;
+    }
+    thead &:nth-of-type(2) span:first-of-type {
+        display:initial;
+        margin-left:.5em;
+    }
+}
+tbody {
+    --pad:.3em;
+}
+tr {
+    background:var(--dark);
+    height:1.6rem;
+}
+tr:not(.H) {
+    --width:.45em;
+    background:repeating-linear-gradient(45deg,var(--light) 0 var(--width),var(--dark) var(--width) calc(1.5*var(--width)));
+}
+.light td:nth-child(2) {
+    color:silver;
+}
+.synchrome:not(:empty) {
+    line-height:1.2;
+    padding-top:.2em; padding-bottom:.2em;
+}
+tr:last-child td {
+    border-bottom:solid .5px var(--on);
+}
+td:not(:last-child) {
+    border-right:solid .5px var(--on);
+}
+td {
+    border-top:solid .5px var(--on);
+    padding: 0 var(--pad);
+}
+td:last-child,td:nth-last-child(2):not(:has(+[colspan='2'])) {
+    text-align:right;
+}
+sub {font-size:.7em;}
+.long {
+    font-size:.9em; 
+    sub {letter-spacing:-.05em;}
+}
+dialog-gallery {
+    img {min-width:30em; max-width:100%;}
+    &#package img[slot=slot-1] {min-width:20em;}
+    &#package img[slot=slot-2] {min-width:40em;}
+}
+</style>
+
+<aside><diamond-grid></diamond-grid></aside>
+
+<section>
+    <h2>譜系</h2>
+    <figure>
+        <figcaption style="height:7em"></figcaption>
+        <div></div>
+        <img src="zodiac.png">
+        <img src="others.png">
+    </figure>
+</section>
+
+<section>
+    <h2>圖片</h2>
+    <nav>
+        <a href="#catalog">香港目錄</a>
+        <a href="#package">少量包裝</a>
+    </nav>
+</section>
+
+<section>
+    <h2>動畫</h2>
+    <nav>
+        <a href="https://www.bilibili.com/video/BV1bx411S7pp/" target="_blank">S1—粤</a>
+        <a href="https://www.bilibili.com/video/BV1Tx411P7t3/" target="_blank">S2—粤</a>
+        <a href="https://www.bilibili.com/video/BV1Kx411N79o/" target="_blank">劇場—粤</a>
+        <a href="https://www.bilibili.com/video/BV16x411Q7uM/" target="_blank">S3—粤</a>
+        <a href="https://www.bilibili.com/video/BV1Tx411L7NY/" target="_blank">S4—粤</a>
+    </nav>
+</section>
+
+<section>
+    <h2>部件表</h2>
+    <nav>
+        <a href="#table">査看</a>
+    </nav>
+</section>
+
+<section>
+    <h2>回憶更多</h2>
+    <nav>
+        <a href="https://kyoganken.web.fc2.com/beymf/lineup.htm" target="_blank">競技玩具研究所</a>
+        <a href="http://www.kcn.ne.jp/~kids/bb/bey2/bb023.htm" target="_blank">爆転小僧</a>
+    </nav>
+</section>
+
+<dialog-gallery id="table">
+    <table>
+        <thead>
+            <tr><th>No<th>Wheel<span>15 款</span><br>Metal Wheel<span>49 款</span><th>Clear Wheel<span>61 款</span><th>Track<span>41 款</span><th>Bottom<span>51 款</span>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+            <tr><th><th>Crystal Wheel<span>10 款</span><th>Chrome Wheel<span>17 款</span><th><th>
+        </tfoot>
+    </table>
+</dialog-gallery>
+
+<script type="module">
+    import {A,E,O,Q} from 'https://aeoq.github.io/AEOQ.mjs'
+    import {Row} from './table.js'
+    Q('#table').after(
+        E('dialog-gallery', {id: 'catalog'}, [9,9,7,9].map((pages, s) => 
+            E('figure', [...Array(pages+1)].map((_, p) => E('img', {src: `catalog/S${s+1}-${p}.jpg`})))
+        )),
+        E('dialog-gallery', {id: 'package'}, [
+            E('figure', [...Array(7)].map((_, p) => E('img', {src: `package/RB${p+3}.jpg`}))),
+            E('figure', [...Array(3)].map((_, p) => E('img', {src: `package/RBL${p+1}.jpg`}))),
+            E('figure', [86,97,98,117,121].map(p => E('img', {src: `package/Set-${p}.jpg`})))
+        ])
+    )
+    fetch('./products.json').then(resp => resp.json()).then(beys => {
+        beys.forEach(b => new Row().create(b));
+        $('table').tablesorter();
+    });
+
+try {
+    const base = `https://beyblade.takaratomy.co.jp/history/assets/img/_gen2_pict`;
+    const images = ["1_1","1_2","1_3","1_4","3_3","5","6_2","6_1","6_3","6_4","7_2","7_3","7_1","8_1","8_3","8_2","12","13_1","13_2","13_3","14_3","14_2","14_1","15_1","15_2","15_3","16_1","16_2","18_1","18_2","18_3","18_4"];
+    Promise.all([...document.images].map(img => new Promise(res => img.complete ? res() : img.onload = res)))
+    .then(() => {
+        E(Q('aside')).set({
+            style: {height: `calc(max(100vh,${document.body.scrollHeight}px) + 5em)`},
+        });
+        Q('diamond-grid').append(...[...Array(Math.ceil(document.body.scrollHeight*document.body.scrollWidth/300000))]
+            .flatMap(_ => images).map(src => E('img', {src: `${base}${src}.jpg`}))
+        );
+    });
+} catch(er) {document.body.append(er)}
+</script>

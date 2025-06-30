@@ -1,0 +1,105 @@
+*,::before,::after {
+    box-sizing:border-box !important;
+}
+html {
+    background:black; color:white;
+    text-align:center;
+    font-family:'IBM Plex Sans JP',sans-serif;
+    font-size:14px;
+}
+body {
+    margin:0;
+    position:relative;
+    overflow-x:hidden;
+}
+button {
+    all:unset;
+    cursor:pointer;
+}
+a {
+    text-decoration:none;
+    color:inherit;
+}
+aside {
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+}
+diamond-grid {
+    position:absolute; left:50%; top:-3em; transform:translateX(-50%);
+    width:calc(100vw + 14em);
+    padding:0;
+    z-index:-2;
+    --side:10em; --gap:.5em;
+    opacity:.3;
+
+    img {
+        background:#e4e4e4;
+        padding:12%;
+    }
+}
+figure {
+    margin:0 auto;
+    display:inline-block;
+    max-width:100%;
+    font-size:calc(var(--f,1)*1em);
+
+    figcaption {position:relative;}
+}
+figure div {
+    display:flex; gap:0 .5em;
+    overflow-x:scroll;
+
+    * {-webkit-user-drag:none;}
+    &::-webkit-scrollbar {
+        background:transparent;
+        height:.5em;
+    }
+    &::-webkit-scrollbar-thumb {
+        background:#ffffff66;
+    }
+
+}
+section {
+    position:relative;
+    overflow:hidden;
+    padding:1em 0;
+
+    h2 {
+        position:absolute; left:50%; transform:translate(-50%);
+        line-height:1.3;
+        font-size:6em; font-weight:normal;
+        color:transparent; -webkit-text-stroke:.05rem white;
+        margin:0;
+        z-index:-1;
+        white-space:nowrap;
+
+        &:has(+nav) {top:50%; transform:translate(-50%,-50%); margin-top:.08em;}
+    }
+    nav {
+        min-height:7em;
+        display:flex; flex-direction:column; justify-content:center;
+
+        &:has(:nth-child(7)) {
+            display:grid; grid-template-columns:auto auto; gap:0 .5em;
+        }
+    }
+    p,a:not(:has(img)) {
+        width:13em;
+        margin:.25em auto; padding:0 1em;
+        background:#99999966;
+        border-radius:9em;
+        transition:opacity 1s .5s;
+        @starting-style {opacity:0;}
+
+        nav:has(:nth-child(7)) & {
+            width:6.5em;
+        }
+    }
+    p {
+        text-align:left;
+    }
+    a:not(:has(img)) {
+        border-left:.2em solid; border-right:.2em solid;
+    }
+}
