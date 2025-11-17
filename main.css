@@ -51,14 +51,6 @@ figure div {
     overflow-x:scroll;
 
     * {-webkit-user-drag:none;}
-    &::-webkit-scrollbar {
-        background:transparent;
-        height:.5em;
-    }
-    &::-webkit-scrollbar-thumb {
-        background:#ffffff66;
-    }
-
 }
 section {
     position:relative;

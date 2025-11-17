@@ -31,15 +31,15 @@ table {
 
     &:has(tbody:empty) {display:none;}
 }
-.RB {--row-s:0%;--b-adj:5%;}
-.B  {--row-c:10;}
-.SS {--row-c:235;--b-adj:5%;}
-.St {--row-c:290;}
-.S  {--row-c:200;}
-.Lm  {--row-c:45;}
+.RB {--sat:0%;--b-adj:5%;}
+.B  {--hue:10;}
+.SS {--hue:235;--b-adj:5%;}
+.St {--hue:290;}
+.S  {--hue:200;}
+.Lm  {--hue:45;}
 .RB,.B,.S,.St,.SS,.Lm {
-    --light:hsl(var(--row-c,0),var(--row-s,60%),calc(var(--row-b,35%) + var(--b-adj,0%)));
-    --dark:hsl(var(--row-c,0),var(--row-s,50%),calc(var(--row-b,25%) + var(--b-adj,0%)));
+    --light:hsl(var(--hue,0),var(--sat,60%),calc(var(--bri,35%) + var(--b-adj,0%)));
+    --dark:hsl(var(--hue,0),var(--sat,50%),calc(var(--bri,25%) + var(--b-adj,0%)));
 }
 th {
     text-align:center; line-height:1.2;
