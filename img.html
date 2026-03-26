@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#b0ff50">
+<link rel="stylesheet" href="/x/include/common.css">
+<link rel="stylesheet" href="/x/include/component.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@700&family=Chiron+GoRound+TC:wght@400..700&display=swap');
+</style>
+<script type="module">
+    import { A, E, O, Q } from 'https://aeoq.github.io/AEOQ.mjs'; Object.assign(window, { A, E, O, Q });
+</script>
+<script src="/x/include/common.js"></script>
+<script src="https://unpkg.com/onnxruntime-web@latest/dist/ort.min.js"></script>
+<script src="https://unpkg.com/@bunnio/rembg-web@latest/dist/index.umd.js"></script>
+<script type="module" src="https://aeoq.github.io/drag-knob/script.js"></script>
+
+<form>
+    <fieldset>
+        <canvas></canvas>
+        <label><input type="file" accept="image/*"></label>
+    </fieldset>
+    <fieldset>
+        <input type="color">
+        <output name="side"></output>
+        <continuous-knob min="0.5" max="4" value="3.54" step="0.005" name="sc" class="fine PI-draggable" style="--min: 35deg; --angle: 286.88571428571424deg;"><template shadowrootmode="open"><output part="output">3.54</output><link rel="stylesheet" href="https://aeoq.github.io/drag-knob/style.css"><slot></slot></template></continuous-knob>
+        <continuous-knob min="-20" max="20" value="0" step="1" name="x" class="symmetric PI-draggable" style="--min: 35deg; --angle: 180deg;"><template shadowrootmode="open"><output part="output">0</output><link rel="stylesheet" href="https://aeoq.github.io/drag-knob/style.css"><slot></slot></template></continuous-knob>
+        <continuous-knob min="-20" max="20" value="0" step="1" name="y" class="symmetric PI-draggable" style="--min: 35deg; --angle: 180deg;"><template shadowrootmode="open"><output part="output">0</output><link rel="stylesheet" href="https://aeoq.github.io/drag-knob/style.css"><slot></slot></template></continuous-knob>
+    </fieldset>
+    <label>上載<input type="file" multiple="" accept="image/*"></label>
+    <img><img><img>
+    <button>開始</button>
+</form>
+<style>
+form {
+    display: grid; gap: .5em; grid-template-columns: 1fr 1fr 5em;
+    max-width: 30em;
+    margin: auto;
+    
+    fieldset:first-child {
+        grid-area: 1/1/2/3;
+        position: relative;
+    }
+    canvas {
+        width: 100%; aspect-ratio: 1;
+        border:.1em solid var(--theme);
+    }
+    label:has(input[type=file]:not([multiple])) {
+        position: absolute; inset: 0;
+    }
+    continuous-knob,input[type=color] {margin: .5em 0;}
+    output {
+        min-height: 1em; 
+        margin-top: .5em;
+        display: block;
+    }
+    label:has(input[multiple]),img {
+        border: .1em solid var(--theme);
+        width: 100%; 
+    }
+    img:not([src]) {
+        border-color: silver;
+        min-height: 10em;
+    }
+    button {
+        grid-area: 2/3;
+        background: var(--theme); border-radius: .5em;
+        color: black;
+    }
+}
+.processing {filter: brightness(.5);}
+</style>
+
+<script type="module">
+const MAIN = {
+    con: Q('canvas').getContext('2d', { alpha: true }),
+    setSide: S => MAIN.hS = (FORM.side.value = MAIN.S = MAIN.con.canvas.width = MAIN.con.canvas.height = Math.floor(S))/2
+}, FORM = document.forms[0];
+const loadIMG = src => new Promise(res => E('img', {src, onload: function() {res(this);}}));
+let IMG;
+Q('input[type=file]:not([multiple])').onchange = ev => {
+    const reader = new FileReader;
+    reader.readAsDataURL(ev.target.files[0]);
+    reader.onload = () => loadIMG(reader.result).then(img => {
+        MAIN.setSide(Math.max(img.naturalWidth, img.naturalHeight));
+        IMG = img;
+        Draw();
+    });
+}
+FORM.oninput = () => Draw();
+document.addEventListener("keydown", ev => { 
+    ev.key == "ArrowUp"    && FORM.y.value++ ;//&& Draw();
+    ev.key == "ArrowDown"  && FORM.y.value-- ;//&& Draw();
+    ev.key == "ArrowLeft"  && FORM.x.value-- ;//&& Draw();
+    ev.key == "ArrowRight" && FORM.x.value++ ;//&& Draw();
+});
+const Draw = (editing = true) => {
+    FORM.values = {};
+    ['sc','ro','st','x','y','opacity'].forEach(name => FORM.values[name] = FORM[name]?.value);
+    let {sc, ro, st, x, y, opacity} = FORM.values, W, H;
+    IMG && ({x, y, W, H} = Draw.transform(MAIN.con, {sc, ro, st, x, y}, IMG));
+    editing ? Draw.bg() : MAIN.con.clearRect(0, 0, 999, 999);
+    IMG && MAIN.con.drawImage(IMG, x, y, W, H);
+    editing && Draw.bisectors();
+}
+Object.assign(Draw, {
+    bg () {
+        MAIN.con.fillStyle = Q('input[type=color]').value;
+        MAIN.con.fillRect(0, 0, MAIN.S, MAIN.S);
+    },
+    bisectors () {
+        MAIN.con.strokeStyle = 'lime';
+        MAIN.con.lineWidth = 1;
+        MAIN.con.beginPath();
+        MAIN.con.moveTo(0, MAIN.hS);
+        MAIN.con.lineTo(MAIN.S, MAIN.hS);
+        MAIN.con.moveTo(MAIN.hS, 0);
+        MAIN.con.lineTo(MAIN.hS, MAIN.S);
+        MAIN.con.moveTo(MAIN.hS + MAIN.S/2.6, MAIN.hS);
+        MAIN.con.arc(MAIN.hS, MAIN.hS, MAIN.S/2.6, 0, 2 * Math.PI);
+        MAIN.con.arc(MAIN.hS, MAIN.hS, MAIN.S/5, 0, 2 * Math.PI);
+        MAIN.con.stroke();
+    },
+    transform (con, {sk, sc, ro, st, x, y}, img) { //translate -> skew -> scale -> rotate -> stretch
+        sk ??= 0, sc ??= 1, ro ??= 0, st ??= 1, x ??= 0, y ??= 0;
+        MAIN.setSide(Math.max(img.naturalWidth, img.naturalHeight)/sc);
+        sc = 1;
+
+        let drawing = {W: img.naturalWidth, H: img.naturalHeight};
+        img.fit ??= Draw.transform.fit(drawing, {xW: drawing.W - MAIN.S, xH: drawing.H - MAIN.S});
+        drawing.hW = drawing.W/2, drawing.hH = drawing.H/2;
+
+        let cos = Math.cos(ro*Math.PI), sin = Math.sin(ro*Math.PI), tan = Math.tan(sk*Math.PI);
+        x = -x-MAIN.hS, y = y-MAIN.hS;
+        con.setTransform(sc*cos, sc*st*sin, sc*(cos*tan-sin), sc*st*(sin*tan+cos), x*sc*cos+y*sc*(cos*tan-sin)-x, x*sc*st*sin+y*sc*st*(sin*tan+cos)-y);
+        return {x: Math.round(-x-drawing.hW), y: Math.round(-y-drawing.hH), W: drawing.W, H: drawing.H};
+    },
+    color: {}
+});
+Draw.transform.fit = (drawing, { xH, xW }) => xW > 0 && xH > 0 ? xW < xH ? MAIN.S / drawing.W : MAIN.S / drawing.H : 1;
+
+let session;
+RembgWeb.rembgConfig.setBaseUrl('https://huggingface.co/bunnio/dis_anime/resolve/main');
+RembgWeb.newSession('isnet-general-use').then(s => session = s);
+import {Call} from './package/magickApi.js'
+import LibImageQuant from './package/libimagequant.mjs'
+
+let IMGS = [];
+Q('input[multiple]').onchange = ev => {
+    IMGS = [...ev.target.files];
+    if (IMGS.length === 0) return;
+    Q('img', img => img.remove());
+    IMGS.forEach(display);
+};
+Q('button').onclick = ev => {
+    ev.preventDefault();
+    Draw(false);
+    [...IMG ? [Q('canvas')] : [], ...IMGS].reduce((prom, file) => prom.then(() => 
+        (Q(file.name ? `img[alt='${file.name}']` : 'canvas').classList = 'processing') &&
+        RembgWeb.remove(file, {session})
+        .then(blob => blob.arrayBuffer())
+        .then(buffer => Call([{
+            name: file.name || '0.png',
+            content: new Uint8Array(buffer)
+        }], [
+            'convert', file.name || '0.png', 
+            ...file.name ? ['-resize', '500>', '-fuzz', '5%', '-trim'] : [], 
+            (file.name?.replace(/\.[^/.]+$/, "") || '') + "1.png"
+        ]))
+        .then(([{buffer}]) => new LibImageQuant().quantizePng(
+            new Blob([buffer], {type: 'image/png'}), 
+            {quality: {min: 65, target: 80}}
+        ))
+        .then(({pngBytes}) => display(file.name, pngBytes))
+        .catch(er => document.body.append(`${er}`))
+    ), Promise.resolve());
+}
+const display = (file, data) => {
+    let src = URL.createObjectURL(typeof file == 'object' ? file : new Blob([data], {type: 'image/png'}));
+    let img = E('img', {
+        src, alt: file?.name || 'chip',
+        onload: () => !data && URL.revokeObjectURL(src)
+    });
+    typeof file == 'object' || !file ? 
+        Q('label:has(input[multiple])').after(img) : Q(`img[alt='${file}']`).replaceWith(img);
+}
+</script>
