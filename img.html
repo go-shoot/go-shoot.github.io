@@ -169,7 +169,7 @@ Q('button').onclick = ev => {
         ]))
         .then(([{buffer}]) => new LibImageQuant().quantizePng(
             new Blob([buffer], {type: 'image/png'}), 
-            {quality: {min: 65, target: 80}}
+            {quality: {min: 65, target: 65}}
         ))
         .then(({pngBytes}) => display(file.name, pngBytes))
         .catch(er => document.body.append(`${er}`))
