@@ -137,7 +137,7 @@ Object.assign(Draw, {
 
 let IMGS = [];
 Q('input[multiple]').onchange = ev => {
-    IMGS = IMGS.concat(ev.target.files);
+    IMGS = IMGS.concat(...ev.target.files);
     if (IMGS.length === 0) return;
     Q('img', img => img.remove());
     IMGS.forEach(display);
