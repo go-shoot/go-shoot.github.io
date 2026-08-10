@@ -13,23 +13,30 @@
 <script src="/x/include/common.js"></script>
 <script src="https://unpkg.com/onnxruntime-web@latest/dist/ort.min.js"></script>
 <script src="https://unpkg.com/@bunnio/rembg-web@latest/dist/index.umd.js"></script>
-<script type="module" src="https://aeoq.github.io/drag-knob/script.js"></script>
+<script type="module" src="https://aeoq.github.io/drag-knob.mjs"></script>
 
 <form>
-    <fieldset>
+    <fieldset style="grid-area: 1/1/2/3;">
         <canvas></canvas>
-        <label><input type="file" accept="image/*"></label>
+        <label><input id="CX" type="file" accept="image/*"></label>
     </fieldset>
     <fieldset>
         <input type="color">
         <output name="side"></output>
-        <continuous-knob min="0.5" max="4" value="3.54" step="0.005" name="sc" class="fine PI-draggable" style="--min: 35deg; --angle: 286.88571428571424deg;"><template shadowrootmode="open"><output part="output">3.54</output><link rel="stylesheet" href="https://aeoq.github.io/drag-knob/style.css"><slot></slot></template></continuous-knob>
-        <continuous-knob min="-20" max="20" value="0" step="1" name="x" class="symmetric PI-draggable" style="--min: 35deg; --angle: 180deg;"><template shadowrootmode="open"><output part="output">0</output><link rel="stylesheet" href="https://aeoq.github.io/drag-knob/style.css"><slot></slot></template></continuous-knob>
-        <continuous-knob min="-20" max="20" value="0" step="1" name="y" class="symmetric PI-draggable" style="--min: 35deg; --angle: 180deg;"><template shadowrootmode="open"><output part="output">0</output><link rel="stylesheet" href="https://aeoq.github.io/drag-knob/style.css"><slot></slot></template></continuous-knob>
+        <drag-knob range=".5/4/.005" value="3.54" name="sc" class="fine"></drag-knob>
+        <drag-knob range="-20/20/1" value="0" name="x"></drag-knob>
+        <drag-knob range="-20/20/1" value="0" name="y"></drag-knob>
+        <drag-knob range="-.1/.1/.001" value="0" name="ro" class="fine"></drag-knob>
     </fieldset>
-    <label>上載<input type="file" multiple="" accept="image/*"></label>
+    <fieldset style="grid-area: 3/3; align-self: center;">
+        <label><input type="checkbox" checked name="Rembg">BG</label>
+        <label><input type="checkbox" checked name="Magick">Trim</label>
+        <drag-knob range="200/500/1" value="500" name="size"></drag-knob>
+        <label><input type="checkbox" checked name="Quant">Compress</label>
+    </fieldset>
+    <label><input type="file" multiple="" accept="image/*"></label>
     <img><img><img>
-    <button>開始</button>
+    <button style="grid-area: 2/3;">GO</button>
 </form>
 <style>
 form {
@@ -38,21 +45,19 @@ form {
     margin: auto;
     
     fieldset:first-child {
-        grid-area: 1/1/2/3;
         position: relative;
+        
+        canvas {
+            width: 100%; aspect-ratio: 1;
+            border:.1em solid var(--theme);
+        }
+        label:has(#CX) {
+            position: absolute; inset: 0;
+        }
     }
-    canvas {
-        width: 100%; aspect-ratio: 1;
-        border:.1em solid var(--theme);
-    }
-    label:has(input[type=file]:not([multiple])) {
-        position: absolute; inset: 0;
-    }
-    continuous-knob,input[type=color] {margin: .5em 0;}
-    output {
-        min-height: 1em; 
-        margin-top: .5em;
-        display: block;
+    fieldset:nth-child(2) {
+        &>* {margin-top: .5em;}
+        output {display: block;}
     }
     label:has(input[multiple]),img {
         border: .1em solid var(--theme);
@@ -63,63 +68,57 @@ form {
         min-height: 10em;
     }
     button {
-        grid-area: 2/3;
         background: var(--theme); border-radius: .5em;
         color: black;
     }
+    label {display: block;}
+    label:has(:checked) {color: var(--theme);}
 }
 .processing {filter: brightness(.5);}
 </style>
 
 <script type="module">
-const MAIN = {
-    con: Q('canvas').getContext('2d', { alpha: true }),
-    setSide: S => MAIN.hS = (FORM.side.value = MAIN.S = MAIN.con.canvas.width = MAIN.con.canvas.height = Math.floor(S))/2
-}, FORM = document.forms[0];
-const loadIMG = src => new Promise(res => E('img', {src, onload: function() {res(this);}}));
-let IMG;
-Q('input[type=file]:not([multiple])').onchange = ev => {
+const FORM = document.forms[0], MAIN = {
+    ctx: Q('canvas').getContext('2d', { alpha: true }),
+    setSide: S => MAIN.hS = (FORM.side.value = MAIN.S = MAIN.ctx.canvas.width = MAIN.ctx.canvas.height = Math.floor(S))/2
+};
+Q('#CX').onchange = ev => {
     const reader = new FileReader;
     reader.readAsDataURL(ev.target.files[0]);
-    reader.onload = () => loadIMG(reader.result).then(img => {
+    reader.onload = () => E.img(reader.result).then(img => {
         MAIN.setSide(Math.max(img.naturalWidth, img.naturalHeight));
-        IMG = img;
+        MAIN.img = img;
         Draw();
     });
 }
 FORM.oninput = () => Draw();
 document.addEventListener("keydown", ev => { 
-    ev.key == "ArrowUp"    && FORM.y.value++ ;//&& Draw();
-    ev.key == "ArrowDown"  && FORM.y.value-- ;//&& Draw();
-    ev.key == "ArrowLeft"  && FORM.x.value-- ;//&& Draw();
-    ev.key == "ArrowRight" && FORM.x.value++ ;//&& Draw();
+    ev.key.startsWith('Arrow') && ev.preventDefault();
+    ev.key == "ArrowUp"    && FORM.y.value++;
+    ev.key == "ArrowDown"  && FORM.y.value--;
+    ev.key == "ArrowLeft"  && FORM.x.value--;
+    ev.key == "ArrowRight" && FORM.x.value++;
 });
 const Draw = (editing = true) => {
-    FORM.values = {};
-    ['sc','ro','st','x','y','opacity'].forEach(name => FORM.values[name] = FORM[name]?.value);
-    let {sc, ro, st, x, y, opacity} = FORM.values, W, H;
-    IMG && ({x, y, W, H} = Draw.transform(MAIN.con, {sc, ro, st, x, y}, IMG));
-    editing ? Draw.bg() : MAIN.con.clearRect(0, 0, 999, 999);
-    IMG && MAIN.con.drawImage(IMG, x, y, W, H);
+    editing ? Draw.bg() : MAIN.ctx.clearRect(0, 0, 999, 999);
+    if (MAIN.img) {
+        let {x, y, W, H} = Draw.transform(MAIN.ctx, Object.fromEntries([...new FormData(FORM)]), MAIN.img);
+        MAIN.ctx.drawImage(MAIN.img, x, y, W, H);
+    }
     editing && Draw.bisectors();
 }
 Object.assign(Draw, {
     bg () {
-        MAIN.con.fillStyle = Q('input[type=color]').value;
-        MAIN.con.fillRect(0, 0, MAIN.S, MAIN.S);
+        MAIN.ctx.fillStyle = Q('input[type=color]').value;
+        MAIN.ctx.fillRect(0, 0, 999, 999);
     },
     bisectors () {
-        MAIN.con.strokeStyle = 'lime';
-        MAIN.con.lineWidth = 1;
-        MAIN.con.beginPath();
-        MAIN.con.moveTo(0, MAIN.hS);
-        MAIN.con.lineTo(MAIN.S, MAIN.hS);
-        MAIN.con.moveTo(MAIN.hS, 0);
-        MAIN.con.lineTo(MAIN.hS, MAIN.S);
-        MAIN.con.moveTo(MAIN.hS + MAIN.S/2.6, MAIN.hS);
-        MAIN.con.arc(MAIN.hS, MAIN.hS, MAIN.S/2.6, 0, 2 * Math.PI);
-        MAIN.con.arc(MAIN.hS, MAIN.hS, MAIN.S/5, 0, 2 * Math.PI);
-        MAIN.con.stroke();
+        const { ctx, S, hS } = MAIN, r1 = S / 2.6, r2 = S / 5;
+        MAIN.ctx.strokeStyle = 'lime';
+        MAIN.ctx.lineWidth = 1;
+        ctx.stroke(new Path2D(`M0,${hS} H${S} M${hS},0 V${S}
+        M${hS - r1},${hS} A${r1},${r1} 0 1 0 ${hS + r1},${hS}A${r1},${r1} 0 1 0 ${hS - r1},${hS}
+        M${hS - r2},${hS} A${r2},${r2} 0 1 0 ${hS + r2},${hS}A${r2},${r2} 0 1 0 ${hS - r2},${hS}`));
     },
     transform (con, {sk, sc, ro, st, x, y}, img) { //translate -> skew -> scale -> rotate -> stretch
         sk ??= 0, sc ??= 1, ro ??= 0, st ??= 1, x ??= 0, y ??= 0;
@@ -127,7 +126,6 @@ Object.assign(Draw, {
         sc = 1;
 
         let drawing = {W: img.naturalWidth, H: img.naturalHeight};
-        img.fit ??= Draw.transform.fit(drawing, {xW: drawing.W - MAIN.S, xH: drawing.H - MAIN.S});
         drawing.hW = drawing.W/2, drawing.hH = drawing.H/2;
 
         let cos = Math.cos(ro*Math.PI), sin = Math.sin(ro*Math.PI), tan = Math.tan(sk*Math.PI);
@@ -135,45 +133,52 @@ Object.assign(Draw, {
         con.setTransform(sc*cos, sc*st*sin, sc*(cos*tan-sin), sc*st*(sin*tan+cos), x*sc*cos+y*sc*(cos*tan-sin)-x, x*sc*st*sin+y*sc*st*(sin*tan+cos)-y);
         return {x: Math.round(-x-drawing.hW), y: Math.round(-y-drawing.hH), W: drawing.W, H: drawing.H};
     },
-    color: {}
 });
-Draw.transform.fit = (drawing, { xH, xW }) => xW > 0 && xH > 0 ? xW < xH ? MAIN.S / drawing.W : MAIN.S / drawing.H : 1;
 
+let IMGS = [];
+Q('input[multiple]').onchange = ev => {
+    IMGS = IMGS.concat(ev.target.files);
+    if (IMGS.length === 0) return;
+    Q('img', img => img.remove());
+    IMGS.forEach(display);
+};
 let session;
 RembgWeb.rembgConfig.setBaseUrl('https://huggingface.co/bunnio/dis_anime/resolve/main');
 RembgWeb.newSession('isnet-general-use').then(s => session = s);
 import {Call} from './package/magickApi.js'
 import LibImageQuant from './package/libimagequant.mjs'
-
-let IMGS = [];
-Q('input[multiple]').onchange = ev => {
-    IMGS = [...ev.target.files];
-    if (IMGS.length === 0) return;
-    Q('img', img => img.remove());
-    IMGS.forEach(display);
-};
-Q('button').onclick = ev => {
+Q('button').onclick = async ev => {
     ev.preventDefault();
     Draw(false);
-    [...IMG ? [Q('canvas')] : [], ...IMGS].reduce((prom, file) => prom.then(() => 
-        (Q(file.name ? `img[alt='${file.name}']` : 'canvas').classList = 'processing') &&
-        RembgWeb.remove(file, {session})
-        .then(blob => blob.arrayBuffer())
-        .then(buffer => Call([{
-            name: file.name || '0.png',
-            content: new Uint8Array(buffer)
-        }], [
-            'convert', file.name || '0.png', 
-            ...file.name ? ['-resize', '500>', '-fuzz', '5%', '-trim'] : [], 
-            (file.name?.replace(/\.[^/.]+$/, "") || '') + "1.png"
-        ]))
-        .then(([{buffer}]) => new LibImageQuant().quantizePng(
-            new Blob([buffer], {type: 'image/png'}), 
-            {quality: {min: 65, target: 65}}
-        ))
-        .then(({pngBytes}) => display(file.name, pngBytes))
-        .catch(er => document.body.append(`${er}`))
-    ), Promise.resolve());
+    const images = [...MAIN.img ? [Q('canvas')] : [], ...IMGS];
+    for (let image of images) {
+        const canvas = image instanceof HTMLCanvasElement;
+        const name = image.name || '0.png';
+        const img = Q(canvas ? 'canvas' : `img[alt='${name}']`);
+        img.classList.add('processing');
+
+        try {
+            image = canvas ? await new Promise(res => image.toBlob(res, 'image/png')) : image;
+            FORM.Rembg.checked && (image = await RembgWeb.remove(image, {session}));
+            image = await image.arrayBuffer();
+            FORM.Magick.checked && ([{buffer: image}] = await Call(
+                [{name, content: new Uint8Array(image)}], 
+                ['convert', name,
+                    ...canvas ? [] : ['-resize', `${FORM.size.value}>`, '-fuzz', '5%', '-trim'],
+                    canvas ? '1.png' : name.replace(/\.[^/.]+$/, "")
+                ]
+            ));
+            image = new Blob([image], {type: 'image/png'});
+            FORM.Quant.checked && ({pngBytes: image} = await new LibImageQuant().quantizePng(
+                image, {quality: {min: 65, target: 65}}
+            ));
+            display(canvas ? '' : name, image);
+        } catch (er) {
+            console.error(er);
+            document.body.append(`${er}`);
+        }
+        img.classList.remove('processing');
+    }
 }
 const display = (file, data) => {
     let src = URL.createObjectURL(typeof file == 'object' ? file : new Blob([data], {type: 'image/png'}));
