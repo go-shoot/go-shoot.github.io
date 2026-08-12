@@ -31,7 +31,7 @@
     <fieldset style="grid-area: 3/3; align-self: center;">
         <label><input type="checkbox" checked name="Rembg">BG</label>
         <label><input type="checkbox" checked name="Magick">Trim</label>
-        <drag-knob range="200/500/1" value="500" name="size"></drag-knob>
+        <drag-knob range="200/500/10" value="500" name="size"></drag-knob>
         <label><input type="checkbox" checked name="Quant">Compress</label>
     </fieldset>
     <label><input type="file" multiple="" accept="image/*"></label>
@@ -158,6 +158,13 @@ Q('button').onclick = async ev => {
         img.classList.add('processing');
 
         try {
+            if (image.name?.endsWith('webp')) {
+                const bmp = await createImageBitmap(new Blob([image], {type: 'image/webp'}));
+                const cvs = new OffscreenCanvas(bmp.width, bmp.height);
+                cvs.getContext('2d').drawImage(bmp, 0, 0);
+                bmp.close();
+                image = await cvs.convertToBlob();
+            }
             image = canvas ? await new Promise(res => image.toBlob(res, 'image/png')) : image;
             FORM.Rembg.checked && (image = await RembgWeb.remove(image, {session}));
             image = await image.arrayBuffer();
