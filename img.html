@@ -177,7 +177,7 @@ Q('button').onclick = async ev => {
             ));
             image = new Blob([image], {type: 'image/png'});
             FORM.Quant.checked && ({pngBytes: image} = await new LibImageQuant().quantizePng(
-                image, {quality: {min: 65, target: 65}}
+                image, {quality: {min: 50, target: 65}}
             ));
             display(canvas ? '' : name, image);
         } catch (er) {
